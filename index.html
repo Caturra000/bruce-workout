@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bruce的硬核训练日志</title>
+    <style>
+        /* 全局滚动条隐藏 */
+        html, .tabs, .year-selector { scrollbar-width: none; -ms-overflow-style: none; }
+        html::-webkit-scrollbar, .tabs::-webkit-scrollbar, .year-selector::-webkit-scrollbar { display: none; }
+
+        :root {
+            --bg-color: #0d1117; --panel-bg: #161b22; --text-main: #c9d1d9;
+            --text-muted: #8b949e; --border-color: #30363d; --accent: #238636;
+            --accent-hover: #2ea043; --danger: #da3633; --quick-fill: #dba61f;
+            --level-0: #161b22; --level-1: #0e4429; --level-2: #006d32;
+            --level-3: #26a641; --level-4: #39d353;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px 10px; display: flex; justify-content: center; line-height: 1.5; }
+        .container { max-width: 800px; width: 100%; box-sizing: border-box; }
+
+        input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+
+        .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; }
+        .tab { padding: 10px 20px; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; font-weight: bold; transition: 0.2s; white-space: nowrap; }
+        .tab:hover, .tab.active { color: var(--text-main); }
+        .tab.active { border-bottom-color: #f78166; }
+
+        .panel { display: none; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; box-sizing: border-box; }
+        .panel.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        select, input[type="date"], input[type="text"], input[type="number"] { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; box-sizing: border-box; }
+        select { width: 100%; margin-bottom: 15px; font-size: 1em; cursor: pointer; }
+
+        button { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: var(--accent-hover); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-quick { background: rgba(219,166,31,0.1); color: var(--quick-fill); border: 1px solid var(--quick-fill); padding: 4px 8px; border-radius: 4px; font-size: 0.8em; margin-left: auto; }
+        .btn-quick:hover { background: var(--quick-fill); color: #000; }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 4px 8px; font-size: 0.8em;}
+        .btn-danger:hover { background: var(--danger); color: #fff; }
+
+        /* 通用卡片样式 */
+        .card { border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #0d1117; position: relative; }
+        .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; }
+        .card-title { font-weight: bold; font-size: 1.1em; color: #58a6ff; }
+        .card-target { font-size: 0.9em; color: var(--text-muted); }
+
+        .bruce-tip { font-size: 0.85em; color: #d2a8ff; font-style: italic; margin-bottom: 12px; }
+        .sets-container { display: flex; flex-direction: column; gap: 10px; }
+        .set-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .set-label { width: 50px; font-size: 0.9em; color: var(--text-muted); }
+        .set-input { width: 80px; text-align: center; flex-grow: 1; max-width: 100px; }
+        .set-unit { color: var(--text-muted); font-size: 0.9em; }
+
+        .edit-meta-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; }
+        .edit-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;}
+        .edit-row label { display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main);}
+        .card input[type="text"].ed-name { flex: 1; min-width: 150px;}
+
+        .year-selector { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; }
+        .year-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px 12px; border-radius: 4px; font-size: 1em; }
+        .year-btn.active { background: var(--accent); color: #fff; }
+
+        .heatmap-wrapper { overflow-x: auto; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+        .heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
+        .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; }
+        .cell { width: 14px; height: 14px; border-radius: 3px; background: var(--level-0); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.1s; }
+        .cell[data-level="1"] { background: var(--level-1); }
+        .cell[data-level="2"] { background: var(--level-2); }
+        .cell[data-level="3"] { background: var(--level-3); }
+        .cell[data-level="4"] { background: var(--level-4); }
+        .cell:hover { border-color: #fff; transform: scale(1.2); }
+
+        .global-tooltip { position: fixed; background: rgba(0,0,0,0.9); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.15s; white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
+
+        .playback-box { background: #0d1117; border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px; display: none; }
+        .playback-set { font-size: 0.9em; color: var(--text-muted); margin-left: 15px; }
+        .trend-chart { display: flex; align-items: flex-end; gap: 8px; height: 150px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        .bar-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+        .bar { width: 100%; max-width: 35px; background: var(--accent); border-radius: 3px 3px 0 0; position: relative; }
+        .bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: bold; z-index: 2;}
+        .month-label { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+        .analysis-box { background: rgba(35,134,54,0.1); border-left: 4px solid var(--accent); padding: 15px; margin-top: 20px; border-radius: 4px; }
+        .warning-box { border-left-color: var(--danger); background: rgba(218,54,51,0.1); }
+
+        #loading-screen { position: fixed; inset: 0; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 10000; font-size: 1.2em; font-weight: bold; color: var(--accent); transition: opacity 0.3s; }
+
+        @media (max-width: 600px) {
+            .set-row { justify-content: space-between; }
+            .set-input { width: 30%; flex-grow: 0; }
+            .btn-quick { width: 100%; text-align: center; margin-top: 5px; margin-left: 0; }
+            .panel { padding: 15px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-screen">加载硬核数据...</div>
+<div id="global-tooltip" class="global-tooltip"></div>
+
+<div class="container">
+    <div class="tabs" id="main-tabs">
+        <div class="tab active" data-target="today">📝 今日打卡</div>
+        <div class="tab" data-target="stats">📊 统计与回放</div>
+        <div class="tab" data-target="edit">⚙️ 计划定制</div>
+        <div class="tab" data-target="data">💾 数据管理</div>
+    </div>
+
+    <!-- Panel: Today -->
+    <div id="today" class="panel active">
+        <h2>🔥 今天的战斗容量</h2>
+        <input type="date" id="date-picker" style="margin-bottom: 15px; width: auto;">
+        <select id="day-selector"></select>
+
+        <div id="exercise-list"></div>
+        <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)" style="width:100%; margin-top:15px; display:none;">
+        <button id="save-btn" style="display: none; width: 100%; margin-top: 20px; font-size: 1.1em;">保存今日容量</button>
+        <div id="daily-feedback" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Panel: Stats -->
+    <div id="stats" class="panel">
+        <div class="year-selector" id="year-tabs"></div>
+        <div class="heatmap-wrapper" id="heatmap-scroll-area">
+            <div class="heatmap-grid" id="heatmap"></div>
+        </div>
+        <div id="playback-area" class="playback-box">
+            <h3 id="pb-title" style="margin-top:0; color:#58a6ff;">点击上方的方块查看记录</h3>
+            <div id="pb-content"></div>
+        </div>
+        <h3 style="margin-top: 30px;">📈 训练频次趋势 (月度)</h3>
+        <div class="trend-chart" id="trend-chart"></div>
+        <h3 style="margin-top: 30px;">近期评估：</h3>
+        <div id="ai-analysis"></div>
+    </div>
+
+    <!-- Panel: Edit -->
+    <div id="edit" class="panel">
+        <h2>⚙️ 训练矩阵定制</h2>
+        <p style="color:var(--text-muted); font-size:0.9em;">完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
+
+        <select id="edit-day-selector"></select>
+
+        <div class="edit-meta-box">
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+                <span style="white-space:nowrap; color: var(--text-muted);">本计划名:</span>
+                <input type="text" id="ed-day-title" style="font-weight:bold; font-size:1.1em; max-width: 300px;">
+            </div>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--accent);">
+                <input type="checkbox" id="ed-day-isrest" style="width:18px;height:18px; accent-color: var(--accent);">
+                <b>将这一天设为【休息日 / 有氧日】(不记录容量)</b>
+            </label>
+        </div>
+
+        <div id="edit-exercise-wrapper">
+            <div id="edit-exercise-list"></div>
+            <button class="btn-outline" style="width: 100%; margin-top: 10px; border-style: dashed;" id="btn-add-exercise">+ 新增动作</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;">
+            <button style="flex: 2; min-width: 200px;" id="btn-save-edit">💾 保存这天的设置</button>
+            <button class="btn-danger" style="flex: 1; min-width: 150px; background: transparent;" id="btn-restore-default">🔄 恢复默认出厂</button>
+        </div>
+        <div id="edit-feedback" style="margin-top: 15px; color: var(--level-4); font-weight: bold;"></div>
+    </div>
+
+    <!-- Panel: Data -->
+    <div id="data" class="panel">
+        <h2>💾 数据存档与迁移</h2>
+        <p style="color: var(--text-muted); font-size: 0.9em;">数据存储在本地。为了防止清理浏览器缓存导致丢失，请定期导出完整数据备份。</p>
+        <button id="btn-export">📥 导出完整数据 (JSON)</button>
+        <div style="margin-top: 20px;">
+            <input type="file" id="import-file" accept=".json" style="display:none">
+            <button class="btn-outline" onclick="$('#import-file').click()">📤 导入恢复数据 (JSON)</button>
+        </div>
+        <button class="btn-outline btn-danger" style="margin-top: 40px;" id="btn-clear-data">⚠️ 清空本地所有数据</button>
+    </div>
+</div>
+
+<script>
+    /* ==========================================
+     * 1. 基础工具与 DB 层
+     * ========================================== */
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    const escapeHTML = s => String(s || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"\'":'&#39;' }[m]));
+    const toNumOrNull = v => (v === '' || v === null || v === undefined) ? null : (isNaN(Number(v)) ? v : Number(v));
+    const toLocalDateStr = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const inferMeasureType = s => (s || '').includes('力竭') ? 'amrap' : /[秒分]/.test(s) ? 'time' : 'reps';
+    const parseTargetValue = s => inferMeasureType(s) === 'reps' ? ((String(s || '').match(/\d+/g) || []).pop() || '') : '';
+    const hasSetActivity = (w, r) => String(r || '').trim() !== '' || (String(w || '').trim() !== '' && String(w || '').trim() !== '0');
+    const isRestDayLog = data => !!(data && (data.isRest || (Array.isArray(data.exercises) && data.exercises.length === 0)));
+
+    const DB_NAME = 'HardcoreLogDB';
+    const STORE_NAME = 'store';
+    const db = {
+        _promise: null,
+        open() {
+            if (this._promise) return this._promise;
+            return this._promise = new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, 1);
+                req.onupgradeneeded = e => { if (!e.target.result.objectStoreNames.contains(STORE_NAME)) e.target.result.createObjectStore(STORE_NAME); };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => { this._promise = null; reject(req.error); };
+            });
+        },
+        async get(key) {
+            const d = await this.open();
+            return new Promise((res, rej) => {
+                const req = d.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).get(key);
+                req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error);
+            });
+        },
+        async set(key, val) {
+            const d = await this.open();
+            return new Promise((res, rej) => {
+                const tx = d.transaction(STORE_NAME, 'readwrite');
+                if (val === null) tx.objectStore(STORE_NAME).delete(key);
+                else tx.objectStore(STORE_NAME).put(val, key);
+                tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
+            });
+        }
+    };
+
+    const defaultWorkoutPlan = {
+        "day1": { title: "Day 1：上肢推力结构", isRest: false, exercises: [
+            { id: "d1e1", name: "上斜俯卧撑 / 跪姿俯卧撑", sets: 3, repsDesc: "8-12次", tip: "双手撑在床沿或桌子上退阶，或者双膝着地。核心收紧，身体保持一条直线。", isCore: true },
+            { id: "d1e2", name: "地板哑铃卧推", sets: 3, repsDesc: "10-15次", tip: "平躺在地板上，手拿哑铃或水瓶向上推。手肘碰到地面就推起，最安全的推力打底动作。" },
+            { id: "d1e3", name: "坐姿肩部推举", sets: 3, repsDesc: "10-12次", tip: "坐在椅子上保持背部挺直。重量不需要大，推到头顶后控制速度慢慢下放。" },
+            { id: "d1e4", name: "极轻重量侧平举", sets: 3, repsDesc: "12-15次", tip: "两手提着轻负重向两侧展开。手肘微弯，想象往两边倒水，体会肩膀侧面的酸胀感。" },
+            { id: "d1e5", name: "双手颈后臂屈伸", sets: 3, repsDesc: "10-12次", tip: "双手握住一个重量放在脑后。大臂贴近耳朵保持不动，只靠小臂发力向上举起。" }
+        ]},
+        "day2": { title: "Day 2：身体恢复与拉伸", isRest: true, exercises: [] },
+        "day3": { title: "Day 3：背部唤醒与核心", isRest: false, exercises: [
+            { id: "d3e1", name: "俯卧W字伸展", sets: 3, repsDesc: "12-15次", tip: "趴在垫子上，双手呈W型。吸气时上半身微抬，把手肘用力往后背夹紧，改善含胸驼背的王牌。", isCore: true },
+            { id: "d3e2", name: "双手俯身划船", sets: 3, repsDesc: "10-12次", tip: "微屈膝，臀部向后撅，背部必须挺直。双手拿重量拉向你的小腹，想象背部中间夹住了一支笔。" },
+            { id: "d3e3", name: "交替二头弯举", sets: 3, repsDesc: "10-12次", tip: "身体站稳千万不要前后摇晃。匀速举起，慢慢放下，让手臂正面得到充分收缩。" },
+            { id: "d3e4", name: "平板支撑 (Plank)", sets: 3, repsDesc: "30-60秒", tip: "核心地基动作。腹部死死绷紧，不要塌腰也不要撅屁股，保持呼吸不要憋气。", isCore: true },
+            { id: "d3e5", name: "徒手臀桥", sets: 3, repsDesc: "15-20次", tip: "平躺屈膝，用臀部发力把胯部顶起。在最高点夹紧屁股停顿1秒，唤醒沉睡的后侧链。" }
+        ]},
+        "day4": { title: "Day 4：低强度有氧或散步", isRest: true, exercises: [] },
+        "day5": { title: "Day 5：下肢引擎构建", isRest: false, exercises: [
+            { id: "d5e1", name: "高脚杯深蹲", sets: 4, repsDesc: "10-15次", tip: "双手在胸前抱住一个重量。重心压在脚后跟，像坐椅子一样往后下方蹲，全程保持腰背挺直。", isCore: true },
+            { id: "d5e2", name: "靠墙静蹲", sets: 3, repsDesc: "40-60秒", tip: "背部贴紧墙面，大腿平行于地面。极度考验意志力，同时对膝盖非常友好的大腿前侧强化。" },
+            { id: "d5e3", name: "向后交替弓步蹲", sets: 3, repsDesc: "每侧8-10次", tip: "不需要拿重量。向后迈出一步并下蹲，后膝盖轻触地面。向后迈比向前迈对膝盖压力更小。" },
+            { id: "d5e4", name: "侧卧直腿上抬", sets: 3, repsDesc: "每侧15次", tip: "侧躺在地上，把上面的腿伸直并向上抬起。动作放慢，感受臀部侧面的强烈发力感。" },
+            { id: "d5e5", name: "原地踮脚尖 (提踵)", sets: 3, repsDesc: "15-20次", tip: "双手可以扶墙保持平衡。尽可能把脚跟踮到最高，再缓慢落下，拉伸小腿肌肉。" }
+        ]},
+        "day6": { title: "Day 6：核心稳固与细化", isRest: false, exercises: [
+            { id: "d6e1", name: "鸟狗式 (Bird-Dog)", sets: 3, repsDesc: "每侧10次", tip: "双手双膝撑地，同时伸直左手和右腿，保持身体不晃动。强化核心稳定的黄金动作。", isCore: true },
+            { id: "d6e2", name: "仰卧卷腹 (Crunch)", sets: 3, repsDesc: "15-20次", tip: "下背部死死贴住地面，双手摸大腿，把肩膀和上背部卷起即可。千万不要抱头硬扯脖子！" },
+            { id: "d6e3", name: "仰卧交替摸脚踝", sets: 3, repsDesc: "每侧15次", tip: "保持卷腹的姿势，身体向两侧弯曲，用手去触摸同侧的脚踝，雕刻侧腹部线条。" },
+            { id: "d6e4", name: "哑铃锤式弯举", sets: 3, repsDesc: "10-12次", tip: "像拿锤子一样竖着握住重物向上弯举，让手臂外侧轮廓更加饱满。" }
+        ]},
+        "day7": { title: "Day 7：休息与营养补充", isRest: true, exercises: [] }
+    };
+
+    /* 全局状态单例 */
+    const state = {
+        logs: {},
+        plan: null,
+        statsYear: String(new Date().getFullYear()),
+        currentRenderedPlan: null
+    };
+
+    /* ==========================================
+     * 2. 生命周期与事件绑定
+     * ========================================== */
+    window.addEventListener('load', async () => {
+        try {
+            state.logs = (await db.get('appData_logs')) || {};
+            state.plan = (await db.get('appData_plan')) || JSON.parse(JSON.stringify(defaultWorkoutPlan));
+
+            $('#date-picker').value = toLocalDateStr();
+            syncSelectOptions();
+
+            if (state.logs[$('#date-picker').value]) {
+                $('#day-selector').value = state.logs[$('#date-picker').value].dayType;
+            }
+
+            bindEvents();
+            renderTodayPanel();
+
+            $('#loading-screen').style.opacity = '0';
+            setTimeout(() => $('#loading-screen').style.display = 'none', 300);
+        } catch (e) {
+            $('#loading-screen').innerHTML = "加载失败，请确保存储权限已开启。";
+        }
+    });
+
+    function bindEvents() {
+        // Tab 切换
+        $('#main-tabs').addEventListener('click', e => {
+            if (e.target.matches('.tab')) switchTab(e.target);
+        });
+
+        // Today 面板
+        $('#date-picker').addEventListener('change', e => {
+            $('#day-selector').value = state.logs[e.target.value]?.dayType || '';
+            renderTodayPanel();
+        });
+        $('#day-selector').addEventListener('change', renderTodayPanel);
+        $('#save-btn').addEventListener('click', saveTodayLog);
+        $('#exercise-list').addEventListener('click', e => {
+            if (e.target.matches('.js-quick-fill')) {
+                quickFill(e.target.dataset.exid, e.target.dataset.repsdesc);
+            }
+        });
+
+        // Edit 面板
+        $('#edit-day-selector').addEventListener('change', renderEditPanel);
+        $('#ed-day-isrest').addEventListener('change', () => {
+            $('#edit-exercise-wrapper').style.display = $('#ed-day-isrest').checked ? 'none' : 'block';
+        });
+        $('#btn-add-exercise').addEventListener('click', addExerciseToEdit);
+        $('#edit-exercise-list').addEventListener('click', e => {
+            if (e.target.matches('.btn-danger')) e.target.closest('.card').remove();
+        });
+        $('#btn-save-edit').addEventListener('click', saveEditPlan);
+        $('#btn-restore-default').addEventListener('click', restoreDefaultPlan);
+
+        // Stats 面板
+        $('#year-tabs').addEventListener('click', e => {
+            if (e.target.matches('.year-btn')) changeStatsYear(e.target.innerText);
+        });
+
+        // Data 面板
+        $('#btn-export').addEventListener('click', exportJSON);
+        $('#import-file').addEventListener('change', importJSON);
+        $('#btn-clear-data').addEventListener('click', clearData);
+    }
+
+    function switchTab(tabEl) {
+        $$('.tab').forEach(t => t.classList.remove('active'));
+        $$('.panel').forEach(p => p.classList.remove('active'));
+        tabEl.classList.add('active');
+        const target = tabEl.dataset.target;
+        $(`#${target}`).classList.add('active');
+
+        if (target === 'stats') {
+            renderYearTabs();
+            renderStats(state.statsYear);
+        } else if (target === 'edit') {
+            renderEditPanel();
+        } else if (target === 'today') {
+            syncSelectOptions();
+            renderTodayPanel();
+        }
+    }
+
+    function syncSelectOptions() {
+        let tHtml = '<option value="">-- 选择今天的计划 --</option>', eHtml = '';
+        for (let i = 1; i <= 7; i++) {
+            const k = 'day' + i;
+            const title = escapeHTML(state.plan[k].title);
+            tHtml += `<option value="${k}">${title}</option>`;
+            eHtml += `<option value="${k}">编辑：${title}</option>`;
+        }
+        const ts = $('#day-selector'), es = $('#edit-day-selector');
+        const tVal = ts.value, eVal = es.value;
+        ts.innerHTML = tHtml; es.innerHTML = eHtml;
+        if (tVal) ts.value = tVal;
+        if (eVal) es.value = eVal;
+        if (!es.value) es.value = 'day1';
+    }
+
+    /* ==========================================
+     * 3. Today 面板核心逻辑
+     * ========================================== */
+    function getHistoryWeight(exId, setIndex) {
+        const targetDate = $('#date-picker').value;
+        const sortedDates = Object.keys(state.logs).filter(d => d < targetDate).sort().reverse();
+        for (const d of sortedDates) {
+            const ex = (state.logs[d].exercises || []).find(e => e.id === exId);
+            if (ex && ex.weights && ex.weights[setIndex] != null) return ex.weights[setIndex];
+        }
+        return '';
+    }
+
+    function quickFill(exId, repsDesc) {
+        const item = document.querySelector(`#exercise-list .card[data-id="${CSS.escape(exId)}"]`);
+        if (!item) return;
+        const targetVal = parseTargetValue(repsDesc);
+        const wInputs = item.querySelectorAll('.set-w'), rInputs = item.querySelectorAll('.set-r');
+
+        wInputs.forEach((wInput, i) => {
+            if (!wInput.value) wInput.value = getHistoryWeight(exId, i);
+            if (targetVal !== '') rInputs[i].value = targetVal;
+        });
+    }
+
+    function buildRenderedPlan(day, savedLog) {
+        const livePlan = state.plan[day];
+        if (!savedLog || savedLog.dayType !== day) return JSON.parse(JSON.stringify(livePlan));
+
+        if (isRestDayLog(savedLog)) return { title: savedLog.title || livePlan.title, isRest: true, exercises: [] };
+
+        return {
+            title: savedLog.title || livePlan.title,
+            isRest: false,
+            exercises: (savedLog.exercises || []).map(logEx => {
+                const planEx = (livePlan.exercises || []).find(e => e.id === logEx.id) || {};
+                const sets = logEx.targetSets || Math.max((logEx.weights||[]).length, (logEx.reps||[]).length) || planEx.sets || 1;
+                return {
+                    id: logEx.id, name: logEx.name || planEx.name, sets,
+                    repsDesc: planEx.repsDesc || '', measureType: logEx.measureType || inferMeasureType(planEx.repsDesc),
+                    tip: planEx.tip || '', isCore: !!planEx.isCore
+                };
+            })
+        };
+    }
+
+    function renderTodayPanel() {
+        const day = $('#day-selector').value;
+        const listDiv = $('#exercise-list');
+        const saveBtn = $('#save-btn');
+        const noteInput = $('#daily-note');
+        const feedbackDiv = $('#daily-feedback');
+
+        listDiv.innerHTML = feedbackDiv.innerHTML = noteInput.value = '';
+        state.currentRenderedPlan = null;
+
+        if (!day) {
+            saveBtn.style.display = noteInput.style.display = 'none';
+            return;
+        }
+
+        const date = $('#date-picker').value;
+        const savedLog = state.logs[date]?.dayType === day ? state.logs[date] : null;
+        const planObj = state.currentRenderedPlan = buildRenderedPlan(day, savedLog);
+
+        if (planObj.isRest) {
+            const checked = savedLog && savedLog.score === 100 ? 'checked' : '';
+            listDiv.innerHTML = `<div class="card" style="border-color: var(--accent);">
+                <label class="rest-day-check" style="display:flex; align-items:center; gap:10px; font-size:1.1em; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="rest-check" style="width:25px;height:25px;" ${checked}>
+                    我今天乖乖休息/完成了有氧安排。
+                </label>
+                <div class="bruce-tip" style="margin-top:10px;">" 肌肉是在休息时生长的，不要有负罪感。 "</div>
+            </div>`;
+        } else {
+            listDiv.innerHTML = planObj.exercises.map(ex => {
+                const measureType = ex.measureType || inferMeasureType(ex.repsDesc);
+                let setsHtml = '<div class="sets-container">';
+
+                for (let i = 0; i < ex.sets; i++) {
+                    let w = '', r = '';
+                    if (savedLog) {
+                        const sEx = savedLog.exercises.find(e => e.id === ex.id);
+                        if (sEx && sEx.weights && sEx.weights[i] != null) w = sEx.weights[i];
+                        if (sEx && sEx.reps && sEx.reps[i] != null) r = sEx.reps[i];
+                    } else {
+                        w = getHistoryWeight(ex.id, i);
+                    }
+                    setsHtml += `
+                        <div class="set-row">
+                            <span class="set-label">第 ${i + 1} 组</span>
+                            <input type="number" step="0.5" min="0" class="set-input set-w" placeholder="kg" value="${escapeHTML(w)}">
+                            <span class="set-unit">x</span>
+                            <input type="number" step="1" min="0" class="set-input set-r" placeholder="${measureType === 'time' ? '秒' : '次数'}" value="${escapeHTML(r)}">
+                            <span class="set-unit">(${escapeHTML(ex.repsDesc)})</span>
+                        </div>`;
+                }
+
+                return `
+                    <div class="card" data-id="${escapeHTML(ex.id)}" data-core="${ex.isCore}" data-total-sets="${ex.sets}" data-measure="${measureType}" data-name="${escapeHTML(ex.name)}">
+                        <div class="card-header">
+                            <div>
+                                <span class="card-title">${escapeHTML(ex.name)} ${ex.isCore ? '🔥' : ''}</span>
+                                <span class="card-target">/ ${ex.sets}组</span>
+                            </div>
+                            <button type="button" class="btn-quick js-quick-fill" data-exid="${escapeHTML(ex.id)}" data-repsdesc="${escapeHTML(ex.repsDesc)}">⚡ 填满</button>
+                        </div>
+                        <div class="bruce-tip">" ${escapeHTML(ex.tip)} "</div>
+                        ${setsHtml}</div>
+                    </div>`;
+            }).join('');
+        }
+
+        saveBtn.style.display = noteInput.style.display = 'block';
+        if (savedLog && savedLog.note) noteInput.value = savedLog.note;
+        if (savedLog) showFeedback(savedLog);
+    }
+
+    async function saveTodayLog() {
+        const dayType = $('#day-selector').value;
+        const date = $('#date-picker').value;
+        const rendered = state.currentRenderedPlan;
+        const note = $('#daily-note').value;
+        let entry = { dayType, title: rendered.title || state.plan[dayType].title, score: 0 };
+
+        if (note) entry.note = note;
+
+        if (rendered.isRest) {
+            entry.isRest = true;
+            entry.score = $('#rest-check').checked ? 100 : 0;
+            entry.exercises = [];
+        } else {
+            const cards = $$('#exercise-list .card[data-id]');
+            if (!cards.length) return showFeedback({ warning: "当前计划没有动作，请先去“计划定制”里补充动作后再保存。" });
+
+            let totalTarget = 0, totalDone = 0, coreMissedName = "";
+            entry.exercises = [];
+
+            cards.forEach(card => {
+                const id = card.dataset.id, name = card.dataset.name, measureType = card.dataset.measure;
+                const isCore = card.dataset.core === 'true', setsCount = parseInt(card.dataset.totalSets);
+                totalTarget += setsCount;
+
+                let wArr = [], rArr = [], activeSets = 0, lastIdx = -1;
+                const ws = card.querySelectorAll('.set-w'), rs = card.querySelectorAll('.set-r');
+
+                for (let i = 0; i < setsCount; i++) {
+                    wArr.push(ws[i].value); rArr.push(rs[i].value);
+                    if (hasSetActivity(ws[i].value, rs[i].value)) {
+                        activeSets++; totalDone++; lastIdx = i;
+                    }
+                }
+
+                if (isCore && activeSets === 0) coreMissedName = name;
+
+                entry.exercises.push({
+                    id, name, measureType, targetSets: setsCount, completedSets: activeSets,
+                    weights: wArr.slice(0, lastIdx + 1), reps: rArr.slice(0, lastIdx + 1)
+                });
+            });
+
+            entry.score = totalTarget === 0 ? 0 : Math.round((totalDone / totalTarget) * 100);
+            if (coreMissedName) entry.coreMissed = true;
+        }
+
+        state.logs[date] = entry;
+        await db.set('appData_logs', state.logs);
+
+        showFeedback(entry);
+        const btn = $('#save-btn');
+        btn.innerText = "✅ 数据已保存"; btn.style.backgroundColor = "var(--level-4)";
+        setTimeout(() => { btn.innerText = "保存今日容量"; btn.style.backgroundColor = "var(--accent)"; }, 2000);
+    }
+
+    function showFeedback(data) {
+        let html = '';
+        if (data.warning) html = `<div class="analysis-box warning-box">${data.warning}</div>`;
+        else if (isRestDayLog(data)) {
+            html = data.score === 100 ? `<div class="analysis-box">Bruce: “很好的执行力，休息也是计划的一部分。”</div>`
+                 : `<div class="analysis-box warning-box">Bruce: “这天被设成了休息/有氧日，但你还没勾选完成。恢复也要认真对待。”</div>`;
+        } else if (data.score === 0) {
+            html = `<div class="analysis-box warning-box">Bruce: “记录保存了，但今天没有完成任何有效组。下次别让空表格赢了你。”</div>`;
+        } else if (data.coreMissed) {
+            html = `<div class="analysis-box warning-box">Bruce: “嘿！你居然跳过了核心动作？容量再高，没有地基刺激，激素水平也上不去！”</div>`;
+        } else if (data.score === 100) {
+            html = `<div class="analysis-box">Bruce: “完美！所有的组都吃下了。去补充碳水吧！”</div>`;
+        } else if (data.score >= 60) {
+            html = `<div class="analysis-box">Bruce: “完成了 ${data.score}% 的容量。留得青山在，下次试着补齐。”</div>`;
+        } else {
+            html = `<div class="analysis-box warning-box">Bruce: “只完成了不到一半？不要让数字欺骗你，要对得起你流的汗。”</div>`;
+        }
+        $('#daily-feedback').innerHTML = html;
+    }
+
+    /* ==========================================
+     * 4. Stats 面板核心逻辑 (图表与回放)
+     * ========================================== */
+    function renderYearTabs() {
+        const years = new Set(Object.keys(state.logs).map(d => d.split('-')[0]));
+        years.add(String(new Date().getFullYear()));
+        $('#year-tabs').innerHTML = Array.from(years).sort().reverse().map(y =>
+            `<button class="year-btn ${y === state.statsYear ? 'active' : ''}">${y}</button>`
+        ).join('');
+    }
+
+    function changeStatsYear(year) {
+        state.statsYear = year;
+        renderYearTabs();
+        renderStats(year);
+        $('#playback-area').style.display = 'none';
+    }
+
+    function renderStats(year) {
+        const heatmap = $('#heatmap');
+        heatmap.innerHTML = '';
+        const startDate = new Date(Number(year), 0, 1), endDate = new Date(Number(year), 11, 31);
+
+        for (let i = 0; i < startDate.getDay(); i++) {
+            const empty = document.createElement('div');
+            empty.className = 'cell'; empty.style.visibility = 'hidden';
+            heatmap.appendChild(empty);
+        }
+
+        let d = new Date(startDate);
+        while (d <= endDate) {
+            const dateStr = toLocalDateStr(d);
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.date = dateStr;
+
+            let level = 0, info = dateStr + " - 无记录";
+            const data = state.logs[dateStr];
+            if (data) {
+                const title = data.title || state.plan[data.dayType]?.title || '未知计划';
+                if (isRestDayLog(data)) {
+                    level = data.score > 0 ? 1 : 0;
+                    info = `${dateStr} - [休息/有氧${level?'':'未确认'}] ${title}`;
+                } else {
+                    level = data.score === 100 ? 4 : data.score >= 75 ? 3 : data.score >= 40 ? 2 : data.score > 0 ? 1 : 0;
+                    info = `${dateStr} - ${title} (${data.score}%)`;
+                }
+            }
+            cell.dataset.level = level;
+
+            cell.addEventListener('mouseenter', () => positionTooltip(cell, info));
+            cell.addEventListener('mouseleave', () => $('#global-tooltip').style.opacity = '0');
+            cell.addEventListener('touchstart', () => positionTooltip(cell, info), { passive: true });
+            cell.addEventListener('touchend', () => setTimeout(() => $('#global-tooltip').style.opacity = '0', 1500));
+            cell.addEventListener('click', () => renderPlayback(dateStr));
+
+            heatmap.appendChild(cell);
+            d.setDate(d.getDate() + 1);
+        }
+
+        setTimeout(centerHeatmap, 150);
+        renderTrendChart(year);
+        renderAnalysis(year);
+    }
+
+    function positionTooltip(cell, text) {
+        const tt = $('#global-tooltip');
+        tt.innerText = text; tt.style.opacity = '1';
+        requestAnimationFrame(() => {
+            const rect = cell.getBoundingClientRect();
+            let left = rect.left + rect.width/2 - tt.offsetWidth/2;
+            let top = rect.top - tt.offsetHeight - 8;
+            left = Math.max(8, Math.min(left, window.innerWidth - tt.offsetWidth - 8));
+            if (top < 8) top = rect.bottom + 8;
+            tt.style.left = `${left}px`; tt.style.top = `${top}px`;
+        });
+    }
+
+    function centerHeatmap() {
+        const wrapper = $('#heatmap-scroll-area');
+        const target = $(`#heatmap .cell[data-date="${toLocalDateStr()}"]`) || $('#heatmap .cell:last-child');
+        if (target) {
+            wrapper.scrollTo({ left: target.offsetLeft - wrapper.clientWidth / 2 + target.clientWidth / 2, behavior: 'smooth' });
+        }
+    }
+
+    function renderPlayback(dateStr) {
+        const pb = $('#playback-area'), title = $('#pb-title'), content = $('#pb-content');
+        pb.style.display = 'block';
+        const data = state.logs[dateStr];
+
+        if (!data) {
+            title.innerText = `📅 ${dateStr} - 无记录`; title.style.color = "var(--text-muted)";
+            content.innerHTML = "<p>这一天像风一样消散了，什么都没留下。</p>"; return;
+        }
+
+        const planTitle = data.title || state.plan[data.dayType]?.title || '未知计划';
+        title.innerText = `📅 ${dateStr} - ${planTitle}`; title.style.color = "#58a6ff";
+
+        if (isRestDayLog(data)) {
+            content.innerHTML = `<p>${data.score > 0 ? '✅ 这一天，你选择了休息或有氧，让身体进行恢复。' : '🕒 这一天被标记为休息/有氧日，但你还没有勾选完成。'}</p>
+                                 ${data.note ? `<p><strong>备注：</strong>${escapeHTML(data.note)}</p>` : ''}`;
+            return;
+        }
+
+        let html = `<p><strong>容量完成度：</strong><span style="color:${data.score > 0 ? 'var(--level-4)' : 'var(--text-muted)'}">${data.score}%</span></p>`;
+        if (data.score === 0) html += `<p style="color:var(--danger)">这次记录已保存，但没有完成任何有效组。</p>`;
+        if (data.note) html += `<p><strong>备注：</strong>${escapeHTML(data.note)}</p>`;
+        html += '<hr style="border-color:var(--border-color); margin: 15px 0;">';
+
+        if (!data.exercises || !data.exercises.length) html += `<p>没有可回放的动作明细。</p>`;
+        else {
+            data.exercises.forEach(ex => {
+                const pEx = (state.plan[data.dayType]?.exercises || []).find(e => e.id === ex.id) || {};
+                const mType = ex.measureType || inferMeasureType(ex.repsDesc || pEx.repsDesc);
+                const tSets = ex.targetSets || Math.max((ex.weights||[]).length, (ex.reps||[]).length) || pEx.sets || 0;
+                const cSets = typeof ex.completedSets === 'number' ? ex.completedSets : (ex.weights||[]).reduce((a, w, i) => a + (hasSetActivity(w, ex.reps?.[i])?1:0), 0);
+
+                html += `<div style="margin-bottom: 12px;"><strong>${escapeHTML(ex.name || pEx.name)}</strong> (${cSets}/${tSets} 组)<div style="margin-top: 4px;">`;
+                if (cSets === 0) html += `<span class="playback-set" style="color:var(--danger)">未执行</span>`;
+                else {
+                    const maxL = Math.max((ex.weights||[]).length, (ex.reps||[]).length);
+                    for (let i = 0; i < maxL; i++) {
+                        if (hasSetActivity(ex.weights?.[i], ex.reps?.[i])) {
+                            const wStr = String(ex.weights?.[i] || '').trim();
+                            const rStr = String(ex.reps?.[i] || '').trim();
+                            const w = wStr && wStr !== '0' ? `${escapeHTML(wStr)}kg` : `自重`;
+                            const r = rStr ? `${escapeHTML(rStr)}${mType==='time'?'秒':'次'}` : `?${mType==='time'?'秒':'次'}`;
+                            html += `<span class="playback-set">[第${i+1}组] ${w} x ${r}</span><br>`;
+                        }
+                    }
+                }
+                html += `</div></div>`;
+            });
+        }
+        content.innerHTML = html;
+        pb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderTrendChart(year) {
+        const md = new Array(12).fill(0);
+        Object.keys(state.logs).forEach(date => {
+            const data = state.logs[date];
+            if (date.startsWith(year) && !isRestDayLog(data) && data.score > 0) md[parseInt(date.split('-')[1]) - 1]++;
+        });
+        const maxD = Math.max(1, ...md);
+        $('#trend-chart').innerHTML = md.map((days, i) => `
+            <div class="bar-container">
+                <div class="bar" style="height: ${days===0 ? 0 : (days/maxD)*100}%" data-val="${days}天"></div>
+                <div class="month-label">${i+1}月</div>
+            </div>`).join('');
+    }
+
+    function renderAnalysis(year) {
+        let days = 0, total = 0;
+        Object.keys(state.logs).forEach(d => {
+            const data = state.logs[d];
+            if (d.startsWith(year) && !isRestDayLog(data) && data.score > 0) { days++; total += data.score; }
+        });
+        $('#ai-analysis').innerHTML = days === 0
+            ? `<p>${escapeHTML(year)}年还没有容量记录。种一棵树最好的时间是十年前，其次是现在。</p>`
+            : `<div class="analysis-box"><strong>${escapeHTML(year)}年数据总览：</strong><br>
+               全年有效训练 (不含纯休息日)：<span style="color:var(--accent); font-size:1.2em; font-weight:bold">${days}</span> 天<br>
+               平均容量完成度：<span style="color:var(--accent); font-size:1.2em; font-weight:bold">${Math.round(total/days)}%</span></div>`;
+    }
+
+    /* ==========================================
+     * 5. Edit 面板核心逻辑 (计划定制)
+     * ========================================== */
+    function renderEditPanel() {
+        const day = $('#edit-day-selector').value;
+        const p = state.plan[day];
+        $('#ed-day-title').value = p.title;
+        $('#ed-day-isrest').checked = p.isRest;
+        $('#edit-exercise-wrapper').style.display = p.isRest ? 'none' : 'block';
+
+        $('#edit-exercise-list').innerHTML = (p.exercises || []).map(ex => `
+            <div class="card" data-id="${escapeHTML(ex.id)}">
+                <div class="edit-row">
+                    <input type="text" class="ed-name" value="${escapeHTML(ex.name)}" placeholder="动作名称" style="font-weight:bold;">
+                    <label><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> 🔥核心</label>
+                    <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
+                </div>
+                <div class="edit-row">
+                    <span style="color:var(--text-muted); font-size:0.9em;">目标组数:</span>
+                    <input type="number" class="ed-sets" value="${ex.sets}" min="1" max="20" style="width:70px;">
+                    <span style="color:var(--text-muted); font-size:0.9em; margin-left:10px;">要求:</span>
+                    <input type="text" class="ed-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
+                </div>
+                <div class="edit-row" style="margin-bottom:0;">
+                    <input type="text" class="ed-tip" value="${escapeHTML(ex.tip)}" placeholder="教练骚话或要点 (选填)" style="width:100%; font-size:0.9em;">
+                </div>
+            </div>`).join('');
+        $('#edit-feedback').innerText = '';
+    }
+
+    function addExerciseToEdit() {
+        const id = 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+        $('#edit-exercise-list').insertAdjacentHTML('beforeend', `
+            <div class="card" data-id="${id}">
+                <div class="edit-row">
+                    <input type="text" class="ed-name" value="" placeholder="新动作名称" style="font-weight:bold;">
+                    <label><input type="checkbox" class="ed-core"> 🔥核心</label>
+                    <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
+                </div>
+                <div class="edit-row">
+                    <span style="color:var(--text-muted); font-size:0.9em;">目标组数:</span>
+                    <input type="number" class="ed-sets" value="3" min="1" max="20" style="width:70px;">
+                    <span style="color:var(--text-muted); font-size:0.9em; margin-left:10px;">要求:</span>
+                    <input type="text" class="ed-reps" value="8-12次" placeholder="如: 8-10次">
+                </div>
+                <div class="edit-row" style="margin-bottom:0;">
+                    <input type="text" class="ed-tip" value="" placeholder="教练提示 (选填)" style="width:100%; font-size:0.9em;">
+                </div>
+            </div>`);
+    }
+
+    async function saveEditPlan() {
+        const isRest = $('#ed-day-isrest').checked;
+        const title = $('#ed-day-title').value.trim() || 'Day 自定义';
+        let newExs = [];
+
+        if (!isRest) {
+            $$('#edit-exercise-list .card').forEach(card => {
+                newExs.push({
+                    id: card.dataset.id,
+                    name: card.querySelector('.ed-name').value.trim() || '未命名动作',
+                    sets: Math.min(20, Math.max(1, parseInt(card.querySelector('.ed-sets').value) || 1)),
+                    repsDesc: card.querySelector('.ed-reps').value.trim() || '力竭',
+                    tip: card.querySelector('.ed-tip').value.trim(),
+                    isCore: card.querySelector('.ed-core').checked
+                });
+            });
+            if (!newExs.length) return $('#edit-feedback').innerText = '❌ 非休息日至少保留一个动作。';
+        }
+
+        const day = $('#edit-day-selector').value;
+        state.plan[day] = { title, isRest, exercises: newExs };
+        await db.set('appData_plan', state.plan);
+
+        syncSelectOptions();
+        if ($('#today').classList.contains('active')) renderTodayPanel();
+        $('#edit-feedback').innerText = `✅ [${title}] 已保存！`;
+        setTimeout(() => $('#edit-feedback').innerText = '', 3000);
+    }
+
+    async function restoreDefaultPlan() {
+        if (confirm("⚠️ 恢复默认训练计划！你的历史打卡记录不会受影响。确定恢复吗？")) {
+            await db.set('appData_plan', null);
+            state.plan = JSON.parse(JSON.stringify(defaultWorkoutPlan));
+            syncSelectOptions();
+            renderEditPanel();
+            if ($('#today').classList.contains('active')) renderTodayPanel();
+            if ($('#stats').classList.contains('active')) { renderYearTabs(); renderStats(state.statsYear); }
+            alert("已成功恢复默认计划。");
+        }
+    }
+
+    /* ==========================================
+     * 6. 数据管理 (导出 / 导入 / 清空)
+     * ========================================== */
+    function exportJSON() {
+        const exp = { plan: {}, logs: {} };
+
+        for (let i = 1; i <= 7; i++) {
+            const p = state.plan['day' + i];
+            if (!p) continue;
+            const cd = { title: p.title };
+            if (p.isRest) { cd.isRest = true; cd.exercises = []; }
+            else cd.exercises = p.exercises.map(ex => {
+                const ce = { id: ex.id, name: ex.name, sets: ex.sets, repsDesc: ex.repsDesc };
+                if (ex.tip) ce.tip = ex.tip;
+                if (ex.isCore) ce.isCore = true;
+                return ce;
+            });
+            exp.plan['day' + i] = cd;
+        }
+
+        Object.keys(state.logs).sort().forEach(date => {
+            const raw = state.logs[date];
+            const cl = { dayType: raw.dayType, title: raw.title };
+            if (raw.isRest) cl.isRest = true;
+            cl.score = raw.score;
+            if (raw.note) cl.note = raw.note;
+
+            if (!raw.isRest && Array.isArray(raw.exercises) && raw.exercises.length) {
+                cl.exercises = raw.exercises.map(ex => {
+                    const ce = { id: ex.id, name: ex.name };
+                    if (ex.measureType && ex.measureType !== 'reps') ce.measureType = ex.measureType;
+                    ce.targetSets = ex.targetSets;
+                    if (ex.weights && ex.weights.length) ce.weights = ex.weights.map(toNumOrNull);
+                    if (ex.reps && ex.reps.length) ce.reps = ex.reps.map(toNumOrNull);
+                    return ce;
+                });
+            }
+            exp.logs[date] = cl;
+        });
+
+        const blob = new Blob([JSON.stringify(exp, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `hardcore_log_${toLocalDateStr()}.json`;
+        a.click(); URL.revokeObjectURL(url);
+    }
+
+    function importJSON(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async evt => {
+            try {
+                const parsed = JSON.parse(evt.target.result);
+                if (!parsed || typeof parsed !== 'object') throw new Error('Invalid JSON');
+
+                const importedLogs = parsed.logs || parsed;
+                Object.entries(importedLogs).forEach(([d, v]) => {
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(d) && v && typeof v === 'object') state.logs[d] = v;
+                });
+
+                if (parsed.plan) state.plan = parsed.plan;
+
+                await db.set('appData_logs', state.logs);
+                await db.set('appData_plan', state.plan);
+                alert("✅ 数据导入成功！");
+                location.reload();
+            } catch (err) {
+                alert("❌ 文件格式错误或内容无效！");
+            } finally { e.target.value = ''; }
+        };
+        reader.readAsText(file);
+    }
+
+    async function clearData() {
+        if (confirm("⚠️ 确定要清空？如果没有备份 JSON，数据将永远消失。")) {
+            await db.set('appData_logs', null);
+            await db.set('appData_plan', null);
+            location.reload();
+        }
+    }
+</script>
+</body>
+</html>
