@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bruce的硬核训练日志</title>
+    <meta name="theme-color" content="#0d1117">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="#">
     <style>
         /* 全局滚动条隐藏 */
         html, .tabs, .year-selector { scrollbar-width: none; -ms-overflow-style: none; }
@@ -228,6 +233,57 @@
         }
     };
 
+    function setupPWA() {
+        function makeIcon(size) {
+            const c = document.createElement('canvas');
+            c.width = c.height = size;
+            const g = c.getContext('2d');
+            const r = size * 0.12;
+            g.beginPath();
+            g.moveTo(r, 0); g.lineTo(size - r, 0); g.arcTo(size, 0, size, r, r);
+            g.lineTo(size, size - r); g.arcTo(size, size, size - r, size, r);
+            g.lineTo(r, size); g.arcTo(0, size, 0, size - r, r);
+            g.lineTo(0, r); g.arcTo(0, 0, r, 0, r);
+            g.closePath();
+            g.fillStyle = '#0d1117'; g.fill();
+            g.fillStyle = '#39d353';
+            g.font = `bold ${size * 0.55}px -apple-system,BlinkMacSystemFont,sans-serif`;
+            g.textAlign = 'center'; g.textBaseline = 'middle';
+            g.fillText('B', size / 2, size / 2 * 1.05);
+            return c.toDataURL('image/png');
+        }
+
+        const icon192 = makeIcon(192), icon512 = makeIcon(512);
+
+        const manifest = {
+            name: 'Bruce的硬核训练日志',
+            short_name: '训练日志',
+            start_url: location.pathname,
+            display: 'standalone',
+            background_color: '#0d1117',
+            theme_color: '#0d1117',
+            icons: [
+                { src: icon192, sizes: '192x192', type: 'image/png' },
+                { src: icon512, sizes: '512x512', type: 'image/png' }
+            ]
+        };
+        $('link[rel="manifest"]').href = URL.createObjectURL(
+            new Blob([JSON.stringify(manifest)], { type: 'application/json' })
+        );
+
+        const link = document.createElement('link');
+        link.rel = 'apple-touch-icon'; link.href = icon192;
+        document.head.appendChild(link);
+
+        if (navigator.storage && navigator.storage.persist) {
+            navigator.storage.persist().then(granted => {
+                if (!granted) {
+                    console.log('存储持久化未授予 — 建议安装为 App 后自动获得');
+                }
+            });
+        }
+    }
+
     const defaultWorkoutPlan = {
         "day1": { title: "Day 1：上肢推力结构", isRest: false, exercises: [
             { id: "d1e1", name: "上斜俯卧撑 / 跪姿俯卧撑", sets: 3, repsDesc: "8-12次", tip: "双手撑在床沿或桌子上退阶，或者双膝着地。核心收紧，身体保持一条直线。", isCore: true },
@@ -286,6 +342,7 @@
 
             bindEvents();
             renderTodayPanel();
+            setupPWA();
 
             $('#loading-screen').style.opacity = '0';
             setTimeout(() => $('#loading-screen').style.display = 'none', 300);
