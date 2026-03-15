@@ -1,0 +1,26 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup page
+        run: mkdir _site && cp index.html _site/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+
+      - name: Deploy to EdgeOne Pages
+        run: npx edgeone pages deploy ./_site -n "single-html-workout" --token ${{ secrets.EDGEONE_API_TOKEN }}
+        env:
+          EDGEONE_API_TOKEN: ${{ secrets.EDGEONE_API_TOKEN }}
