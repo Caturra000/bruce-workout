@@ -10,16 +10,21 @@
 - 历史回放
 - JSON 导入导出
 - 无后端，无需账号
+- iOS/Android [PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) 应用支持
+    - [iOS](https://support.apple.com/zh-cn/guide/iphone/iphea86e5236/ios): Safari - 分享↑ - 添加到主屏幕
+    - Android: Chrome - 三个点┇ - 添加到主屏幕
 
 ## 快速开始
 
-直接用浏览器打开 `index.html`，或部署到 GitHub Pages。
+- 直接使用静态网站：<https://workout.bluepuni.com>
+- 或 保存 index.html，本地用浏览器打开
+- 或 自行部署静态网站，比如 GitHub Pages
 
-在线测试：[点击这里](http://htmlpreview.github.io/?https://github.com/Caturra000/single-html-workout/blob/master/index.html)。
+手机上可以进一步参考上述 PWA 说明，作为 Android/iOS app 去使用。
 
-## 存储方式
+## 数据/隐私
 
-数据通过 IndexedDB 保存在浏览器本地。
+数据持久保存在浏览器本地。
 
 ## 许可证
 
