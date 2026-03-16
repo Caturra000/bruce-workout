@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bruce的硬核训练日志</title>
+    <title>Bruce的硬核训练</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d1117'/><text x='50' y='55' text-anchor='middle' dominant-baseline='central' font-size='55' font-weight='bold' fill='%2339d353'>B</text></svg>">
     <meta name="theme-color" content="#0d1117">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href='data:application/manifest+json,{"display":"standalone","start_url":"./","name":"Bruce的硬核训练日志","short_name":"Bruce","background_color":"%230d1117","theme_color":"%230d1117"}'>
+    <link rel="manifest" href='data:application/manifest+json,{"display":"standalone","start_url":"./","name":"Bruce的硬核训练","short_name":"Bruce","background_color":"%230d1117","theme_color":"%230d1117"}'>
     <style>
         /* 全局滚动条隐藏 */
         html, .tabs, .year-selector { scrollbar-width: none; -ms-overflow-style: none; }
@@ -74,7 +74,7 @@
         .heatmap-wrapper { overflow-x: auto; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         .heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; }
+        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; padding: 2px; }
         .cell { width: 14px; height: 14px; border-radius: 3px; background: var(--level-0); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.1s; }
         .cell[data-level="1"] { background: var(--level-1); }
         .cell[data-level="2"] { background: var(--level-2); }
@@ -86,12 +86,11 @@
 
         .playback-box { background: #0d1117; border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px; display: none; }
         .playback-set { font-size: 0.9em; color: var(--text-muted); margin-left: 15px; }
-        .trend-chart { display: flex; align-items: flex-end; gap: 8px; height: 150px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
-        .bar-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
+        .bar-cell { display: flex; align-items: flex-end; justify-content: center; }
         .bar { width: 100%; max-width: 35px; background: var(--accent); border-radius: 3px 3px 0 0; position: relative; }
-        .bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: bold; z-index: 2;}
-        .month-label { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
-
+        .bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: bold; z-index: 2; white-space: nowrap; }
+        .month-label { font-size: 12px; color: var(--text-muted); text-align: center; padding-top: 5px; }
         .analysis-box { background: rgba(35,134,54,0.1); border-left: 4px solid var(--accent); padding: 15px; margin-top: 20px; border-radius: 4px; }
         .warning-box { border-left-color: var(--danger); background: rgba(218,54,51,0.1); }
 
@@ -138,6 +137,7 @@
         <div class="tab" data-target="stats">📊 统计与回放</div>
         <div class="tab" data-target="edit">⚙️ 计划定制</div>
         <div class="tab" data-target="data">💾 数据管理</div>
+        <div class="tab" data-target="about">📔 关于软件</div>
     </div>
 
     <!-- Panel: Today -->
@@ -201,7 +201,7 @@
     <!-- Panel: Data -->
     <div id="data" class="panel">
         <h2>💾 数据存档与迁移</h2>
-        <p style="color: var(--text-muted); font-size: 0.9em;">数据存储在本地。为了防止清理浏览器缓存导致丢失，请定期导出完整数据备份。</p>
+        <p style="color: var(--text-muted); font-size: 0.9em;">数据存储在本地，建议定期导出完整数据备份。</p>
         <button id="btn-export">📥 导出完整数据 (JSON)</button>
         <div style="margin-top: 20px;">
             <input type="file" id="import-file" accept=".json" style="display:none">
@@ -247,14 +247,24 @@
         </div>
         <button class="btn-outline btn-danger" style="margin-top: 40px;" id="btn-clear-data">⚠️ 清空本地所有数据</button>
     </div>
-    <div style="text-align:center; margin-top:30px; padding:10px 0;">
-        <a href="https://github.com/Caturra000/single-html-workout" target="_blank" rel="noopener"
-            style="color:var(--text-muted); text-decoration:none; font-size:0.85em; transition:0.2s;"
-            onmouseenter="this.style.color='var(--text-main)'" onmouseleave="this.style.color='var(--text-muted)'">
-            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-3px; margin-right:4px;">
+
+    <!-- Panel: About -->
+    <div id="about" class="panel">
+        <div style="text-align:center; padding:30px 0 20px;">
+            <svg height="48" width="48" viewBox="0 0 16 16" fill="var(--text-muted)" style="margin-bottom:12px;">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-            </svg>GitHub
-        </a>
+            </svg>
+            <h2 style="margin:0 0 4px;">Bruce的硬核训练</h2>
+            <p style="color:var(--text-muted); font-size:0.85em; margin:0;">单文件 · 多平台同步 · 健身打卡</p>
+        </div>
+        <div style="border-top:1px solid var(--border-color); padding-top:15px; font-size:0.9em; color:var(--text-muted); line-height:2;">
+            <table style="border-collapse:collapse; font-size:0.9em; color:var(--text-muted); line-height:2;">
+                <tr><td style="padding-right:20px;"><b style="color:var(--text-main);">源代码</b></td><td><a href="https://github.com/Caturra000/bruce-workout" target="_blank" rel="noopener" style="color:#58a6ff;">GitHub ↗</a></td></tr>
+                <tr><td style="padding-right:20px;"><b style="color:var(--text-main);">许可协议</b></td><td>MPL-2.0 License</td></tr>
+                <tr><td style="padding-right:20px;"><b style="color:var(--text-main);"><i>Bruce</i></b></td><td>虚拟教练，你可想象为肌肉版的初音未来</td></tr>
+            </table>
+            <p style="margin-top:20px; font-size:0.8em; color:rgba(139,148,158,0.5);">© 2026 Caturra</p>
+        </div>
     </div>
 </div>
 
@@ -505,7 +515,7 @@
         const icon192 = makeIcon(192), icon512 = makeIcon(512);
 
         const manifest = {
-            name: 'Bruce的硬核训练日志',
+            name: 'Bruce的硬核训练',
             short_name: 'Bruce',
             start_url: location.pathname,
             display: 'standalone',
@@ -1023,11 +1033,9 @@
             if (date.startsWith(year) && !isRestDayLog(data) && data.score > 0) md[parseInt(date.split('-')[1]) - 1]++;
         });
         const maxD = Math.max(1, ...md);
-        $('#trend-chart').innerHTML = md.map((days, i) => `
-            <div class="bar-container">
-                <div class="bar" style="height: ${days===0 ? 0 : (days/maxD)*100}%" data-val="${days}天"></div>
-                <div class="month-label">${i+1}月</div>
-            </div>`).join('');
+        $('#trend-chart').innerHTML =
+            md.map(days => `<div class="bar-cell"><div class="bar" style="height:${days === 0 ? 0 : (days / maxD) * 100}%" data-val="${days}天"></div></div>`).join('') +
+            md.map((_, i) => `<div class="month-label">${i + 1}月</div>`).join('');
     }
 
     function renderAnalysis(year) {
