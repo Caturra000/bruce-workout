@@ -63,8 +63,8 @@
         .set-unit { color: var(--text-muted); font-size: 0.9em; }
 
         .edit-meta-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; }
-        .edit-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;}
-        .edit-row label { display: flex; align-items: center; gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main);}
+        .edit-row { display: flex; gap: 10px; margin-bottom: 10px;  flex-wrap: wrap;}
+        .edit-row label { display: flex;  gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main);}
         .card input[type="text"].ed-name { flex: 1; min-width: 150px;}
 
         .year-selector { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; }
@@ -1177,11 +1177,15 @@
                     <label><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> 🔥核心</label>
                     <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
                 </div>
-                <div class="edit-row">
-                    <span style="color:var(--text-muted); font-size:0.9em;">目标组数:</span>
-                    <input type="number" class="ed-sets" value="${ex.sets}" min="1" max="20" style="width:70px;">
-                    <span style="color:var(--text-muted); font-size:0.9em; margin-left:10px;">要求:</span>
-                    <input type="text" class="ed-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
+                <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <label style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="color:var(--text-muted); font-size:0.85em;">目标组数</span>
+                        <input type="number" class="ed-sets" value="${ex.sets}" min="1" max="20">
+                    </label>
+                    <label style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="color:var(--text-muted); font-size:0.85em;">要求</span>
+                        <input type="text" class="ed-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
+                    </label>
                 </div>
                 <div class="edit-row" style="margin-bottom:0;">
                     <input type="text" class="ed-tip" value="${escapeHTML(ex.tip)}" placeholder="教练骚话或要点 (选填)" style="width:100%; font-size:0.9em;">
@@ -1199,11 +1203,15 @@
                     <label><input type="checkbox" class="ed-core"> 🔥核心</label>
                     <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
                 </div>
-                <div class="edit-row">
-                    <span style="color:var(--text-muted); font-size:0.9em;">目标组数:</span>
-                    <input type="number" class="ed-sets" value="3" min="1" max="20" style="width:70px;">
-                    <span style="color:var(--text-muted); font-size:0.9em; margin-left:10px;">要求:</span>
-                    <input type="text" class="ed-reps" value="8-12次" placeholder="如: 8-10次">
+                <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <label style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="color:var(--text-muted); font-size:0.85em;">目标组数</span>
+                        <input type="number" class="ed-sets" value="3" min="1" max="20">
+                    </label>
+                    <label style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="color:var(--text-muted); font-size:0.85em;">要求</span>
+                        <input type="text" class="ed-reps" value="8-12次" placeholder="如: 8-10次">
+                    </label>
                 </div>
                 <div class="edit-row" style="margin-bottom:0;">
                     <input type="text" class="ed-tip" value="" placeholder="教练提示 (选填)" style="width:100%; font-size:0.9em;">
