@@ -113,6 +113,10 @@
         .guide-step .y { color:var(--quick-fill); }
         .guide-step .r { color:var(--danger); }
 
+        @supports (-webkit-touch-callout: none) {
+            select, input { font-size: 16px; }
+        }
+
         @media (max-width: 600px) {
             .set-row { justify-content: space-between; }
             .set-input { width: 30%; flex-grow: 0; }
