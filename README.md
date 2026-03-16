@@ -42,4 +42,20 @@ v0.1:
 v1.0:
 - 改名 bruce-workout。
 - 实现 GitHub Contents API 多平台同步。
-- 解决 Safari 的 PWA 兼容性问题。（Only Apple can do!）
+- 修复 Safari 的 PWA 兼容性问题。（Only Apple can do!）
+
+v1.1:
+- 修复 Safari 的 16px 兼容性问题。（Only Apple can do!）
+
+v10.0:
+- 实现 GitHub 指定历史版本的拉取。
+- 修复 GitHub token 显示溢出。
+
+v11.0:
+- 实现 sw.js 同时保持 single HTML，做法是比较反模式的。
+
+v100.0:
+
+v101.0:
+
+v110.0:

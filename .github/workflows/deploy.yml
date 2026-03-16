@@ -15,7 +15,31 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup page
-        run: mkdir _site && cp index.html _site/
+        run: |
+          mkdir _site && cp index.html _site/
+          HASH=$(sha256sum index.html | cut -c1-8)
+          cat > _site/sw.js << EOF
+          const CACHE = 'workout-${HASH}';
+          const FILES = ['./'];
+          self.addEventListener('install', e => e.waitUntil(
+            caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())
+          ));
+          self.addEventListener('activate', e => e.waitUntil(
+            caches.keys().then(keys => Promise.all(
+              keys.filter(k => k !== CACHE).map(k => caches.delete(k))
+            )).then(() => self.clients.claim())
+          ));
+          self.addEventListener('fetch', e => {
+            if (e.request.method !== 'GET') return;
+            e.respondWith(
+              caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+                const clone = resp.clone();
+                caches.open(CACHE).then(c => c.put(e.request, clone));
+                return resp;
+              }))
+            );
+          });
+          EOF
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
