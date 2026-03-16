@@ -97,6 +97,23 @@
 
         #loading-screen { position: fixed; inset: 0; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 10000; font-size: 1.2em; font-weight: bold; color: var(--accent); transition: opacity 0.3s; }
 
+        .guide-toggle { display:flex; align-items:center; gap:8px; padding:8px 12px; margin-bottom:12px; border-radius:6px; cursor:pointer; color:#58a6ff; font-size:0.85em; font-weight:600; background:transparent; border:none; transition:background 0.2s; width:100%; }
+        .guide-toggle:hover { background:rgba(88,166,255,0.08); }
+        .guide-toggle .arrow { transition:transform 0.25s; font-size:0.7em; }
+        .guide-toggle.open { margin-bottom:0; }
+        .guide-toggle.open .arrow { transform:rotate(90deg); }
+        .guide-steps { display:none; margin:4px 0 12px; padding:0 4px 0 8px; }
+        .guide-steps.open { display:block; animation:fadeIn 0.25s; }
+        .guide-step { display:flex; gap:12px; padding:6px 0; font-size:0.84em; color:var(--text-muted); line-height:1.7; }
+        .guide-step + .guide-step { border-top:1px solid rgba(255,255,255,0.04); }
+        .guide-num { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:rgba(88,166,255,0.12); color:#58a6ff; font-size:0.75em; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+        .guide-step b { color:var(--text-main); }
+        .guide-step a { color:#58a6ff; }
+        .guide-step code { background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:3px; font-size:0.95em; }
+        .guide-step .g { color:var(--level-4); }
+        .guide-step .y { color:var(--quick-fill); }
+        .guide-step .r { color:var(--danger); }
+
         @media (max-width: 600px) {
             .set-row { justify-content: space-between; }
             .set-input { width: 30%; flex-grow: 0; }
@@ -111,6 +128,11 @@
 <div id="global-tooltip" class="global-tooltip"></div>
 
 <div class="container">
+    <div id="sync-toast" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+        background:var(--panel-bg); border:1px solid var(--border-color); border-radius:8px;
+        padding:10px 20px; font-size:0.9em; z-index:9999; opacity:0; transition:opacity 0.3s;
+        pointer-events:none; white-space:nowrap; box-shadow:0 4px 12px rgba(0,0,0,0.4);">
+    </div>
     <div class="tabs" id="main-tabs">
         <div class="tab active" data-target="today">📝 今日打卡</div>
         <div class="tab" data-target="stats">📊 统计与回放</div>
@@ -185,6 +207,44 @@
             <input type="file" id="import-file" accept=".json" style="display:none">
             <button class="btn-outline" onclick="$('#import-file').click()">📤 导入恢复数据 (JSON)</button>
         </div>
+        <div style="margin-top:30px; border-top:1px solid var(--border-color); padding-top:20px;">
+            <h3>☁️ GitHub 云同步</h3>
+            <p style="color:var(--text-muted); font-size:0.85em; margin-bottom:4px;">
+                通过 GitHub 仓库实现跨设备数据同步。需要创建一个 Fine-grained PAT。
+            </p>
+
+            <button type="button" class="guide-toggle" id="guide-toggle" onclick="this.classList.toggle('open'); $('#guide-steps').classList.toggle('open');">
+                <span class="arrow">👉</span> 首次配置教程
+            </button>
+
+            <div class="guide-steps" id="guide-steps">
+                <div class="guide-step"><span class="guide-num">1</span><div>新建一个<b>私有仓库</b>（如 <code>my-workout-sync</code>），专门存放同步数据。</div></div>
+                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页 ↗</a>，点 <b class="g">Generate new token</b>。</div></div>
+                <div class="guide-step"><span class="guide-num">3</span><div><b>Token name</b> 随意填，<b>Expiration</b> 建议选 90 天或 1 年。</div></div>
+                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="y">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
+                <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="g">Add permissions</b>，勾选 <b class="y">Contents</b> 并设为 <b class="g">Read and write</b>，其余不动。</div></div>
+                <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="g">Generate token</b>，<b class="r">立刻复制</b> <code>github_pat_xxx…</code>（只显示一次）。</div></div>
+                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="g">💾 保存配置</b> 即可。</div></div>
+                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，可以考虑先本地 <b class="g">📥 导出完整数据</b>，随时都可以通过 <b class="g">📤 导入恢复数据</b> 挽救回来。</div></div>
+                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="g">⬆️ 推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="g">⬇️ 拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)" style="width:100%; font-family:monospace;">
+                <input type="text" id="gh-repo" placeholder="仓库 (格式: owner/repo)" style="width:100%;">
+                <input type="text" id="gh-path" placeholder="文件路径 (默认: workout_data.json)" style="width:100%;">
+                <input type="text" id="gh-msg" placeholder="Commit 信息模板 (默认: sync: {time})" style="width:100%;">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9em; color:var(--text-muted);">
+                    <input type="checkbox" id="gh-autosync" style="width:18px;height:18px; accent-color:var(--accent);">
+                    保存打卡 / 修改计划时自动推送到 GitHub
+                </label>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+                <button id="btn-gh-save" class="btn-outline" style="flex:1; min-width:100px;">💾 保存配置</button>
+                <button id="btn-gh-push" style="flex:1; min-width:100px;">⬆️ 推送</button>
+                <button id="btn-gh-pull" class="btn-outline" style="flex:1; min-width:100px;">⬇️ 拉取</button>
+            </div>
+            <div id="gh-status" style="margin-top:10px; font-size:0.9em; min-height:1.4em;"></div>
+        </div>
         <button class="btn-outline btn-danger" style="margin-top: 40px;" id="btn-clear-data">⚠️ 清空本地所有数据</button>
     </div>
     <div style="text-align:center; margin-top:30px; padding:10px 0;">
@@ -240,6 +300,185 @@
                 else tx.objectStore(STORE_NAME).put(val, key);
                 tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
             });
+        }
+    };
+
+    /* ==========================================
+    * GitHub 云同步模块
+    * ========================================== */
+    const githubSync = {
+        settings: {},
+
+        async loadSettings() {
+            this.settings = (await db.get('github_settings')) || {};
+            this.updateUI();
+        },
+
+        updateUI() {
+            const s = this.settings;
+            if ($('#gh-token')) $('#gh-token').value = s.token || '';
+            if ($('#gh-repo'))  $('#gh-repo').value  = s.repo  || '';
+            if ($('#gh-path'))  $('#gh-path').value  = s.path  || '';
+            if ($('#gh-msg')) $('#gh-msg').value = s.msg || '';
+            if ($('#gh-autosync')) $('#gh-autosync').checked = !!s.autoSync;
+            if (s.lastSync) this.setStatus(`上次同步: ${s.lastSync}`, 'var(--text-muted)');
+        },
+
+        async saveSettings() {
+            this.settings = {
+                token:    $('#gh-token').value.trim(),
+                repo:     $('#gh-repo').value.trim(),
+                path:     $('#gh-path').value.trim() || 'workout_data.json',
+                msg:      $('#gh-msg').value.trim(),
+                autoSync: $('#gh-autosync').checked,
+                lastSync: this.settings.lastSync || null,
+            };
+            await db.set('github_settings', this.settings);
+            this.setStatus('✅ 配置已保存', 'var(--level-4)');
+        },
+
+        buildCommitMsg() {
+            const now = new Date();
+            const template = this.settings.msg || 'sync: {time}';
+            return template
+                .replace(/\{time\}/g, `${toLocalDateStr(now)} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`)
+                .replace(/\{date\}/g, toLocalDateStr(now))
+                .replace(/\{iso\}/g, now.toISOString())
+                .replace(/\{ts\}/g, now.getTime());
+        },
+
+        isReady() { return !!(this.settings.token && this.settings.repo); },
+
+        setStatus(msg, color = 'var(--text-muted)') {
+            const el = $('#gh-status');
+            if (el) { el.innerHTML = msg; el.style.color = color; }
+        },
+
+        async push(silent = false) {
+            if (!this.isReady()) {
+                if (!silent) this.setStatus('❌ 请先配置 Token 和仓库', 'var(--danger)');
+                return false;
+            }
+            const { token, repo, path } = this.settings;
+            const filePath = path || 'workout_data.json';
+            if (!silent) this.setStatus('⏳ 正在推送…', 'var(--quick-fill)');
+
+            try {
+                // 1) 获取当前文件 SHA（若存在）
+                let sha = null;
+                const getResp = await fetch(
+                    `https://api.github.com/repos/${repo}/contents/${filePath}`,
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                if (getResp.ok) {
+                    sha = (await getResp.json()).sha;
+                } else if (getResp.status !== 404) {
+                    const errBody = await getResp.json().catch(() => ({}));
+                    throw new Error(errBody.message || `HTTP ${getResp.status}`);
+                }
+
+                // 2) 构建 & 推送
+                const content = JSON.stringify(buildExportData(), null, 2);
+                const body = {
+                    message: this.buildCommitMsg(),
+                    content: btoa(unescape(encodeURIComponent(content)))
+                };
+                if (sha) body.sha = sha;
+
+                const putResp = await fetch(
+                    `https://api.github.com/repos/${repo}/contents/${filePath}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    }
+                );
+                if (!putResp.ok) {
+                    const err = await putResp.json().catch(() => ({}));
+                    throw new Error(err.message || `HTTP ${putResp.status}`);
+                }
+
+                this.settings.lastSync = new Date().toLocaleString('zh-CN');
+                await db.set('github_settings', this.settings);
+                this.setStatus(`✅ 推送成功 (${this.settings.lastSync})`, 'var(--level-4)');
+                return true;
+            } catch (e) {
+                this.setStatus(`❌ 推送失败: ${e.message}`, 'var(--danger)');
+                return false;
+            }
+        },
+
+        async pull() {
+            if (!this.isReady()) {
+                this.setStatus('❌ 请先配置 Token 和仓库', 'var(--danger)');
+                return;
+            }
+            const { token, repo, path } = this.settings;
+            const filePath = path || 'workout_data.json';
+            this.setStatus('⏳ 正在拉取…', 'var(--quick-fill)');
+
+            try {
+                const resp = await fetch(
+                    `https://api.github.com/repos/${repo}/contents/${filePath}`,
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                if (resp.status === 404) throw new Error('远程文件不存在，请先推送一次');
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+                const fileInfo = await resp.json();
+                const decoded = decodeURIComponent(
+                    escape(atob(fileInfo.content.replace(/[\r\n]/g, '')))
+                );
+                const parsed = JSON.parse(decoded);
+
+                if (!confirm('⚠️ 拉取会将远程数据与本地合并（冲突时远程优先）。确定继续？')) {
+                    this.setStatus('已取消', 'var(--text-muted)');
+                    return;
+                }
+
+                // 合并日志（远程覆盖同日）
+                const importedLogs = parsed.logs || {};
+                Object.entries(importedLogs).forEach(([d, v]) => {
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(d) && v && typeof v === 'object') state.logs[d] = v;
+                });
+                if (parsed.plan) state.plan = parsed.plan;
+
+                await db.set('appData_logs', state.logs);
+                await db.set('appData_plan', state.plan);
+
+                this.settings.lastSync = new Date().toLocaleString('zh-CN');
+                await db.set('github_settings', this.settings);
+
+                syncSelectOptions();
+                renderTodayPanel();
+                this.setStatus(`✅ 拉取成功 (${this.settings.lastSync})`, 'var(--level-4)');
+                alert('✅ 数据已从 GitHub 拉取并合并！');
+            } catch (e) {
+                this.setStatus(`❌ 拉取失败: ${e.message}`, 'var(--danger)');
+            }
+        },
+
+        async autoSyncPush() {
+            if (!this.settings.autoSync || !this.isReady()) return;
+            this.showToast('☁️ 正在同步到 GitHub…', 'var(--quick-fill)');
+            const ok = await this.push(true);
+            this.showToast(
+                ok ? '✅ 已同步到 GitHub' : '❌ GitHub 同步失败',
+                ok ? 'var(--level-4)' : 'var(--danger)'
+            );
+        },
+
+        showToast(msg, color) {
+            const el = $('#sync-toast');
+            if (!el) return;
+            el.innerText = msg;
+            el.style.color = color;
+            el.style.opacity = '1';
+            clearTimeout(this._toastTimer);
+            this._toastTimer = setTimeout(() => el.style.opacity = '0', 3000);
         }
     };
 
@@ -353,6 +592,7 @@
             bindEvents();
             renderTodayPanel();
             setupPWA();
+            await githubSync.loadSettings();
 
             $('#loading-screen').style.opacity = '0';
             setTimeout(() => $('#loading-screen').style.display = 'none', 300);
@@ -401,6 +641,11 @@
         $('#btn-export').addEventListener('click', exportJSON);
         $('#import-file').addEventListener('change', importJSON);
         $('#btn-clear-data').addEventListener('click', clearData);
+
+        // GitHub 同步按钮
+        $('#btn-gh-save').addEventListener('click', () => githubSync.saveSettings());
+        $('#btn-gh-push').addEventListener('click', () => githubSync.push());
+        $('#btn-gh-pull').addEventListener('click', () => githubSync.pull());
     }
 
     function switchTab(tabEl) {
@@ -609,6 +854,7 @@
         const btn = $('#save-btn');
         btn.innerText = "✅ 数据已保存"; btn.style.backgroundColor = "var(--level-4)";
         setTimeout(() => { btn.innerText = "保存今日容量"; btn.style.backgroundColor = "var(--accent)"; }, 2000);
+        githubSync.autoSyncPush();
     }
 
     function showFeedback(data) {
@@ -875,6 +1121,7 @@
         if ($('#today').classList.contains('active')) renderTodayPanel();
         $('#edit-feedback').innerText = `✅ [${title}] 已保存！`;
         setTimeout(() => $('#edit-feedback').innerText = '', 3000);
+        githubSync.autoSyncPush();
     }
 
     async function restoreDefaultPlan() {
@@ -892,7 +1139,7 @@
     /* ==========================================
      * 6. 数据管理 (导出 / 导入 / 清空)
      * ========================================== */
-    function exportJSON() {
+    function buildExportData() {
         const exp = { plan: {}, logs: {} };
 
         for (let i = 1; i <= 7; i++) {
@@ -929,6 +1176,11 @@
             exp.logs[date] = cl;
         });
 
+        return exp;
+    }
+
+    function exportJSON() {
+        const exp = buildExportData();
         const blob = new Blob([JSON.stringify(exp, null, 2)], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
