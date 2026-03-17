@@ -391,8 +391,8 @@
                 // 1) 获取当前文件 SHA（若存在）
                 let sha = null;
                 const getResp = await fetch(
-                    `https://api.github.com/repos/${repo}/contents/${filePath}`,
-                    { headers: { 'Authorization': `Bearer ${token}` } }
+                    `https://api.github.com/repos/${repo}/contents/${filePath}?_t=${Date.now()}`,
+                    { headers: { 'Authorization': `Bearer ${token}` }, cache: 'no-store' }
                 );
                 if (getResp.ok) {
                     sha = (await getResp.json()).sha;
@@ -446,8 +446,8 @@
 
             try {
                 const resp = await fetch(
-                    `https://api.github.com/repos/${repo}/contents/${filePath}`,
-                    { headers: { 'Authorization': `Bearer ${token}` } }
+                    `https://api.github.com/repos/${repo}/contents/${filePath}?_t=${Date.now()}`,
+                    { headers: { 'Authorization': `Bearer ${token}` }, cache: 'no-store' }
                 );
                 if (resp.status === 404) throw new Error('远程文件不存在，请先推送一次');
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -497,8 +497,8 @@
 
             try {
                 const resp = await fetch(
-                    `https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(filePath)}&per_page=15`,
-                    { headers: { 'Authorization': `Bearer ${token}` } }
+                    `https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(filePath)}&per_page=15&_t=${Date.now()}`,
+                    { headers: { 'Authorization': `Bearer ${token}` }, cache: 'no-store' }
                 );
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                 const commits = await resp.json();
