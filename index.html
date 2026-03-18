@@ -294,7 +294,7 @@
     const toNumOrNull = v => (v === '' || v === null || v === undefined) ? null : (isNaN(Number(v)) ? v : Number(v));
     const toLocalDateStr = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const inferMeasureType = s => (s || '').includes('力竭') ? 'amrap' : /[秒分]/.test(s) ? 'time' : 'reps';
-    const parseTargetValue = s => inferMeasureType(s) === 'reps' ? ((String(s || '').match(/\d+/g) || []).pop() || '') : '';
+    const parseTargetValue = s => inferMeasureType(s) === 'amrap' ? '' : ((String(s || '').match(/\d+/g) || []).pop() || '');
     const hasSetActivity = (w, r) => String(r || '').trim() !== '' || (String(w || '').trim() !== '' && String(w || '').trim() !== '0');
     const isRestDayLog = data => !!(data && (data.isRest || (Array.isArray(data.exercises) && data.exercises.length === 0)));
 
