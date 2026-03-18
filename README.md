@@ -21,8 +21,9 @@
 - 或 自行部署静态网站，比如 GitHub Pages
 
 手机上可以进一步作为 Android/iOS app 去使用（基于 [PWA](https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps)）：
-- iOS: Safari - 分享⬆ - 添加到主屏幕
-- Android: Chrome - 三个点┇ - 添加到主屏幕
+- iOS 安装：Safari - 分享⬆ - 添加到主屏幕
+- Android 安装：Chrome - 三个点┇ - 添加到主屏幕
+- 通过主屏幕进入 app 可以提供离线使用和沉浸全屏应用特性
 
 ## 数据隐私
 
