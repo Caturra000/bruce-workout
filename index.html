@@ -40,7 +40,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; box-sizing: border-box; }
-        select { width: 100%; margin-bottom: 15px; font-size: 1em; cursor: pointer; }
+        select { width: 100%; margin-bottom: 15px; font-size: 1em; cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9d1d9' stroke-width='1' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
 
         button { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         button:hover { background: var(--accent-hover); }
@@ -65,7 +65,8 @@
 
         .edit-meta-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; }
         .edit-row { display: flex; gap: 10px; margin-bottom: 10px;  flex-wrap: wrap;}
-        .edit-row label { display: flex;  gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main);}
+        .edit-row label { display: flex; gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
+        .edit-row label input[type="checkbox"] { margin: 0; width: 16px; height: 16px; flex-shrink: 0; }
         .card input[type="text"].ed-name { flex: 1; min-width: 150px;}
 
         .year-selector { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; }
@@ -234,12 +235,12 @@
                 <div class="guide-step"><span class="guide-num">1</span><div>新建一个<b>私有仓库</b>（如 <code>my-workout-sync</code>），专门存放同步数据。</div></div>
                 <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页 ↗</a>，点 <b class="g">Generate new token</b>。</div></div>
                 <div class="guide-step"><span class="guide-num">3</span><div><b>Token name</b> 随意填，<b>Expiration</b> 建议选 90 天或 1 年。</div></div>
-                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="y">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
-                <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="g">Add permissions</b>，勾选 <b class="y">Contents</b> 并设为 <b class="g">Read and write</b>，其余不动。</div></div>
+                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="g">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
+                <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="g">Add permissions</b>，勾选 <b class="y">Contents</b> 并设为 <b class="y">Read and write</b>，其余不动。</div></div>
                 <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="g">Generate token</b>，<b class="r">立刻复制</b> <code>github_pat_xxx…</code>（只显示一次）。</div></div>
                 <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="g">💾 保存配置</b> 即可。</div></div>
-                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，可以考虑先本地 <b class="g">📥 导出完整数据</b>，随时都可以通过 <b class="g">📤 导入恢复数据</b> 挽救回来。</div></div>
-                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="g">⬆️ 推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="g">⬇️ 拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
+                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，建议先本地 <b class="g">📥 导出完整数据</b>，随时都可以通过 <b class="g">📤 导入恢复数据</b> 挽救回来。</div></div>
+                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="y">⬆️ 推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="y">⬇️ 拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
             </div>
             <div style="display:flex; flex-direction:column; gap:10px;">
                 <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)" style="width:100%; font-family:monospace;">
@@ -1175,7 +1176,7 @@
             <div class="card" data-id="${escapeHTML(ex.id)}">
                 <div class="edit-row">
                     <input type="text" class="ed-name" value="${escapeHTML(ex.name)}" placeholder="动作名称" style="font-weight:bold;">
-                    <label><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> 🔥核心</label>
+                    <label style="align-items: center;"><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> 🔥核心</label>
                     <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
                 </div>
                 <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
@@ -1201,7 +1202,7 @@
             <div class="card" data-id="${id}">
                 <div class="edit-row">
                     <input type="text" class="ed-name" value="" placeholder="新动作名称" style="font-weight:bold;">
-                    <label><input type="checkbox" class="ed-core"> 🔥核心</label>
+                    <label style="align-items: center;"><input type="checkbox" class="ed-core" > 🔥核心</label>
                     <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
                 </div>
                 <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
