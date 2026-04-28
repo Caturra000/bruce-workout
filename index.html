@@ -718,6 +718,24 @@
         }
     }
 
+    function updateManifestTheme(color) {
+        const manifest = {
+            name: 'Bruce的硬核训练',
+            short_name: 'Bruce',
+            start_url: location.pathname,
+            display: 'standalone',
+            background_color: color,
+            theme_color: color,
+            icons: [
+                { src: document.querySelector('link[rel="apple-touch-icon"]').href, sizes: '192x192', type: 'image/png' },
+                { src: document.querySelector('link[rel="apple-touch-icon"]').href, sizes: '512x512', type: 'image/png' }
+            ]
+        };
+        $('link[rel="manifest"]').href = URL.createObjectURL(
+            new Blob([JSON.stringify(manifest)], { type: 'application/json' })
+        );
+    }
+
     const defaultWorkoutPlan = {
         "day1": { title: "Day 1：上肢推力结构", isRest: false, exercises: [
             { id: "d1e1", name: "上斜俯卧撑 / 跪姿俯卧撑", sets: 3, repsDesc: "8-12次", tip: "双手撑在床沿或桌子上退阶，或者双膝着地。核心收紧，身体保持一条直线。", isCore: true },
@@ -770,7 +788,7 @@
             const savedTheme = (await db.get('app_theme')) || '';
             if (savedTheme) {
                 document.documentElement.dataset.theme = savedTheme;
-                document.querySelector('meta[name="theme-color"]').content = '#fff0f5';
+                document.querySelector('meta[name="theme-color"]').content = '#ffe0ee';
             }
 
             initCustomSelect($('#day-selector'));
@@ -805,10 +823,12 @@
             if (el.dataset.theme === 'pink') {
                 delete el.dataset.theme;
                 document.querySelector('meta[name="theme-color"]').content = '#0d1117';
+                updateManifestTheme('#0d1117');
                 await db.set('app_theme', null);
             } else {
                 el.dataset.theme = 'pink';
-                document.querySelector('meta[name="theme-color"]').content = '#fff0f5';
+                document.querySelector('meta[name="theme-color"]').content = '#ffe0ee';
+                updateManifestTheme('#ffe0ee');
                 await db.set('app_theme', 'pink');
             }
         });
