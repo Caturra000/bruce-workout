@@ -23,6 +23,42 @@
             --level-3: #26a641; --level-4: #39d353;
         }
 
+        [data-theme="pink"] {
+            color-scheme: light;
+            --bg-color: #ffe0ee; --panel-bg: #ffd0e2;
+            --text-main: #4a0c28; --text-muted: #c05880;
+            --border-color: #d06088; --accent: #ff0066;
+            --accent-hover: #ff2288; --danger: #ee0055;
+            --quick-fill: #ff6600;
+            --level-0: #ffd0e2; --level-1: #ffaacc;
+            --level-2: #ff77aa; --level-3: #ff4488;
+            --level-4: #ff0066;
+        }
+        [data-theme="pink"] .card,
+        [data-theme="pink"] .playback-box { background: #ffe8f0; }
+        [data-theme="pink"] .card-title,
+        [data-theme="pink"] .guide-toggle,
+        [data-theme="pink"] .guide-step a,
+        [data-theme="pink"] .gh-commit:hover,
+        [data-theme="pink"] .gh-commit-sha { color: #e00060; }
+        [data-theme="pink"] .bruce-tip { color: #c03060; }
+        [data-theme="pink"] .tab.active { border-bottom-color: #ff4488; }
+        [data-theme="pink"] .guide-num { color: #e00060; background: rgba(224,0,96,0.08); }
+        [data-theme="pink"] .cell { border-color: rgba(0,0,0,0.04); }
+        [data-theme="pink"] .cell:hover { border-color: var(--accent); }
+        [data-theme="pink"] .analysis-box { background: rgba(255,0,102,0.06); }
+        [data-theme="pink"] .warning-box { background: rgba(238,0,85,0.06); }
+        [data-theme="pink"] .edit-meta-box { background: rgba(0,0,0,0.02); }
+        [data-theme="pink"] .guide-step code { background: rgba(0,0,0,0.04); }
+        [data-theme="pink"] .guide-step + .guide-step { border-top-color: rgba(0,0,0,0.08); }
+        [data-theme="pink"] .guide-toggle:hover { background: rgba(255,0,102,0.08); }
+        [data-theme="pink"] .global-tooltip { background: #fff; color: var(--text-main); border-color: var(--border-color); }
+        [data-theme="pink"] .tab:hover,
+        [data-theme="pink"] .tab.active { color: var(--accent); }
+        [data-theme="pink"] .tab:hover { background: rgba(255,0,102,0.08); }
+        [data-theme="pink"] input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
+        [data-theme="pink"] .custom-select-btn::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a0c28' stroke-width='1' fill='none'/%3E%3C/svg%3E"); }
+
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px 10px; display: flex; justify-content: center; line-height: 1.5; }
         .container { max-width: 800px; width: 100%; box-sizing: border-box; }
 
@@ -30,17 +66,30 @@
         input[type=number] { -moz-appearance: textfield; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
 
-        .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; }
+        .tabs { display: flex; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; }
         .tab { padding: 10px 20px; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; font-weight: bold; transition: 0.2s; white-space: nowrap; }
         .tab:hover, .tab.active { color: var(--text-main); }
         .tab.active { border-bottom-color: #f78166; }
+        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; flex-shrink: 0; transition: 0.2s; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
+        #theme-toggle:hover { border-color: var(--text-muted); }
 
         .panel { display: none; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; box-sizing: border-box; }
         .panel.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; box-sizing: border-box; }
-        select { width: 100%; margin-bottom: 15px; font-size: 1em; cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9d1d9' stroke-width='1' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+        .custom-select { position: relative; width: 100%; margin-bottom: 15px; font-size: 1em; }
+        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 36px 8px 8px; border-radius: 4px; cursor: pointer; box-sizing: border-box; font-weight: normal; }
+        .custom-select-btn:hover { background: var(--bg-color); }
+        .custom-select-btn::after { content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 12px; height: 8px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9d1d9' stroke-width='1' fill='none'/%3E%3C/svg%3E") no-repeat center; pointer-events: none; }
+        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px; max-height: 280px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .custom-select.open .custom-select-dropdown { display: block; }
+        .custom-select-option { padding: 8px 12px; cursor: pointer; color: var(--text-main); transition: background 0.1s; }
+        .custom-select-option:hover { background: var(--accent); color: #fff; }
+        .custom-select-option.selected { font-weight: bold; }
+        .custom-select-option.selected:hover { color: var(--text-main) !important; }
+        [data-theme="pink"] .custom-select-option:hover { background: #f0b8cc; color: var(--text-main); }
 
         button { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         button:hover { background: var(--accent-hover); }
@@ -133,6 +182,11 @@
             .btn-quick { width: 100%; text-align: center; margin-top: 5px; margin-left: 0; }
             .panel { padding: 15px 10px; }
         }
+
+        [data-theme="pink"] #theme-toggle { border-color: var(--accent); }
+        [data-theme="pink"] #theme-toggle:hover { border-color: var(--text-main); }
+        html[data-theme="pink"] input { border: 1px solid #ff4488 !important; }
+        html[data-theme="pink"] input:focus-visible { outline: 1px solid #ff4488; }
     </style>
 </head>
 <body>
@@ -152,13 +206,19 @@
         <div class="tab" data-target="edit">⚙️ 计划定制</div>
         <div class="tab" data-target="data">💾 数据管理</div>
         <div class="tab" data-target="about">📔 关于软件</div>
+        <button id="theme-toggle" title="切换主题">🌸</button>
     </div>
 
     <!-- Panel: Today -->
     <div id="today" class="panel active">
         <h2>🔥 今天的战斗容量</h2>
         <input type="date" id="date-picker" style="margin-bottom: 15px; width: auto;">
-        <select id="day-selector"></select>
+        <div class="custom-select" id="day-selector">
+            <button type="button" class="custom-select-btn" data-placeholder="-- 选择今天的计划 --">
+                <span class="custom-select-label">-- 选择今天的计划 --</span>
+            </button>
+            <div class="custom-select-dropdown"></div>
+        </div>
 
         <div id="exercise-list"></div>
         <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)" style="width:100%; margin-top:15px; display:none;">
@@ -187,7 +247,12 @@
         <h2>⚙️ 训练矩阵定制</h2>
         <p style="color:var(--text-muted); font-size:0.9em;">完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
 
-        <select id="edit-day-selector"></select>
+        <div class="custom-select" id="edit-day-selector">
+            <button type="button" class="custom-select-btn">
+                <span class="custom-select-label">Day 1</span>
+            </button>
+            <div class="custom-select-dropdown"></div>
+        </div>
 
         <div class="edit-meta-box">
             <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
@@ -702,6 +767,15 @@
             state.logs = (await db.get('appData_logs')) || {};
             state.plan = (await db.get('appData_plan')) || JSON.parse(JSON.stringify(defaultWorkoutPlan));
 
+            const savedTheme = (await db.get('app_theme')) || '';
+            if (savedTheme) {
+                document.documentElement.dataset.theme = savedTheme;
+                document.querySelector('meta[name="theme-color"]').content = '#fff0f5';
+            }
+
+            initCustomSelect($('#day-selector'));
+            initCustomSelect($('#edit-day-selector'));
+
             $('#date-picker').value = toLocalDateStr();
             syncSelectOptions();
 
@@ -725,6 +799,18 @@
         // Tab 切换
         $('#main-tabs').addEventListener('click', e => {
             if (e.target.matches('.tab')) switchTab(e.target);
+        });
+        $('#theme-toggle').addEventListener('click', async () => {
+            const el = document.documentElement;
+            if (el.dataset.theme === 'pink') {
+                delete el.dataset.theme;
+                document.querySelector('meta[name="theme-color"]').content = '#0d1117';
+                await db.set('app_theme', null);
+            } else {
+                el.dataset.theme = 'pink';
+                document.querySelector('meta[name="theme-color"]').content = '#fff0f5';
+                await db.set('app_theme', 'pink');
+            }
         });
 
         // Today 面板
@@ -803,17 +889,45 @@
         }
     }
 
+    function initCustomSelect(el) {
+        el._value = '';
+        Object.defineProperty(el, 'value', {
+            get() { return el._value; },
+            set(v) {
+                if (el._value === v) return;
+                el._value = v;
+                const label = el.querySelector('.custom-select-label');
+                const opt = v ? el.querySelector(`.custom-select-option[data-value="${CSS.escape(v)}"]`) : null;
+                if (label) label.textContent = opt ? opt.textContent : (el.querySelector('.custom-select-btn').dataset.placeholder || '');
+                el.querySelectorAll('.custom-select-option').forEach(o => o.classList.toggle('selected', o.dataset.value === v));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+        el.querySelector('.custom-select-btn').addEventListener('click', () => {
+            document.querySelectorAll('.custom-select.open').forEach(s => { if (s !== el) s.classList.remove('open'); });
+            el.classList.toggle('open');
+        });
+        el.querySelector('.custom-select-dropdown').addEventListener('click', e => {
+            const opt = e.target.closest('.custom-select-option');
+            if (opt) { el.value = opt.dataset.value; el.classList.remove('open'); }
+        });
+        document.addEventListener('click', e => {
+            if (!el.contains(e.target)) el.classList.remove('open');
+        });
+    }
+
     function syncSelectOptions() {
-        let tHtml = '<option value="">-- 选择今天的计划 --</option>', eHtml = '';
+        let tHtml = '', eHtml = '';
         for (let i = 1; i <= 7; i++) {
             const k = 'day' + i;
             const title = escapeHTML(state.plan[k].title);
-            tHtml += `<option value="${k}">${title}</option>`;
-            eHtml += `<option value="${k}">编辑：${title}</option>`;
+            tHtml += `<div class="custom-select-option" data-value="${k}">${title}</div>`;
+            eHtml += `<div class="custom-select-option" data-value="${k}">编辑：${title}</div>`;
         }
         const ts = $('#day-selector'), es = $('#edit-day-selector');
         const tVal = ts.value, eVal = es.value;
-        ts.innerHTML = tHtml; es.innerHTML = eHtml;
+        ts.querySelector('.custom-select-dropdown').innerHTML = tHtml;
+        es.querySelector('.custom-select-dropdown').innerHTML = eHtml;
         if (tVal) ts.value = tVal;
         if (eVal) es.value = eVal;
         if (!es.value) es.value = 'day1';
