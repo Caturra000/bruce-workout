@@ -739,6 +739,22 @@
                 quickFill(e.target.dataset.exid, e.target.dataset.repsdesc);
             }
         });
+        $('#exercise-list').addEventListener('input', e => {
+            const t = e.target;
+            if (!t.matches('.set-w, .set-r')) return;
+            const card = t.closest('.card[data-id]');
+            if (!card) return;
+            const key = $('#date-picker').value + '|' + $('#day-selector').value;
+            (state._draft = state._draft || {})[key] = state._draft[key] || {};
+            const em = state._draft[key];
+            const eid = card.dataset.id;
+            em[eid] = em[eid] || {};
+            const isW = t.classList.contains('set-w');
+            const list = card.querySelectorAll(isW ? '.set-w' : '.set-r');
+            const idx = Array.prototype.indexOf.call(list, t);
+            const prop = isW ? '_w' : '_r';
+            (em[eid][prop] = em[eid][prop] || {})[idx] = t.value;
+        });
 
         // Edit 面板
         $('#edit-day-selector').addEventListener('change', renderEditPanel);
@@ -808,10 +824,17 @@
      * ========================================== */
     function getHistoryWeight(exId, setIndex) {
         const targetDate = $('#date-picker').value;
-        const sortedDates = Object.keys(state.logs).filter(d => d < targetDate).sort().reverse();
-        for (const d of sortedDates) {
+        let bestDate = null, bestDiff = Infinity;
+        for (const d of Object.keys(state.logs)) {
+            if (d === targetDate) continue;
             const ex = (state.logs[d].exercises || []).find(e => e.id === exId);
-            if (ex && ex.weights && ex.weights[setIndex] != null) return ex.weights[setIndex];
+            if (!ex || !ex.weights || ex.weights[setIndex] == null) continue;
+            const diff = Math.abs(new Date(d) - new Date(targetDate));
+            if (diff < bestDiff) { bestDiff = diff; bestDate = d; }
+        }
+        if (bestDate) {
+            const ex = state.logs[bestDate].exercises.find(e => e.id === exId);
+            return ex && ex.weights && ex.weights[setIndex] != null ? ex.weights[setIndex] : '';
         }
         return '';
     }
@@ -823,8 +846,14 @@
         const wInputs = item.querySelectorAll('.set-w'), rInputs = item.querySelectorAll('.set-r');
 
         wInputs.forEach((wInput, i) => {
-            if (!wInput.value) wInput.value = getHistoryWeight(exId, i);
-            if (targetVal !== '') rInputs[i].value = targetVal;
+            if (!wInput.value) {
+                wInput.value = getHistoryWeight(exId, i);
+                wInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            if (targetVal !== '') {
+                rInputs[i].value = targetVal;
+                rInputs[i].dispatchEvent(new Event('input', { bubbles: true }));
+            }
         });
     }
 
@@ -847,6 +876,19 @@
                 };
             })
         };
+    }
+
+    function restoreDraft() {
+        const key = $('#date-picker').value + '|' + $('#day-selector').value;
+        const exMap = state._draft && state._draft[key];
+        if (!exMap) return;
+        $$('#exercise-list .card[data-id]').forEach(card => {
+            const eid = card.dataset.id;
+            const ex = exMap[eid];
+            if (!ex) return;
+            card.querySelectorAll('.set-w').forEach((w, i) => { if (ex._w && ex._w[i] !== undefined) w.value = ex._w[i]; });
+            card.querySelectorAll('.set-r').forEach((r, i) => { if (ex._r && ex._r[i] !== undefined) r.value = ex._r[i]; });
+        });
     }
 
     function renderTodayPanel() {
@@ -916,6 +958,8 @@
             }).join('');
         }
 
+        if (!planObj.isRest) restoreDraft();
+
         saveBtn.style.display = noteInput.style.display = 'block';
         if (savedLog && savedLog.note) noteInput.value = savedLog.note;
         if (savedLog) showFeedback(savedLog);
@@ -970,6 +1014,8 @@
 
         state.logs[date] = entry;
         await db.set('appData_logs', state.logs);
+        const draftKey = date + '|' + dayType;
+        if (state._draft) delete state._draft[draftKey];
 
         showFeedback(entry);
         const btn = $('#save-btn');
