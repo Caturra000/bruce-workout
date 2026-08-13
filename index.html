@@ -1285,7 +1285,6 @@
 
         let html = `<p><strong>容量完成度：</strong><span style="color:${data.score > 0 ? 'var(--level-4)' : 'var(--text-muted)'}">${data.score}%</span></p>`;
         if (data.score === 0) html += `<p style="color:var(--danger)">这次记录已保存，但没有完成任何有效组。</p>`;
-        if (data.note) html += `<p><strong>备注：</strong>${escapeHTML(data.note)}</p>`;
         html += '<hr style="border-color:var(--border-color); margin: 15px 0;">';
 
         if (!data.exercises || !data.exercises.length) html += `<p>没有可回放的动作明细。</p>`;
@@ -1312,6 +1311,10 @@
                 }
                 html += `</div></div>`;
             });
+        }
+        if (data.note) {
+            html += '<hr style="border-color:var(--border-color); margin: 15px 0;">';
+            html += `<p><strong>备注：</strong>${escapeHTML(data.note)}</p>`;
         }
         content.innerHTML = html;
         pb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
