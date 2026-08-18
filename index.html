@@ -137,7 +137,7 @@
 
         .playback-box { background: #0d1117; border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px; display: none; }
         .playback-set { font-size: 0.9em; color: var(--text-muted); margin-left: 15px; }
-        
+
         .vol-chart-wrapper { overflow-x: auto; margin-top: 15px; padding: 15px 0 5px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         .vol-chart-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
@@ -183,11 +183,95 @@
             select, input { font-size: 16px; }
         }
 
+        .vol-settings-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+        .vol-input-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .vol-input-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .vol-input-group input[type="number"] {
+            width: 70px;
+        }
+        .vol-date-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vol-date-range input[type="date"] {
+            width: 135px;
+        }
+        .vol-zoom-controls {
+            margin-left: auto;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .vol-zoom-controls button {
+            padding: 4px 10px;
+            font-weight: bold;
+        }
+        .vol-input-group button.btn-outline {
+            padding: 4px 12px;
+            font-size: 0.9em;
+        }
+
         @media (max-width: 600px) {
             .set-row { justify-content: space-between; }
             .set-input { width: 30%; flex-grow: 0; }
             .btn-quick { width: 100%; text-align: center; margin-top: 5px; margin-left: 0; }
             .panel { padding: 15px 10px; }
+
+            .vol-input-group {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .vol-input-group label {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .vol-input-group input[type="number"] {
+                width: auto;
+                flex: 1;
+                margin-left: 10px;
+            }
+            .vol-input-group button.btn-outline {
+                width: 100%;
+                padding: 8px 12px;
+            }
+            .vol-date-range {
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .vol-date-range input[type="date"] {
+                width: calc(50% - 15px);
+                flex: 1;
+            }
+            .vol-zoom-controls {
+                margin-left: 0;
+                justify-content: flex-end;
+            }
+            .vol-zoom-controls button {
+                padding: 6px 16px;
+                font-size: 1.1em;
+            }
+            .vol-chart-wrapper {
+                min-height: 220px;
+            }
         }
 
         [data-theme="pink"] #theme-toggle { border-color: var(--accent); }
@@ -246,14 +330,23 @@
         <h3 style="margin-top: 30px;">📈 训练频次趋势 (月度)</h3>
         <div class="trend-chart" id="trend-chart"></div>
         <h3 style="margin-top: 30px;">📈 容量趋势 (按训练日)</h3>
-        <div style="display:flex; gap:15px; margin-bottom:5px; flex-wrap:wrap; align-items:center; font-size:0.9em; color:var(--text-muted);">
-            <label style="display:flex; align-items:center; gap:5px;">全局自重: <input type="number" id="vol-bodyweight" style="width:70px;" step="0.5" placeholder="如：60"> kg</label>
-            <label style="display:flex; align-items:center; gap:5px;">时间折算: <input type="number" id="vol-time-convert" style="width:70px;" step="1" placeholder="如：4"> 秒=1次</label>
-            <button id="btn-save-vol-settings" class="btn-outline" style="padding:4px 12px; font-size:0.9em;">应用并刷新</button>
-            <label style="display:flex; align-items:center; gap:5px;">区间: <input type="date" id="vol-start-date" style="width:135px;"> <span>-</span> <input type="date" id="vol-end-date" style="width:135px;"></label>
-            <div style="margin-left:auto; display:flex; gap:5px; align-items:center;">
-                <button id="btn-vol-zoom-out" class="btn-outline" style="padding:4px 10px; font-weight:bold;">-</button>
-                <button id="btn-vol-zoom-in" class="btn-outline" style="padding:4px 10px; font-weight:bold;">+</button>
+        <div class="vol-settings-bar">
+            <div class="vol-input-group">
+                <label>全局自重<input type="number" id="vol-bodyweight" step="0.5" placeholder="如：60"> kg</label>
+                <label>时间折算<input type="number" id="vol-time-convert" step="1" placeholder="如：4"> 秒=1次</label>
+                <button id="btn-save-vol-settings" class="btn-outline">应用并刷新</button>
+            </div>
+            <div class="vol-input-group">
+                <div class="vol-date-range">
+                    <label>区间</label>
+                    <input type="date" id="vol-start-date">
+                    <span>-</span>
+                    <input type="date" id="vol-end-date">
+                </div>
+                <div class="vol-zoom-controls">
+                    <button id="btn-vol-zoom-out" class="btn-outline">-</button>
+                    <button id="btn-vol-zoom-in" class="btn-outline">+</button>
+                </div>
             </div>
         </div>
         <p style="font-size:0.8em; color:var(--text-muted); margin:5px 0 0 0;">区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
@@ -377,7 +470,7 @@
      * ========================================== */
     const $ = s => document.querySelector(s);
     const $$ = s => document.querySelectorAll(s);
-    const escapeHTML = s => String(s || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"\'":'&#39;' }[m]));
+    const escapeHTML = s => String(s || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
     const toNumOrNull = v => (v === '' || v === null || v === undefined) ? null : (isNaN(Number(v)) ? v : Number(v));
     const toLocalDateStr = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const inferMeasureType = s => (s || '').includes('力竭') ? 'amrap' : /[秒分]/.test(s) ? 'time' : 'reps';
@@ -797,7 +890,7 @@
         plan: null,
         statsYear: String(new Date().getFullYear()),
         currentRenderedPlan: null,
-        volStepX: 25
+        volStepX: window.innerWidth <= 600 ? 35 : 25
     };
 
     /* ==========================================
@@ -911,15 +1004,17 @@
                 timeConvert: Number($('#vol-time-convert').value) || 0
             };
             await db.set('app_vol_settings', volSettings);
+            const count = Object.keys(state.logs).filter(d => d.startsWith(state.statsYear) && !isRestDayLog(state.logs[d])).length;
+            autoFitVolStepX(count);
             renderVolumeChart(state.statsYear);
         });
 
         $('#btn-vol-zoom-in').addEventListener('click', () => {
-            state.volStepX = Math.min(100, state.volStepX + 5);
+            state.volStepX = Math.min(120, Math.round(state.volStepX * 1.25));
             renderVolumeChart(state.statsYear);
         });
         $('#btn-vol-zoom-out').addEventListener('click', () => {
-            state.volStepX = Math.max(10, state.volStepX - 5);
+            state.volStepX = Math.max(1, Math.round(state.volStepX / 1.25));
             renderVolumeChart(state.statsYear);
         });
 
@@ -1241,9 +1336,18 @@
         renderYearTabs();
         renderStats(year);
         $('#playback-area').style.display = 'none';
-        // 切换年份时清空容量图的日期筛选
         if ($('#vol-start-date')) $('#vol-start-date').value = '';
         if ($('#vol-end-date')) $('#vol-end-date').value = '';
+
+        const count = Object.keys(state.logs).filter(d => d.startsWith(year) && !isRestDayLog(state.logs[d])).length;
+        autoFitVolStepX(count);
+    }
+
+    function autoFitVolStepX(dataLength) {
+        if (dataLength === 0) return;
+        const containerWidth = window.innerWidth <= 600 ? window.innerWidth - 40 : 760;
+        const usableWidth = containerWidth - 60;
+        state.volStepX = Math.max(5, Math.min(35, usableWidth / dataLength));
     }
 
     function renderStats(year) {
@@ -1376,7 +1480,6 @@
         const chartDiv = $('#volume-chart');
         const volData = [];
 
-        // 实时获取全局配置
         const bw = Number($('#vol-bodyweight').value) || 0;
         const tc = Number($('#vol-time-convert').value) || 0;
 
@@ -1421,19 +1524,25 @@
             return;
         }
 
-        const stepX = state.volStepX;
+        let stepX = state.volStepX;
+        const containerWidth = container.clientWidth;
+        const naturalWidth = volData.length * state.volStepX + 60;
+        if (naturalWidth < containerWidth && volData.length > 0) {
+            stepX = Math.max(state.volStepX, (containerWidth - 60) / volData.length);
+        }
+
+        const showPoints = stepX >= 10;
+
         const padL = 40, padR = 20, padT = 20, padB = 25;
         const svgW = Math.max(container.clientWidth, volData.length * stepX + padL + padR);
         const svgH = 180;
         const innerH = svgH - padT - padB;
 
-        // 动态计算 Y 轴范围，放大波动 (类似 K线图)
         const vols = volData.map(d => d.vol);
         let maxVol = Math.max(...vols);
         let minVol = Math.min(...vols);
 
         if (maxVol === minVol) {
-            // 如果所有值一样，人为制造一点范围
             maxVol += maxVol * 0.1 || 1;
             minVol = Math.max(0, minVol - (minVol * 0.1 || 1));
         } else {
@@ -1455,7 +1564,9 @@
             if (i === 0) pathD += `M ${x} ${y}`;
             else pathD += ` L ${x} ${y}`;
 
-            pointsHtml += `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" class="vol-point" data-date="${d.date}" data-vol="${d.vol.toFixed(1)}" style="cursor:pointer;" />`;
+            if (showPoints) {
+                pointsHtml += `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" class="vol-point" data-date="${d.date}" data-vol="${d.vol.toFixed(1)}" style="cursor:pointer;" />`;
+            }
 
             const m = d.date.split('-')[1];
             if (m !== lastMonth) {
@@ -1466,15 +1577,17 @@
 
         const topY = padT;
         const botY = padT + innerH;
+        const strokeWidth = showPoints ? 2 : 1.5;
+
         chartDiv.innerHTML = `
             <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="overflow: visible;">
                 <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,2" />
-                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol.toFixed(0)}</text>
-                
+                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol}</text>
+
                 <line x1="${padL}" y1="${botY}" x2="${svgW - padR}" y2="${botY}" stroke="var(--border-color)" />
-                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol.toFixed(0)}</text>
-                
-                <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol}</text>
+
+                <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" />
                 ${pointsHtml}
                 ${monthMarks}
             </svg>
@@ -1484,25 +1597,41 @@
             container.scrollLeft = chartDiv.scrollWidth - container.clientWidth;
         }, 50);
 
+        if (!showPoints) return;
+
+        const showTooltip = (p) => {
+            p.setAttribute('r', 6);
+            const tt = $('#global-tooltip');
+            tt.innerText = `${p.dataset.date} | ${p.dataset.vol} 容量`;
+            tt.style.opacity = '1';
+            requestAnimationFrame(() => {
+                const rect = p.getBoundingClientRect();
+                let left = rect.left + rect.width/2 - tt.offsetWidth/2;
+                let top = rect.top - tt.offsetHeight - 8;
+                left = Math.max(8, Math.min(left, window.innerWidth - tt.offsetWidth - 8));
+                if (top < 8) top = rect.bottom + 8;
+                tt.style.left = `${left}px`;
+                tt.style.top = `${top}px`;
+            });
+        };
+
+        const hideTooltip = () => {
+            chartDiv.querySelectorAll('.vol-point').forEach(pt => pt.setAttribute('r', 4));
+            $('#global-tooltip').style.opacity = '0';
+        };
+
+        container.ontouchmove = hideTooltip;
+
         chartDiv.querySelectorAll('.vol-point').forEach(p => {
-            p.addEventListener('mouseenter', () => {
-                p.setAttribute('r', 6);
-                const tt = $('#global-tooltip');
-                tt.innerText = `${p.dataset.date} | ${p.dataset.vol} 容量`;
-                tt.style.opacity = '1';
-                requestAnimationFrame(() => {
-                    const rect = p.getBoundingClientRect();
-                    let left = rect.left + rect.width/2 - tt.offsetWidth/2;
-                    let top = rect.top - tt.offsetHeight - 8;
-                    left = Math.max(8, Math.min(left, window.innerWidth - tt.offsetWidth - 8));
-                    if (top < 8) top = rect.bottom + 8;
-                    tt.style.left = `${left}px`; tt.style.top = `${top}px`;
-                });
-            });
-            p.addEventListener('mouseleave', () => {
-                p.setAttribute('r', 4);
-                $('#global-tooltip').style.opacity = '0';
-            });
+            p.addEventListener('mouseenter', () => showTooltip(p));
+            p.addEventListener('mouseleave', hideTooltip);
+            p.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                hideTooltip();
+                showTooltip(p);
+                clearTimeout(p._tipTimer);
+                p._tipTimer = setTimeout(hideTooltip, 2000);
+            }, { passive: true });
         });
     }
 
