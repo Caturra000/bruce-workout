@@ -137,7 +137,14 @@
 
         .playback-box { background: #0d1117; border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px; display: none; }
         .playback-set { font-size: 0.9em; color: var(--text-muted); margin-left: 15px; }
-        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
+        
+        .vol-chart-wrapper { overflow-x: auto; margin-top: 15px; padding: 15px 0 5px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+        .vol-chart-wrapper::-webkit-scrollbar { height: 8px; display: block; }
+        .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .vol-chart-wrapper svg { display: block; }
+        .vol-point { transition: r 0.1s; }
+
+        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px Auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
         .bar-cell { display: flex; align-items: flex-end; justify-content: center; }
         .bar { width: 100%; max-width: 35px; background: var(--accent); border-radius: 3px 3px 0 0; position: relative; }
         .bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: bold; z-index: 2; white-space: nowrap; }
@@ -238,6 +245,21 @@
         </div>
         <h3 style="margin-top: 30px;">📈 训练频次趋势 (月度)</h3>
         <div class="trend-chart" id="trend-chart"></div>
+        <h3 style="margin-top: 30px;">📈 容量趋势 (按训练日)</h3>
+        <div style="display:flex; gap:15px; margin-bottom:5px; flex-wrap:wrap; align-items:center; font-size:0.9em; color:var(--text-muted);">
+            <label style="display:flex; align-items:center; gap:5px;">全局自重: <input type="number" id="vol-bodyweight" style="width:70px;" step="0.5" placeholder="如：60"> kg</label>
+            <label style="display:flex; align-items:center; gap:5px;">时间折算: <input type="number" id="vol-time-convert" style="width:70px;" step="1" placeholder="如：4"> 秒=1次</label>
+            <button id="btn-save-vol-settings" class="btn-outline" style="padding:4px 12px; font-size:0.9em;">应用并刷新</button>
+            <label style="display:flex; align-items:center; gap:5px;">区间: <input type="date" id="vol-start-date" style="width:135px;"> <span>-</span> <input type="date" id="vol-end-date" style="width:135px;"></label>
+            <div style="margin-left:auto; display:flex; gap:5px; align-items:center;">
+                <button id="btn-vol-zoom-out" class="btn-outline" style="padding:4px 10px; font-weight:bold;">-</button>
+                <button id="btn-vol-zoom-in" class="btn-outline" style="padding:4px 10px; font-weight:bold;">+</button>
+            </div>
+        </div>
+        <p style="font-size:0.8em; color:var(--text-muted); margin:5px 0 0 0;">区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
+        <div class="vol-chart-wrapper" id="vol-chart-wrapper">
+            <div id="volume-chart" style="width: max-content; min-width: 100%;"></div>
+        </div>
         <h3 style="margin-top: 30px;">近期评估：</h3>
         <div id="ai-analysis"></div>
     </div>
@@ -774,7 +796,8 @@
         logs: {},
         plan: null,
         statsYear: String(new Date().getFullYear()),
-        currentRenderedPlan: null
+        currentRenderedPlan: null,
+        volStepX: 25
     };
 
     /* ==========================================
@@ -790,6 +813,10 @@
                 document.documentElement.dataset.theme = savedTheme;
                 document.querySelector('meta[name="theme-color"]').content = '#ffe0ee';
             }
+
+            const volSettings = (await db.get('app_vol_settings')) || {};
+            if ($('#vol-bodyweight')) $('#vol-bodyweight').value = volSettings.bodyweight || '';
+            if ($('#vol-time-convert')) $('#vol-time-convert').value = volSettings.timeConvert || '';
 
             initCustomSelect($('#day-selector'));
             initCustomSelect($('#edit-day-selector'));
@@ -878,6 +905,26 @@
         $('#year-tabs').addEventListener('click', e => {
             if (e.target.matches('.year-btn')) changeStatsYear(e.target.innerText);
         });
+        $('#btn-save-vol-settings').addEventListener('click', async () => {
+            const volSettings = {
+                bodyweight: Number($('#vol-bodyweight').value) || 0,
+                timeConvert: Number($('#vol-time-convert').value) || 0
+            };
+            await db.set('app_vol_settings', volSettings);
+            renderVolumeChart(state.statsYear);
+        });
+
+        $('#btn-vol-zoom-in').addEventListener('click', () => {
+            state.volStepX = Math.min(100, state.volStepX + 5);
+            renderVolumeChart(state.statsYear);
+        });
+        $('#btn-vol-zoom-out').addEventListener('click', () => {
+            state.volStepX = Math.max(10, state.volStepX - 5);
+            renderVolumeChart(state.statsYear);
+        });
+
+        $('#vol-start-date').addEventListener('change', () => renderVolumeChart(state.statsYear));
+        $('#vol-end-date').addEventListener('change', () => renderVolumeChart(state.statsYear));
 
         // Data 面板
         $('#btn-export').addEventListener('click', exportJSON);
@@ -1194,6 +1241,9 @@
         renderYearTabs();
         renderStats(year);
         $('#playback-area').style.display = 'none';
+        // 切换年份时清空容量图的日期筛选
+        if ($('#vol-start-date')) $('#vol-start-date').value = '';
+        if ($('#vol-end-date')) $('#vol-end-date').value = '';
     }
 
     function renderStats(year) {
@@ -1239,6 +1289,7 @@
         }
 
         setTimeout(centerHeatmap, 150);
+        renderVolumeChart(year);
         renderTrendChart(year);
         renderAnalysis(year);
     }
@@ -1318,6 +1369,141 @@
         }
         content.innerHTML = html;
         pb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderVolumeChart(year) {
+        const container = $('#vol-chart-wrapper');
+        const chartDiv = $('#volume-chart');
+        const volData = [];
+
+        // 实时获取全局配置
+        const bw = Number($('#vol-bodyweight').value) || 0;
+        const tc = Number($('#vol-time-convert').value) || 0;
+
+        const startDateStr = $('#vol-start-date').value;
+        const endDateStr = $('#vol-end-date').value;
+        const useDateFilter = startDateStr || endDateStr;
+
+        Object.keys(state.logs).sort().forEach(date => {
+            if (!useDateFilter) {
+                if (!date.startsWith(year)) return;
+            } else {
+                if (startDateStr && date < startDateStr) return;
+                if (endDateStr && date > endDateStr) return;
+            }
+
+            const data = state.logs[date];
+            if (isRestDayLog(data)) return;
+
+            let dayVol = 0;
+            (data.exercises || []).forEach(ex => {
+                const sets = ex.targetSets || Math.max((ex.weights||[]).length, (ex.reps||[]).length) || 0;
+                for(let i = 0; i < sets; i++) {
+                    const w = ex.weights?.[i];
+                    const r = ex.reps?.[i];
+                    if(!hasSetActivity(w, r)) continue;
+
+                    let realW = (Number(w) || 0) + bw;
+                    let realR = Number(r) || 0;
+
+                    if (ex.measureType === 'time') {
+                        realR = tc > 0 ? realR / tc : 0;
+                    }
+                    dayVol += realW * realR;
+                }
+            });
+
+            if(dayVol > 0) volData.push({ date, vol: dayVol });
+        });
+
+        if (volData.length === 0) {
+            chartDiv.innerHTML = `<p style="color:var(--text-muted); text-align:center; width:100%;">所选范围内暂无有效容量数据</p>`;
+            return;
+        }
+
+        const stepX = state.volStepX;
+        const padL = 40, padR = 20, padT = 20, padB = 25;
+        const svgW = Math.max(container.clientWidth, volData.length * stepX + padL + padR);
+        const svgH = 180;
+        const innerH = svgH - padT - padB;
+
+        // 动态计算 Y 轴范围，放大波动 (类似 K线图)
+        const vols = volData.map(d => d.vol);
+        let maxVol = Math.max(...vols);
+        let minVol = Math.min(...vols);
+
+        if (maxVol === minVol) {
+            // 如果所有值一样，人为制造一点范围
+            maxVol += maxVol * 0.1 || 1;
+            minVol = Math.max(0, minVol - (minVol * 0.1 || 1));
+        } else {
+            const range = maxVol - minVol;
+            maxVol += range * 0.15;
+            minVol = Math.max(0, minVol - range * 0.15);
+        }
+        const yRange = maxVol - minVol;
+
+        let pathD = "";
+        let pointsHtml = "";
+        let monthMarks = "";
+        let lastMonth = "";
+
+        volData.forEach((d, i) => {
+            const x = padL + i * stepX + stepX / 2;
+            const y = padT + innerH - ((d.vol - minVol) / yRange * innerH);
+
+            if (i === 0) pathD += `M ${x} ${y}`;
+            else pathD += ` L ${x} ${y}`;
+
+            pointsHtml += `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" class="vol-point" data-date="${d.date}" data-vol="${d.vol.toFixed(1)}" style="cursor:pointer;" />`;
+
+            const m = d.date.split('-')[1];
+            if (m !== lastMonth) {
+                lastMonth = m;
+                monthMarks += `<text x="${x}" y="${svgH - 8}" fill="var(--text-muted)" font-size="10" text-anchor="middle">${parseInt(m)}月</text>`;
+            }
+        });
+
+        const topY = padT;
+        const botY = padT + innerH;
+        chartDiv.innerHTML = `
+            <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="overflow: visible;">
+                <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,2" />
+                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol.toFixed(0)}</text>
+                
+                <line x1="${padL}" y1="${botY}" x2="${svgW - padR}" y2="${botY}" stroke="var(--border-color)" />
+                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol.toFixed(0)}</text>
+                
+                <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                ${pointsHtml}
+                ${monthMarks}
+            </svg>
+        `;
+
+        setTimeout(() => {
+            container.scrollLeft = chartDiv.scrollWidth - container.clientWidth;
+        }, 50);
+
+        chartDiv.querySelectorAll('.vol-point').forEach(p => {
+            p.addEventListener('mouseenter', () => {
+                p.setAttribute('r', 6);
+                const tt = $('#global-tooltip');
+                tt.innerText = `${p.dataset.date} | ${p.dataset.vol} 容量`;
+                tt.style.opacity = '1';
+                requestAnimationFrame(() => {
+                    const rect = p.getBoundingClientRect();
+                    let left = rect.left + rect.width/2 - tt.offsetWidth/2;
+                    let top = rect.top - tt.offsetHeight - 8;
+                    left = Math.max(8, Math.min(left, window.innerWidth - tt.offsetWidth - 8));
+                    if (top < 8) top = rect.bottom + 8;
+                    tt.style.left = `${left}px`; tt.style.top = `${top}px`;
+                });
+            });
+            p.addEventListener('mouseleave', () => {
+                p.setAttribute('r', 4);
+                $('#global-tooltip').style.opacity = '0';
+            });
+        });
     }
 
     function renderTrendChart(year) {
