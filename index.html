@@ -1389,7 +1389,7 @@
         if (dataLength === 0) return;
         const containerWidth = window.innerWidth <= 600 ? window.innerWidth - 40 : 760;
         const usableWidth = containerWidth - 60;
-        state.volStepX = Math.max(5, Math.min(35, usableWidth / dataLength));
+        state.volStepX = Math.max(1, Math.min(35, usableWidth / dataLength));
     }
 
     function renderStats(year) {
@@ -1563,22 +1563,11 @@
 
         if (volData.length === 0) {
             chartDiv.innerHTML = `<p style="color:var(--text-muted); text-align:center; width:100%;">所选范围内暂无有效容量数据</p>`;
+            container.style.overflowX = 'hidden';
+            chartDiv.style.width = '100%';
+            chartDiv.style.minWidth = '0';
             return;
         }
-
-        let stepX = state.volStepX;
-        const containerWidth = container.clientWidth;
-        const naturalWidth = volData.length * state.volStepX + 60;
-        if (naturalWidth < containerWidth && volData.length > 0) {
-            stepX = Math.max(state.volStepX, (containerWidth - 60) / volData.length);
-        }
-
-        const showPoints = stepX >= 10;
-
-        const padL = 60, padR = 20, padT = 20, padB = 25;
-        const svgW = Math.max(container.clientWidth, volData.length * stepX + padL + padR);
-        const svgH = 180;
-        const innerH = svgH - padT - padB;
 
         const vols = volData.map(d => d.vol);
         let maxVol = Math.max(...vols);
@@ -1593,6 +1582,37 @@
             minVol = Math.max(0, minVol - range * 0.15);
         }
         const yRange = maxVol - minVol;
+
+        const maxLabelLen = Math.max(String(maxVol.toFixed(0)).length, String(minVol.toFixed(0)).length);
+        const padL = Math.max(40, maxLabelLen * 7 + 5);
+        const padR = 20, padT = 20, padB = 25;
+        const totalPad = padL + padR;
+
+        let stepX = state.volStepX;
+        const containerWidth = container.clientWidth;
+        const naturalWidth = volData.length * state.volStepX + totalPad;
+
+        if (naturalWidth < containerWidth && volData.length > 0) {
+            stepX = Math.max(state.volStepX, (containerWidth - totalPad) / volData.length);
+        }
+
+        const showPoints = stepX >= 10;
+
+        const svgW = volData.length * stepX + totalPad;
+        const isScrollable = svgW > containerWidth + 1;
+
+        if (isScrollable) {
+            container.style.overflowX = 'auto';
+            chartDiv.style.width = 'max-content';
+            chartDiv.style.minWidth = '100%';
+        } else {
+            container.style.overflowX = 'hidden';
+            chartDiv.style.width = '100%';
+            chartDiv.style.minWidth = '0';
+        }
+
+        const svgH = 180;
+        const innerH = svgH - padT - padB;
 
         let pathD = "";
         let pointsHtml = "";
@@ -1620,14 +1640,15 @@
         const topY = padT;
         const botY = padT + innerH;
         const strokeWidth = showPoints ? 2 : 1.5;
+        const svgWidthAttr = isScrollable ? svgW : '100%';
 
         chartDiv.innerHTML = `
-            <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="overflow: visible;">
+            <svg width="${svgWidthAttr}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="overflow: visible; display: block;">
                 <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,2" />
-                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol}</text>
+                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol.toFixed(0)}</text>
 
                 <line x1="${padL}" y1="${botY}" x2="${svgW - padR}" y2="${botY}" stroke="var(--border-color)" />
-                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol}</text>
+                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol.toFixed(0)}</text>
 
                 <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" />
                 ${pointsHtml}
@@ -1636,7 +1657,11 @@
         `;
 
         setTimeout(() => {
-            container.scrollLeft = chartDiv.scrollWidth - container.clientWidth;
+            if (isScrollable) {
+                container.scrollLeft = chartDiv.scrollWidth - container.clientWidth;
+            } else {
+                container.scrollLeft = 0;
+            }
         }, 50);
 
         if (!showPoints) return;
@@ -1662,7 +1687,7 @@
             $('#global-tooltip').style.opacity = '0';
         };
 
-        container.ontouchmove = hideTooltip;
+        container.ontouchmove = isScrollable ? hideTooltip : null;
 
         chartDiv.querySelectorAll('.vol-point').forEach(p => {
             p.addEventListener('mouseenter', () => showTooltip(p));
