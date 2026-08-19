@@ -227,6 +227,18 @@
             padding: 4px 12px;
             font-size: 0.9em;
         }
+        .vol-quick-range {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .vol-quick-range button {
+            flex: 1;
+            min-width: 60px;
+            padding: 6px 8px;
+            font-size: 0.85em;
+            text-align: center;
+        }
 
         @media (max-width: 600px) {
             .set-row { justify-content: space-between; }
@@ -268,6 +280,10 @@
             .vol-zoom-controls button {
                 padding: 6px 16px;
                 font-size: 1.1em;
+            }
+            .vol-quick-range button {
+                padding: 8px 4px;
+                font-size: 0.9em;
             }
             .vol-chart-wrapper {
                 min-height: 220px;
@@ -347,6 +363,12 @@
                     <button id="btn-vol-zoom-out" class="btn-outline">-</button>
                     <button id="btn-vol-zoom-in" class="btn-outline">+</button>
                 </div>
+            </div>
+            <div class="vol-quick-range">
+                <button class="btn-outline" data-range="1m">近一月</button>
+                <button class="btn-outline" data-range="3m">近三月</button>
+                <button class="btn-outline" data-range="6m">近半年</button>
+                <button class="btn-outline" data-range="1y">近一年</button>
             </div>
         </div>
         <p style="font-size:0.8em; color:var(--text-muted); margin:5px 0 0 0;">区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
@@ -1020,6 +1042,26 @@
 
         $('#vol-start-date').addEventListener('change', () => renderVolumeChart(state.statsYear));
         $('#vol-end-date').addEventListener('change', () => renderVolumeChart(state.statsYear));
+
+        $$('.vol-quick-range button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const range = btn.dataset.range;
+                const start = new Date();
+                if (range === '1m') start.setMonth(start.getMonth() - 1);
+                else if (range === '3m') start.setMonth(start.getMonth() - 3);
+                else if (range === '6m') start.setMonth(start.getMonth() - 6);
+                else if (range === '1y') start.setFullYear(start.getFullYear() - 1);
+
+                $('#vol-start-date').value = toLocalDateStr(start);
+                $('#vol-end-date').value = toLocalDateStr();
+
+                const startStr = $('#vol-start-date').value;
+                const endStr = $('#vol-end-date').value;
+                const count = Object.keys(state.logs).filter(d => d >= startStr && d <= endStr && !isRestDayLog(state.logs[d])).length;
+                autoFitVolStepX(count);
+                renderVolumeChart(state.statsYear);
+            });
+        });
 
         // Data 面板
         $('#btn-export').addEventListener('click', exportJSON);
