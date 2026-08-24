@@ -827,35 +827,64 @@
         }
     };
 
-    function setupPWA() {
-        function makeIcon(size) {
-            const c = document.createElement('canvas');
-            c.width = c.height = size;
-            const g = c.getContext('2d');
-            const r = size * 0.12;
-            g.beginPath();
-            g.moveTo(r, 0); g.lineTo(size - r, 0); g.arcTo(size, 0, size, r, r);
-            g.lineTo(size, size - r); g.arcTo(size, size, size - r, size, r);
-            g.lineTo(r, size); g.arcTo(0, size, 0, size - r, r);
-            g.lineTo(0, r); g.arcTo(0, 0, r, 0, r);
-            g.closePath();
-            g.fillStyle = '#0d1117'; g.fill();
-            g.fillStyle = '#39d353';
-            g.font = `bold ${size * 0.55}px -apple-system,BlinkMacSystemFont,sans-serif`;
-            g.textAlign = 'center'; g.textBaseline = 'middle';
-            g.fillText('B', size / 2, size / 2 * 1.05);
-            return c.toDataURL('image/png');
+    const themeIconColors = {
+        default: { bg: '#0d1117', accent: '#39d353', themeColor: '#0d1117' },
+        pink:    { bg: '#ffe0ee', accent: '#ff0066', themeColor: '#ffe0ee' }
+    };
+
+    function makeIconDataURL(size, theme) {
+        const colors = themeIconColors[theme] || themeIconColors.default;
+        const c = document.createElement('canvas');
+        c.width = c.height = size;
+        const g = c.getContext('2d');
+        const r = size * 0.12;
+        g.beginPath();
+        g.moveTo(r, 0); g.lineTo(size - r, 0); g.arcTo(size, 0, size, r, r);
+        g.lineTo(size, size - r); g.arcTo(size, size, size - r, size, r);
+        g.lineTo(r, size); g.arcTo(0, size, 0, size - r, r);
+        g.lineTo(0, r); g.arcTo(0, 0, r, 0, r);
+        g.closePath();
+        g.fillStyle = colors.bg; g.fill();
+        g.fillStyle = colors.accent;
+        g.font = `bold ${size * 0.55}px -apple-system,BlinkMacSystemFont,sans-serif`;
+        g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.fillText('B', size / 2, size / 2 * 1.05);
+        return c.toDataURL('image/png');
+    }
+
+    function makeFaviconSVG(theme) {
+        const colors = themeIconColors[theme] || themeIconColors.default;
+        const bg     = colors.bg.replace('#', '%23');
+        const accent = colors.accent.replace('#', '%23');
+        return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='${bg}'/><text x='50' y='55' text-anchor='middle' dominant-baseline='central' font-size='55' font-weight='bold' fill='${accent}'>B</text></svg>`;
+    }
+
+    function updateThemeAssets(theme) {
+        const colors = themeIconColors[theme] || themeIconColors.default;
+
+        const faviconLink = $('link[rel="icon"]');
+        if (faviconLink) faviconLink.href = makeFaviconSVG(theme);
+
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) themeMeta.content = colors.themeColor;
+
+        let appleLink = $('link[rel="apple-touch-icon"]');
+        if (!appleLink) {
+            appleLink = document.createElement('link');
+            appleLink.rel = 'apple-touch-icon';
+            document.head.appendChild(appleLink);
         }
+        appleLink.href = makeIconDataURL(192, theme);
 
-        const icon192 = makeIcon(192), icon512 = makeIcon(512);
-
+        const icon192 = makeIconDataURL(192, theme);
+        const icon512 = makeIconDataURL(512, theme);
         const manifest = {
             name: 'Bruce的硬核训练',
             short_name: 'Bruce',
             start_url: location.pathname,
             display: 'standalone',
-            background_color: '#0d1117',
-            theme_color: '#0d1117',
+            background_color: colors.themeColor,
+            theme_color: colors.themeColor,
             icons: [
                 { src: icon192, sizes: '192x192', type: 'image/png' },
                 { src: icon512, sizes: '512x512', type: 'image/png' }
@@ -864,11 +893,9 @@
         $('link[rel="manifest"]').href = URL.createObjectURL(
             new Blob([JSON.stringify(manifest)], { type: 'application/json' })
         );
+    }
 
-        const link = document.createElement('link');
-        link.rel = 'apple-touch-icon'; link.href = icon192;
-        document.head.appendChild(link);
-
+    function setupPWA() {
         if (navigator.storage && navigator.storage.persist) {
             navigator.storage.persist().then(granted => {
                 if (!granted) {
@@ -880,24 +907,6 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').catch(() => {});
         }
-    }
-
-    function updateManifestTheme(color) {
-        const manifest = {
-            name: 'Bruce的硬核训练',
-            short_name: 'Bruce',
-            start_url: location.pathname,
-            display: 'standalone',
-            background_color: color,
-            theme_color: color,
-            icons: [
-                { src: document.querySelector('link[rel="apple-touch-icon"]').href, sizes: '192x192', type: 'image/png' },
-                { src: document.querySelector('link[rel="apple-touch-icon"]').href, sizes: '512x512', type: 'image/png' }
-            ]
-        };
-        $('link[rel="manifest"]').href = URL.createObjectURL(
-            new Blob([JSON.stringify(manifest)], { type: 'application/json' })
-        );
     }
 
     const defaultWorkoutPlan = {
@@ -952,11 +961,11 @@
             state.logs = (await db.get('appData_logs')) || {};
             state.plan = (await db.get('appData_plan')) || JSON.parse(JSON.stringify(defaultWorkoutPlan));
 
-            const savedTheme = (await db.get('app_theme')) || '';
-            if (savedTheme) {
+            const savedTheme = (await db.get('app_theme')) || 'default';
+            if (savedTheme !== 'default') {
                 document.documentElement.dataset.theme = savedTheme;
-                document.querySelector('meta[name="theme-color"]').content = '#ffe0ee';
             }
+            updateThemeAssets(savedTheme);
 
             const volSettings = (await db.get('app_vol_settings')) || {};
             if ($('#vol-bodyweight')) $('#vol-bodyweight').value = volSettings.bodyweight || '';
@@ -993,13 +1002,11 @@
             const el = document.documentElement;
             if (el.dataset.theme === 'pink') {
                 delete el.dataset.theme;
-                document.querySelector('meta[name="theme-color"]').content = '#0d1117';
-                updateManifestTheme('#0d1117');
+                updateThemeAssets('default');
                 await db.set('app_theme', null);
             } else {
                 el.dataset.theme = 'pink';
-                document.querySelector('meta[name="theme-color"]').content = '#ffe0ee';
-                updateManifestTheme('#ffe0ee');
+                updateThemeAssets('pink');
                 await db.set('app_theme', 'pink');
             }
         });
