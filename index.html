@@ -1747,7 +1747,8 @@
                     const r = ex.reps?.[i];
                     if(!hasSetActivity(w, r)) continue;
 
-                    let realW = (Number(w) || 0) + bw;
+                    const wIsEmpty = (w === null || w === undefined || String(w).trim() === '');
+                    let realW = wIsEmpty ? bw : (Number(w) || 0);
                     let realR = Number(r) || 0;
 
                     if (ex.measureType === 'time') {
