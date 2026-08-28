@@ -118,6 +118,9 @@
         .set-unit { color: var(--text-muted); font-size: 0.9em; }
 
         .edit-meta-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; }
+        .edit-meta-box .edit-row:first-child { flex-wrap: nowrap; }
+        .edit-meta-box .edit-row:first-child #ed-day-id { flex: 1; min-width: 0; width: auto; }
+        .edit-meta-box .edit-row:first-child #day-count-badge { flex-shrink: 0; }
         .edit-row { display: flex; gap: 10px; margin-bottom: 10px;  flex-wrap: wrap;}
         .edit-row label { display: flex; gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
         .edit-row label input[type="checkbox"] { margin: 0; width: 16px; height: 16px; flex-shrink: 0; }
