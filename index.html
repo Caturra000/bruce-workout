@@ -149,12 +149,16 @@
         .heatmap-wrapper.is-scrolling { pointer-events: none; }
 
         .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; padding: 6px 8px; }
-        .cell { width: 14px; height: 14px; border-radius: 3px; background: var(--level-0); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.1s; }
+        .cell { width: 14px; height: 14px; border-radius: 3px; background: var(--level-0); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.1s, opacity 0.25s; }
         .cell[data-level="1"] { background: var(--level-1); }
         .cell[data-level="2"] { background: var(--level-2); }
         .cell[data-level="3"] { background: var(--level-3); }
         .cell[data-level="4"] { background: var(--level-4); }
         .cell:hover { border-color: #fff; transform: scale(1.2); }
+
+        .heatmap-grid.has-selection .cell { opacity: 0.15; }
+        .heatmap-grid.has-selection .cell.selected { opacity: 1; }
+        .heatmap-grid.has-selection .heatmap-month-svg { opacity: 0.2; }
 
         .heatmap-month-svg {
             position: absolute;
@@ -165,6 +169,7 @@
             pointer-events: none;
             z-index: 5;
             overflow: visible;
+            transition: opacity 0.25s;
         }
 
         .heatmap-month-path {
@@ -1518,6 +1523,7 @@
         state.activePlaybackDate = null;
         clearHeatmapMonthFocus();
         const heatmap = $('#heatmap');
+        heatmap.classList.remove('has-selection');
         heatmap.innerHTML = '';
         const startDate = new Date(Number(year), 0, 1), endDate = new Date(Number(year), 11, 31);
 
@@ -1769,14 +1775,23 @@
 
     function renderPlayback(dateStr) {
         const pb = $('#playback-area'), title = $('#pb-title'), content = $('#pb-content');
+        const heatmap = $('#heatmap');
 
         if (state.activePlaybackDate === dateStr && pb.style.display !== 'none') {
             pb.style.display = 'none';
             state.activePlaybackDate = null;
+            heatmap.classList.remove('has-selection');
+            $$('#heatmap .cell.selected').forEach(c => c.classList.remove('selected'));
             return;
         }
 
         state.activePlaybackDate = dateStr;
+
+        $$('#heatmap .cell.selected').forEach(c => c.classList.remove('selected'));
+        const activeCell = $(`#heatmap .cell[data-date="${dateStr}"]`);
+        if (activeCell) activeCell.classList.add('selected');
+        heatmap.classList.add('has-selection');
+
         pb.style.display = 'block';
         const data = state.logs[dateStr];
 
