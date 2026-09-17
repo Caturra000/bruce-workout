@@ -143,12 +143,11 @@
         .year-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px 12px; border-radius: 4px; font-size: 1em; }
         .year-btn.active { background: var(--accent); color: #fff; }
 
-        .heatmap-wrapper { overflow-x: auto; padding: 6px 0 15px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; }
+        .heatmap-wrapper { overflow-x: auto; padding: 6px 0 15px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
         .heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        .heatmap-wrapper { overflow-anchor: none; }
-        .heatmap-wrapper.is-scrolling .cell { pointer-events: none; transition: none; }
-        .heatmap-wrapper.is-scrolling .cell:hover { transform: none; border-color: rgba(255,255,255,0.05); }
+        .heatmap-wrapper.is-scrolling { pointer-events: none; }
+
         .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; padding: 6px 8px; }
         .cell { width: 14px; height: 14px; border-radius: 3px; background: var(--level-0); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.1s; }
         .cell[data-level="1"] { background: var(--level-1); }
@@ -167,13 +166,13 @@
             z-index: 5;
             overflow: visible;
         }
+
         .heatmap-month-path {
             fill: rgba(57, 211, 83, 0.14);
             stroke: var(--level-4);
             stroke-width: 2.5px;
             stroke-linejoin: round;
             stroke-linecap: round;
-            transition: all 0.25s ease;
         }
         [data-theme="pink"] .heatmap-month-path {
             fill: rgba(255, 0, 102, 0.12);
@@ -191,13 +190,13 @@
         .vol-chart-wrapper svg { display: block; }
         .vol-point { transition: r 0.1s; }
 
-        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px Auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
-        .bar-cell { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; }
+        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
+        .bar-cell { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .bar { width: 100%; max-width: 35px; background: var(--accent); border-radius: 3px 3px 0 0; position: relative; transition: filter 0.2s, transform 0.15s; }
         .bar-cell:hover .bar { filter: brightness(1.25); transform: translateY(-2px); }
         .bar-cell.active-month .bar { filter: brightness(1.35); }
         .bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: bold; z-index: 2; white-space: nowrap; }
-        .month-label { font-size: 12px; color: var(--text-muted); text-align: center; padding-top: 5px; cursor: pointer; transition: color 0.2s, font-weight 0.2s; }
+        .month-label { font-size: 12px; color: var(--text-muted); text-align: center; padding-top: 5px; cursor: pointer; transition: color 0.2s, font-weight 0.2s; -webkit-tap-highlight-color: transparent; }
         .month-label:hover { color: var(--text-main); }
         .month-label.active-month { color: var(--accent); font-weight: bold; }
         .analysis-box { background: rgba(35,134,54,0.1); border-left: 4px solid var(--accent); padding: 15px; margin-top: 20px; border-radius: 4px; }
@@ -1579,27 +1578,27 @@
         });
     }
 
-    function animateScrollLeft(el, targetLeft, duration = 400) {
+    function animateScrollLeft(el, targetLeft, duration = 380) {
         if (!el) return;
-        if (el._scrollAnimRaf) { cancelAnimationFrame(el._scrollAnimRaf); el._scrollAnimRaf = null; }
-
         const maxLeft = Math.max(0, el.scrollWidth - el.clientWidth);
-        const from = el.scrollLeft;
         const to = Math.max(0, Math.min(targetLeft, maxLeft));
-        const delta = to - from;
 
+        if ('scrollBehavior' in document.documentElement.style) {
+            el.scrollTo({ left: to, behavior: 'smooth' });
+            return;
+        }
+
+        if (el._scrollAnimRaf) { cancelAnimationFrame(el._scrollAnimRaf); el._scrollAnimRaf = null; }
+        const from = el.scrollLeft;
+        const delta = to - from;
         if (Math.abs(delta) < 1) { el.scrollLeft = to; return; }
 
-        const dist = Math.abs(delta);
-        const dur = Math.max(260, Math.min(duration, 260 + dist * 0.5));
-
         el.classList.add('is-scrolling');
-
         const start = performance.now();
-        const ease = t => 1 - Math.pow(1 - t, 3);
+        const ease = t => 1 - Math.pow(1 - t, 4);
 
         const step = now => {
-            const t = Math.min(1, (now - start) / dur);
+            const t = Math.min(1, (now - start) / duration);
             el.scrollLeft = from + delta * ease(t);
             if (t < 1) {
                 el._scrollAnimRaf = requestAnimationFrame(step);
@@ -1616,7 +1615,7 @@
         const target = $(`#heatmap .cell[data-date="${toLocalDateStr()}"]`) || $('#heatmap .cell:last-child');
         if (target) {
             const left = target.offsetLeft - wrapper.clientWidth / 2 + target.clientWidth / 2;
-            animateScrollLeft(wrapper, left, 420);
+            animateScrollLeft(wrapper, left, 380);
         }
     }
 
@@ -1682,10 +1681,12 @@
             heatmap.appendChild(svg);
         }
 
-        const allCells = Array.from($$('#heatmap .cell'));
         const pad = 2.5;
-        const gridTop = Math.min(...allCells.map(c => c.offsetTop)) - pad;
-        const gridBot = Math.max(...allCells.map(c => c.offsetTop + c.offsetHeight)) + pad;
+
+        const firstGridChild = heatmap.children[0];
+        const lastRowChild = heatmap.children[Math.min(6, heatmap.children.length - 1)] || firstGridChild;
+        const gridTop = firstGridChild.offsetTop - pad;
+        const gridBot = lastRowChild.offsetTop + lastRowChild.offsetHeight + pad;
 
         const firstCell = cells[0];
         const lastCell = cells[cells.length - 1];
@@ -1759,10 +1760,7 @@
 
         const targetCenterX = (x1L + x2R) / 2;
         const targetLeft = targetCenterX - wrapper.clientWidth / 2;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => animateScrollLeft(wrapper, targetLeft, 400));
-        });
+        animateScrollLeft(wrapper, targetLeft, 380);
 
         $$('#trend-chart .bar-cell, #trend-chart .month-label').forEach(el => {
             el.classList.toggle('active-month', parseInt(el.dataset.month, 10) === month);
