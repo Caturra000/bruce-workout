@@ -985,6 +985,7 @@
         statsYear: String(new Date().getFullYear()),
         currentRenderedPlan: null,
         volStepX: window.innerWidth <= 600 ? 35 : 25,
+        volManualZoom: false,
         focusedMonth: null,
         activePlaybackDate: null
     };
@@ -1112,17 +1113,20 @@
                 timeConvert: Number($('#vol-time-convert').value) || 0
             };
             await db.set('app_vol_settings', volSettings);
+            state.volManualZoom = false;
             const count = Object.keys(state.logs).filter(d => d.startsWith(state.statsYear) && !isRestDayLog(state.logs[d])).length;
             autoFitVolStepX(count);
             renderVolumeChart(state.statsYear);
         });
 
         $('#btn-vol-zoom-in').addEventListener('click', () => {
-            state.volStepX = Math.min(120, Math.round(state.volStepX * 1.25));
+            state.volManualZoom = true;
+            state.volStepX = Math.min(120, state.volStepX * 1.25);
             renderVolumeChart(state.statsYear);
         });
         $('#btn-vol-zoom-out').addEventListener('click', () => {
-            state.volStepX = Math.max(1, Math.round(state.volStepX / 1.25));
+            state.volManualZoom = true;
+            state.volStepX = Math.max(1, state.volStepX / 1.25);
             renderVolumeChart(state.statsYear);
         });
 
@@ -1140,6 +1144,8 @@
 
                 $('#vol-start-date').value = toLocalDateStr(start);
                 $('#vol-end-date').value = toLocalDateStr();
+
+                state.volManualZoom = false;
 
                 const startStr = $('#vol-start-date').value;
                 const endStr = $('#vol-end-date').value;
@@ -1478,6 +1484,7 @@
     function changeStatsYear(year) {
         state.statsYear = year;
         state.activePlaybackDate = null;
+        state.volManualZoom = false;
         clearHeatmapMonthFocus();
         renderYearTabs();
         renderStats(year);
@@ -1489,10 +1496,19 @@
         autoFitVolStepX(count);
     }
 
+    function getVolAvailableWidth() {
+        const wrapper = $('#vol-chart-wrapper');
+        if (wrapper && wrapper.clientWidth > 0) return wrapper.clientWidth;
+        return window.innerWidth <= 600 ? window.innerWidth - 40 : 760;
+    }
+
     function autoFitVolStepX(dataLength) {
-        if (dataLength === 0) return;
-        const containerWidth = window.innerWidth <= 600 ? window.innerWidth - 40 : 760;
-        const usableWidth = containerWidth - 60;
+        if (!dataLength) { state.volStepX = 25; return; }
+        const wrapper = $('#vol-chart-wrapper');
+        const containerWidth = (wrapper && wrapper.clientWidth > 0)
+            ? wrapper.clientWidth
+            : getVolAvailableWidth();
+        const usableWidth = Math.max(1, containerWidth - 60);
         state.volStepX = Math.max(1, Math.min(35, usableWidth / dataLength));
     }
 
@@ -1849,13 +1865,15 @@
         const padR = 20, padT = 20, padB = 25;
         const totalPad = padL + padR;
 
-        let stepX = state.volStepX;
-        const containerWidth = container.clientWidth;
-        const naturalWidth = volData.length * state.volStepX + totalPad;
+        const containerWidth = container.clientWidth || getVolAvailableWidth();
+        const availWidth = Math.max(1, containerWidth - totalPad);
 
-        if (naturalWidth < containerWidth && volData.length > 0) {
-            stepX = Math.max(state.volStepX, (containerWidth - totalPad) / volData.length);
-        }
+        const minStepX = availWidth / volData.length;
+        let stepX = state.volManualZoom
+            ? Math.max(state.volStepX, minStepX)
+            : minStepX;
+
+        state.volStepX = stepX;
 
         const showPoints = stepX >= 10;
 
