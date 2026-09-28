@@ -227,8 +227,10 @@
 
         /* ============ 关于 ============ */
         .ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 11px; line-height: 1.15; margin: 10px 0 8px; overflow-x: auto; max-width: 100%; }
-        .about-table { border-collapse: collapse; font-size: 0.9em; color: var(--text-muted); line-height: 2; }
-        .about-table td { padding-right: 20px; }
+        .about-table { border-collapse: collapse; font-size: 0.9em; color: var(--text-muted); line-height: 2; width: 100%; }
+        .about-table td { padding-right: 20px; vertical-align: top; }
+        .about-table td:first-child { white-space: nowrap; width: 1%; }
+        .about-table td:last-child { padding-right: 0; overflow-wrap: anywhere; }
 
         #sync-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: 8px 16px; font-size: 0.9em; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
 
