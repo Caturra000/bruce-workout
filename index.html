@@ -4,380 +4,289 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bruce的硬核训练</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d1117'/><text x='50' y='55' text-anchor='middle' dominant-baseline='central' font-size='55' font-weight='bold' fill='%2339d353'>B</text></svg>">
-    <meta name="theme-color" content="#0d1117">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23000000'/><rect x='8' y='8' width='84' height='84' fill='none' stroke='%23d4d4d4' stroke-width='3'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-family='Menlo,Consolas,monospace' font-size='50' font-weight='bold' fill='%23d4d4d4'>B</text></svg>">
+    <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href='data:application/manifest+json,{"display":"standalone","start_url":"./","name":"Bruce的硬核训练","short_name":"Bruce","background_color":"%230d1117","theme_color":"%230d1117"}'>
+    <link rel="manifest" href='data:application/manifest+json,{"display":"standalone","start_url":"./","name":"Bruce的硬核训练","short_name":"Bruce","background_color":"%23000000","theme_color":"%23000000"}'>
     <style>
-        /* 全局滚动条隐藏 */
+        /* ============ 滚动条 ============ */
         html, .tabs, .year-selector { scrollbar-width: none; -ms-overflow-style: none; }
         html::-webkit-scrollbar, .tabs::-webkit-scrollbar, .year-selector::-webkit-scrollbar { display: none; }
 
+        /* ============ 主题变量 ============ */
         :root {
-            --bg-color: #0d1117; --panel-bg: #161b22; --text-main: #c9d1d9;
-            --text-muted: #8b949e; --border-color: #30363d; --accent: #238636;
-            --accent-hover: #2ea043; --danger: #da3633; --quick-fill: #dba61f;
-            --level-0: #161b22; --level-1: #0e4429; --level-2: #006d32;
-            --level-3: #26a641; --level-4: #39d353;
+            color-scheme: dark;
+            --font: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+            --bg-color: #000000; --panel-bg: #000000;
+            --text-main: #d4d4d4; --text-muted: #7c7c7c;
+            --border-color: #4a4a4a;
+            --accent: #ffffff; --accent-hover: #ffffff;
+            --danger: #ff5f5f; --quick-fill: #b0b0b0;
+            --level-0: #141414; --level-1: #3c3c3c; --level-2: #707070; --level-3: #a8a8a8; --level-4: #e8e8e8;
         }
-
         [data-theme="pink"] {
-            color-scheme: light;
-            --bg-color: #ffe0ee; --panel-bg: #ffd0e2;
-            --text-main: #4a0c28; --text-muted: #c05880;
-            --border-color: #d06088; --accent: #ff0066;
-            --accent-hover: #ff2288; --danger: #ee0055;
-            --quick-fill: #ff6600;
-            --level-0: #ffd0e2; --level-1: #ffaacc;
-            --level-2: #ff77aa; --level-3: #ff4488;
-            --level-4: #ff0066;
+            --text-main: #ff8fc8; --text-muted: #a0527e;
+            --border-color: #6e2f52;
+            --accent: #ff3d9a; --accent-hover: #ff5cab;
+            --danger: #ff5f5f; --quick-fill: #d977ab;
+            --level-0: #1c0912; --level-1: #561c3d; --level-2: #9f2a68; --level-3: #de4b97; --level-4: #ff9ad2;
         }
-        [data-theme="pink"] .card,
-        [data-theme="pink"] .playback-box { background: #ffe8f0; }
-        [data-theme="pink"] .card-title,
-        [data-theme="pink"] .guide-toggle,
-        [data-theme="pink"] .guide-step a,
-        [data-theme="pink"] .gh-commit:hover,
-        [data-theme="pink"] .gh-commit-sha { color: #e00060; }
-        [data-theme="pink"] .bruce-tip { color: #c03060; }
-        [data-theme="pink"] .tab.active { border-bottom-color: #ff4488; }
-        [data-theme="pink"] .guide-num { color: #e00060; background: rgba(224,0,96,0.08); }
-        [data-theme="pink"] .cell { border-color: rgba(0,0,0,0.04); }
-        [data-theme="pink"] .cell:hover { border-color: var(--accent); }
-        [data-theme="pink"] .analysis-box { background: rgba(255,0,102,0.06); }
-        [data-theme="pink"] .warning-box { background: rgba(238,0,85,0.06); }
-        [data-theme="pink"] .edit-meta-box { background: rgba(0,0,0,0.02); }
-        [data-theme="pink"] .guide-step code { background: rgba(0,0,0,0.04); }
-        [data-theme="pink"] .guide-step + .guide-step { border-top-color: rgba(0,0,0,0.08); }
-        [data-theme="pink"] .guide-toggle:hover { background: rgba(255,0,102,0.08); }
-        [data-theme="pink"] .global-tooltip { background: #fff; color: var(--text-main); border-color: var(--border-color); }
-        [data-theme="pink"] .tab:hover,
-        [data-theme="pink"] .tab.active { color: var(--accent); }
-        [data-theme="pink"] .tab:hover { background: rgba(255,0,102,0.08); }
-        [data-theme="pink"] input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
-        [data-theme="pink"] .custom-select-btn::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a0c28' stroke-width='1' fill='none'/%3E%3C/svg%3E"); }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px 10px; display: flex; justify-content: center; line-height: 1.5; }
+        /* ============ 基础 ============ */
+        * { border-radius: 0 !important; }
+        body { font-family: var(--font); font-size: 14px; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 16px 10px; display: flex; justify-content: center; line-height: 1.5; }
         .container { max-width: 800px; width: 100%; box-sizing: border-box; }
+        a { color: var(--text-main); text-decoration: underline; }
+        a:hover { color: var(--accent); }
+        b, strong { color: var(--text-main); }
 
+        h2, h3 { display: flex; align-items: center; gap: 10px; font-size: 1em; font-weight: bold; margin: 0 0 15px; color: var(--text-main); }
+        h2::before, h3::before { content: '\2500\2500'; color: var(--border-color); flex-shrink: 0; }
+        h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
+
+        .titlebar { color: var(--text-muted); font-size: 0.85em; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .titlebar b { color: var(--text-main); }
+
+        /* ============ 表单 ============ */
+        input, select, button { font-family: inherit; font-size: inherit; }
         input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.75); cursor: pointer; }
+        select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] {
+            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 8px; box-sizing: border-box;
+        }
+        input:focus { outline: none; border-color: var(--text-main); }
+        ::placeholder { color: var(--text-muted); opacity: 1; }
 
-        .tabs { display: flex; align-items: center; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; }
-        .tab { padding: 10px 20px; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; font-weight: bold; transition: 0.2s; white-space: nowrap; }
-        .tab:hover, .tab.active { color: var(--text-main); }
-        .tab.active { border-bottom-color: #f78166; }
-        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; flex-shrink: 0; transition: 0.2s; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
-        #theme-toggle:hover { border-color: var(--text-muted); }
+        input[type="checkbox"] {
+            appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin: 0;
+            border: 1px solid var(--border-color); background: var(--bg-color);
+            display: inline-grid; place-content: center; cursor: pointer; flex-shrink: 0; vertical-align: middle;
+        }
+        input[type="checkbox"]::before { content: 'x'; font-size: 12px; line-height: 1; font-weight: bold; color: var(--text-main); transform: scale(0); }
+        input[type="checkbox"]:checked { border-color: var(--text-main); }
+        input[type="checkbox"]:checked::before { transform: scale(1); }
 
-        .panel { display: none; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; box-sizing: border-box; }
-        .panel.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: 8px 16px; font-weight: bold; cursor: pointer; }
+        button:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-outline { background: transparent; color: var(--text-main); border-color: var(--border-color); }
+        .btn-outline:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .btn-quick { background: transparent; color: var(--quick-fill); border: 1px solid var(--quick-fill); padding: 3px 8px; font-size: 0.85em; font-weight: normal; margin-left: auto; }
+        .btn-quick:hover { background: var(--quick-fill); color: var(--bg-color); border-color: var(--quick-fill); }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 4px 8px; font-size: 0.85em; }
+        .btn-danger:hover { background: var(--danger); color: var(--bg-color); border-color: var(--danger); }
 
-        select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; box-sizing: border-box; }
+        /* ============ 标签栏 ============ */
+        .tabs { display: flex; align-items: center; gap: 4px; border: 1px solid var(--border-color); border-bottom: none; padding: 6px 8px; overflow-x: auto; }
+        .tab { padding: 3px 10px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; }
+        .tab:hover { color: var(--text-main); }
+        .tab.active { background: var(--text-main); color: var(--bg-color); }
+        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 2px 8px; font-size: 0.85em; font-weight: normal; flex-shrink: 0; }
+        #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
-        .custom-select { position: relative; width: 100%; margin-bottom: 15px; font-size: 1em; }
-        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 36px 8px 8px; border-radius: 4px; cursor: pointer; box-sizing: border-box; font-weight: normal; }
-        .custom-select-btn:hover { background: var(--bg-color); }
-        .custom-select-btn::after { content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 12px; height: 8px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9d1d9' stroke-width='1' fill='none'/%3E%3C/svg%3E") no-repeat center; pointer-events: none; }
-        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px; max-height: 280px; overflow-y: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .custom-select-dropdown { scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
+        .panel { display: none; background: var(--panel-bg); border: 1px solid var(--border-color); padding: 20px; box-sizing: border-box; }
+        .panel.active { display: block; }
+
+        /* ============ 自定义下拉 ============ */
+        .custom-select { position: relative; width: 100%; margin-bottom: 15px; }
+        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 30px 6px 8px; cursor: pointer; box-sizing: border-box; font-weight: normal; }
+        .custom-select-btn:hover { background: var(--bg-color); border-color: var(--text-main); }
+        .custom-select-btn::after { content: 'v'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85em; pointer-events: none; }
+        .custom-select.open .custom-select-btn::after { content: '^'; }
+        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 280px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar { width: 8px; }
-        .custom-select-dropdown::-webkit-scrollbar-track { background: var(--bg-color); border-radius: 4px; }
-        .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        .custom-select-dropdown::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+        .custom-select-dropdown::-webkit-scrollbar-track { background: var(--bg-color); }
+        .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-color); }
         .custom-select.open .custom-select-dropdown { display: block; }
-        .custom-select-option { padding: 8px 12px; cursor: pointer; color: var(--text-main); transition: background 0.1s; }
-        .custom-select-option:hover { background: var(--accent); color: #fff; }
-        .custom-select-option.selected { font-weight: bold; }
-        .custom-select-option.selected:hover { color: var(--text-main) !important; }
-        [data-theme="pink"] .custom-select-option:hover { background: #f0b8cc; color: var(--text-main); }
+        .custom-select-option { padding: 6px 10px; cursor: pointer; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .custom-select-option::before { content: '  '; white-space: pre; color: var(--text-muted); }
+        .custom-select-option.selected::before { content: '> '; }
+        .custom-select-option:hover { background: var(--text-main); color: var(--bg-color); }
+        .custom-select-option:hover::before { color: var(--bg-color); }
 
-        button { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        button:hover { background: var(--accent-hover); }
-        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
-        .btn-quick { background: rgba(219,166,31,0.1); color: var(--quick-fill); border: 1px solid var(--quick-fill); padding: 4px 8px; border-radius: 4px; font-size: 0.8em; margin-left: auto; }
-        .btn-quick:hover { background: var(--quick-fill); color: #000; }
-        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 4px 8px; font-size: 0.8em;}
-        .btn-danger:hover { background: var(--danger); color: #fff; }
-
-        /* 通用卡片样式 */
-        .card { border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #0d1117; position: relative; }
+        /* ============ 卡片 ============ */
+        .card { border: 1px solid var(--border-color); padding: 12px; margin-bottom: 12px; background: var(--bg-color); position: relative; }
         .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; }
-        .card-title { font-weight: bold; font-size: 1.1em; color: #58a6ff; }
-        .card-target { font-size: 0.9em; color: var(--text-muted); }
+        .card-title { font-weight: bold; color: var(--text-main); }
+        .card-title::before { content: '> '; color: var(--text-muted); }
+        .card-target { font-size: 0.85em; color: var(--text-muted); }
+        .core-mark { color: var(--accent); font-size: 0.8em; margin-left: 6px; }
 
-        .bruce-tip { font-size: 0.85em; color: #d2a8ff; font-style: italic; margin-bottom: 12px; }
-        .sets-container { display: flex; flex-direction: column; gap: 10px; }
+        .bruce-tip { font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px; }
+        .bruce-tip::before { content: '// '; }
+        .sets-container { display: flex; flex-direction: column; gap: 8px; }
         .set-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .set-label { width: 50px; font-size: 0.9em; color: var(--text-muted); }
+        .set-label { width: 50px; font-size: 0.85em; color: var(--text-muted); }
         .set-input { width: 80px; text-align: center; flex-grow: 1; max-width: 100px; }
-        .set-unit { color: var(--text-muted); font-size: 0.9em; }
+        .set-unit { color: var(--text-muted); font-size: 0.85em; }
 
-        .edit-meta-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 20px; }
+        .edit-meta-box { border: 1px dashed var(--border-color); padding: 15px; margin-bottom: 20px; }
         .edit-meta-box .edit-row:first-child { flex-wrap: nowrap; }
         .edit-meta-box .edit-row:first-child #ed-day-id { flex: 1; min-width: 0; width: auto; }
         .edit-meta-box .edit-row:first-child #day-count-badge { flex-shrink: 0; }
-        .edit-row { display: flex; gap: 10px; margin-bottom: 10px;  flex-wrap: wrap;}
-        .edit-row label { display: flex; gap: 5px; font-size: 0.9em; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
-        .edit-row label input[type="checkbox"] { margin: 0; width: 16px; height: 16px; flex-shrink: 0; }
-        .card input[type="text"].ed-name { flex: 1; min-width: 150px;}
+        .edit-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .edit-row label { display: flex; gap: 6px; font-size: 0.9em; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
+        .card input[type="text"].ed-name { flex: 1; min-width: 150px; }
         .card input[type="text"].ed-exid {
-            width: 110px; flex-shrink: 0;
-            font-family: monospace; font-size: 0.78em; text-align: center;
-            color: var(--text-muted); background: transparent;
-            border: 1px dashed transparent !important;
-            border-radius: 4px; padding: 3px 6px;
+            width: 110px; flex-shrink: 0; font-size: 0.8em; text-align: center;
+            color: var(--text-muted); background: transparent; border: 1px dashed transparent; padding: 3px 6px;
         }
-        .card input[type="text"].ed-exid:hover { border-color: var(--border-color) !important; cursor: text; }
-        .card input[type="text"].ed-exid:focus { outline: none; border-color: var(--accent) !important; color: var(--text-main); background: var(--bg-color); }
+        .card input[type="text"].ed-exid:hover { border-color: var(--border-color); cursor: text; }
+        .card input[type="text"].ed-exid:focus { outline: none; border-color: var(--text-main); border-style: solid; color: var(--text-main); }
 
         .edit-day-bar { display: flex; gap: 8px; align-items: stretch; margin-bottom: 15px; flex-wrap: wrap; }
         .edit-day-bar .custom-select { flex: 1; min-width: 200px; margin-bottom: 0; }
-        .edit-day-bar button { white-space: nowrap; padding: 8px 12px; }
+        .edit-day-bar button { white-space: nowrap; padding: 6px 12px; }
 
-        .year-selector { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; }
-        .year-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px 12px; border-radius: 4px; font-size: 1em; }
-        .year-btn.active { background: var(--accent); color: #fff; }
+        /* ============ 统计 ============ */
+        .year-selector { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; }
+        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 3px 10px; font-weight: normal; }
+        .year-btn:hover { background: transparent; color: var(--text-main); border-color: var(--border-color); }
+        .year-btn.active, .year-btn.active:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
         .heatmap-wrapper { overflow-x: auto; padding: 6px 0 15px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
         .heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
-        .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
         .heatmap-wrapper.is-scrolling { pointer-events: none; }
 
         .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; padding: 6px 8px; }
-        .cell { width: 14px; height: 14px; border-radius: 3px; background: var(--level-0); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.1s, opacity 0.25s; }
+        .cell { width: 14px; height: 14px; box-sizing: border-box; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; }
         .cell[data-level="1"] { background: var(--level-1); }
         .cell[data-level="2"] { background: var(--level-2); }
         .cell[data-level="3"] { background: var(--level-3); }
         .cell[data-level="4"] { background: var(--level-4); }
-        .cell:hover { border-color: #fff; transform: scale(1.2); }
+        .cell:hover { border-color: var(--text-main); }
+        .cell.selected { border-color: var(--accent); }
 
         .heatmap-grid.has-selection .cell { opacity: 0.15; }
         .heatmap-grid.has-selection .cell.selected { opacity: 1; }
         .heatmap-grid.has-selection .heatmap-month-svg { opacity: 0.2; }
 
-        .heatmap-month-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            overflow: visible;
-            transition: opacity 0.25s;
-        }
+        .heatmap-month-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible; transition: opacity 0.2s; }
+        .heatmap-month-path { fill: var(--text-main); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 1.5px; stroke-linejoin: miter; }
 
-        .heatmap-month-path {
-            fill: rgba(57, 211, 83, 0.14);
-            stroke: var(--level-4);
-            stroke-width: 2.5px;
-            stroke-linejoin: round;
-            stroke-linecap: round;
-        }
-        [data-theme="pink"] .heatmap-month-path {
-            fill: rgba(255, 0, 102, 0.12);
-            stroke: var(--accent);
-        }
+        .global-tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: 4px 8px; font-size: 12px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
 
-        .global-tooltip { position: fixed; background: rgba(0,0,0,0.9); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.15s; white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
-
-        .playback-box { background: #0d1117; border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-top: 20px; display: none; }
+        .playback-box { border: 1px solid var(--border-color); padding: 15px; margin-top: 20px; display: none; }
         .playback-set { font-size: 0.9em; color: var(--text-muted); margin-left: 15px; }
+        .playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: 15px 0; }
 
         .vol-chart-wrapper { overflow-x: auto; margin-top: 15px; padding: 15px 0 5px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         .vol-chart-wrapper::-webkit-scrollbar { height: 8px; display: block; }
-        .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
         .vol-chart-wrapper svg { display: block; }
-        .vol-point { transition: r 0.1s; }
+        .vol-point { cursor: pointer; transform-box: fill-box; transform-origin: center; }
+        .vol-point.hot { transform: scale(1.6); }
 
         .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
         .bar-cell { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .bar { width: 100%; max-width: 35px; background: var(--accent); border-radius: 3px 3px 0 0; position: relative; transition: filter 0.2s, transform 0.15s; }
-        .bar-cell:hover .bar { filter: brightness(1.25); transform: translateY(-2px); }
-        .bar-cell.active-month .bar { filter: brightness(1.35); }
-        .bar:hover::after { content: attr(data-val); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 2px 6px; border-radius: 3px; font-size: 12px; font-weight: bold; z-index: 2; white-space: nowrap; }
-        .month-label { font-size: 12px; color: var(--text-muted); text-align: center; padding-top: 5px; cursor: pointer; transition: color 0.2s, font-weight 0.2s; -webkit-tap-highlight-color: transparent; }
+        .bar { width: 100%; max-width: 35px; background: var(--level-3); position: relative; }
+        .bar-cell:hover .bar { background: var(--text-main); }
+        .bar-cell.active-month .bar { background: var(--accent); }
+        .bar:hover::after { content: attr(data-val); position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: 1px 6px; font-size: 12px; font-weight: bold; z-index: 2; white-space: nowrap; }
+        .month-label { font-size: 12px; color: var(--text-muted); text-align: center; padding-top: 5px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .month-label:hover { color: var(--text-main); }
         .month-label.active-month { color: var(--accent); font-weight: bold; }
-        .analysis-box { background: rgba(35,134,54,0.1); padding: 15px; margin-top: 20px; border-radius: 4px; }
-        .warning-box { border-left-color: var(--danger); background: rgba(218,54,51,0.1); }
 
-        #loading-screen { position: fixed; inset: 0; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 10000; font-size: 1.2em; font-weight: bold; color: var(--accent); transition: opacity 0.3s; }
+        .analysis-box { border: 1px solid var(--border-color); padding: 12px 15px; margin-top: 20px; }
+        .warning-box { border-color: var(--danger); }
 
-        .guide-toggle { display:flex; align-items:center; gap:8px; padding:8px 12px; margin-bottom:12px; border-radius:6px; cursor:pointer; color:#58a6ff; font-size:0.85em; font-weight:600; background:transparent; border:none; transition:background 0.2s; width:100%; }
-        .guide-toggle:hover { background:rgba(88,166,255,0.08); }
-        .guide-toggle .arrow { transition:transform 0.25s; font-size:0.7em; }
-        .guide-toggle.open { margin-bottom:0; }
-        .guide-toggle.open .arrow { transform:rotate(90deg); }
-        .guide-steps { display:none; margin:4px 0 12px; padding:0 4px 0 8px; }
-        .guide-steps.open { display:block; animation:fadeIn 0.25s; }
-        .guide-step { display:flex; gap:12px; padding:6px 0; font-size:0.84em; color:var(--text-muted); line-height:1.7; }
-        .guide-step + .guide-step { border-top:1px solid rgba(255,255,255,0.04); }
-        .guide-num { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:rgba(88,166,255,0.12); color:#58a6ff; font-size:0.75em; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:2px; }
-        .guide-step b { color:var(--text-main); }
-        .guide-step a { color:#58a6ff; }
-        .guide-step code { background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:3px; font-size:0.95em; }
-        .guide-step .g { color:var(--level-4); }
-        .guide-step .y { color:var(--quick-fill); }
-        .guide-step .r { color:var(--danger); }
+        /* ============ 加载页 ============ */
+        #loading-screen { position: fixed; inset: 0; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 10000; color: var(--text-main); transition: opacity 0.3s; }
+        .cursor { display: inline-block; width: 0.6em; height: 1em; background: var(--text-main); vertical-align: -0.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        .gh-commit { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--border-color); border-radius:6px; margin-bottom:6px; font-size:0.85em; background:rgba(255,255,255,0.02); transition:border-color 0.2s; }
-        .gh-commit:hover { border-color:#58a6ff; }
-        .gh-commit-info { flex:1; min-width:0; }
-        .gh-commit-msg { color:var(--text-main); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .gh-commit-meta { color:var(--text-muted); font-size:0.9em; margin-top:2px; }
-        .gh-commit-sha { font-family:monospace; color:#58a6ff; font-size:0.85em; }
-        .gh-commit button { flex-shrink:0; padding:4px 10px; font-size:0.8em; }
+        /* ============ 教程 / GitHub ============ */
+        .guide-toggle { display: flex; align-items: center; gap: 8px; padding: 6px 10px; margin-bottom: 12px; cursor: pointer; color: var(--text-main); font-size: 0.85em; font-weight: normal; background: transparent; border: 1px dashed var(--border-color); width: 100%; text-align: left; }
+        .guide-toggle:hover { background: transparent; border-color: var(--text-main); }
+        .guide-toggle .arrow::before { content: '[+]'; color: var(--text-muted); }
+        .guide-toggle.open { margin-bottom: 0; }
+        .guide-toggle.open .arrow::before { content: '[-]'; }
+        .guide-steps { display: none; margin: 0 0 12px; padding: 6px 10px; border: 1px dashed var(--border-color); border-top: none; }
+        .guide-steps.open { display: block; }
+        .guide-step { display: flex; gap: 10px; padding: 5px 0; font-size: 0.84em; color: var(--text-muted); line-height: 1.7; }
+        .guide-step + .guide-step { border-top: 1px dotted var(--border-color); }
+        .guide-num { flex-shrink: 0; color: var(--text-main); }
+        .guide-num::before { content: '['; }
+        .guide-num::after { content: ']'; }
+        .guide-step b { color: var(--text-main); }
+        .guide-step code { border: 1px solid var(--border-color); padding: 0 4px; font-family: inherit; font-size: 0.95em; }
+        .guide-step .g { color: var(--text-main); }
+        .guide-step .y { color: var(--quick-fill); }
+        .guide-step .r { color: var(--danger); }
 
-        @supports (-webkit-touch-callout: none) {
-            select, input { font-size: 16px; }
-        }
+        .gh-commit { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border-color); margin-bottom: 6px; font-size: 0.85em; }
+        .gh-commit:hover { border-color: var(--text-main); }
+        .gh-commit-info { flex: 1; min-width: 0; }
+        .gh-commit-msg { color: var(--text-main); font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .gh-commit-meta { color: var(--text-muted); font-size: 0.9em; margin-top: 2px; }
+        .gh-commit-sha { color: var(--text-main); }
+        .gh-commit button { flex-shrink: 0; padding: 3px 10px; font-size: 0.85em; }
 
-        .vol-settings-bar {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 10px;
-            font-size: 0.9em;
-            color: var(--text-muted);
-        }
-        .vol-input-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .vol-input-group label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .vol-input-group input[type="number"] {
-            width: 70px;
-        }
-        .vol-date-range {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .vol-date-range input[type="date"] {
-            width: 135px;
-        }
-        .vol-zoom-controls {
-            margin-left: auto;
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-        .vol-zoom-controls button {
-            padding: 4px 10px;
-            font-weight: bold;
-        }
-        .vol-input-group button.btn-outline {
-            padding: 4px 12px;
-            font-size: 0.9em;
-        }
-        .vol-quick-range {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .vol-quick-range button {
-            flex: 1;
-            min-width: 60px;
-            padding: 6px 8px;
-            font-size: 0.85em;
-            text-align: center;
-        }
+        /* ============ 关于 ============ */
+        .ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 11px; line-height: 1.15; margin: 10px 0 8px; overflow-x: auto; max-width: 100%; }
+        .about-table { border-collapse: collapse; font-size: 0.9em; color: var(--text-muted); line-height: 2; }
+        .about-table td { padding-right: 20px; }
+
+        #sync-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: 8px 16px; font-size: 0.9em; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+
+        @supports (-webkit-touch-callout: none) { select, input { font-size: 16px; } }
+
+        .vol-settings-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; font-size: 0.9em; color: var(--text-muted); }
+        .vol-input-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .vol-input-group label { display: flex; align-items: center; gap: 5px; }
+        .vol-input-group input[type="number"] { width: 70px; }
+        .vol-date-range { display: flex; align-items: center; gap: 8px; }
+        .vol-date-range input[type="date"] { width: 135px; }
+        .vol-zoom-controls { margin-left: auto; display: flex; gap: 5px; align-items: center; }
+        .vol-zoom-controls button { padding: 3px 10px; font-weight: bold; }
+        .vol-input-group button.btn-outline { padding: 3px 12px; font-size: 0.9em; }
+        .vol-quick-range { display: flex; gap: 8px; flex-wrap: wrap; }
+        .vol-quick-range button { flex: 1; min-width: 60px; padding: 5px 8px; font-size: 0.85em; text-align: center; }
 
         @media (max-width: 600px) {
             .set-row { justify-content: space-between; }
             .set-input { width: 30%; flex-grow: 0; }
             .btn-quick { width: 100%; text-align: center; margin-top: 5px; margin-left: 0; }
             .panel { padding: 15px 10px; }
-
             .edit-day-bar { flex-wrap: wrap; }
             .edit-day-bar .custom-select { min-width: 100%; }
             .edit-day-bar button { flex: 1; }
-
-            .vol-input-group {
-                width: 100%;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-            .vol-input-group label {
-                justify-content: space-between;
-                width: 100%;
-            }
-            .vol-input-group input[type="number"] {
-                width: auto;
-                flex: 1;
-                margin-left: 10px;
-            }
-            .vol-input-group button.btn-outline {
-                width: 100%;
-                padding: 8px 12px;
-            }
-            .vol-date-range {
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-            .vol-date-range input[type="date"] {
-                width: calc(50% - 15px);
-                flex: 1;
-            }
-            .vol-zoom-controls {
-                margin-left: 0;
-                justify-content: flex-end;
-            }
-            .vol-zoom-controls button {
-                padding: 6px 16px;
-                font-size: 1.1em;
-            }
-            .vol-quick-range button {
-                padding: 8px 4px;
-                font-size: 0.9em;
-            }
-            .vol-chart-wrapper {
-                min-height: 220px;
-            }
+            .vol-input-group { width: 100%; flex-direction: column; align-items: stretch; gap: 10px; }
+            .vol-input-group label { justify-content: space-between; width: 100%; }
+            .vol-input-group input[type="number"] { width: auto; flex: 1; margin-left: 10px; }
+            .vol-input-group button.btn-outline { width: 100%; padding: 8px 12px; }
+            .vol-date-range { flex-wrap: wrap; justify-content: space-between; }
+            .vol-date-range input[type="date"] { width: calc(50% - 15px); flex: 1; }
+            .vol-zoom-controls { margin-left: 0; justify-content: flex-end; }
+            .vol-zoom-controls button { padding: 6px 16px; font-size: 1.1em; }
+            .vol-quick-range button { padding: 8px 4px; font-size: 0.9em; }
+            .vol-chart-wrapper { min-height: 220px; }
         }
-
-        [data-theme="pink"] #theme-toggle { border-color: var(--accent); }
-        [data-theme="pink"] #theme-toggle:hover { border-color: var(--text-main); }
-        html[data-theme="pink"] input { border: 1px solid #ff4488 !important; }
-        html[data-theme="pink"] input:focus-visible { outline: 1px solid #ff4488; }
     </style>
 </head>
 <body>
 
-<div id="loading-screen">加载硬核数据...</div>
+<div id="loading-screen"><span>&gt; loading data</span><span class="cursor"></span></div>
 <div id="global-tooltip" class="global-tooltip"></div>
 
 <div class="container">
-    <div id="sync-toast" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-        background:var(--panel-bg); border:1px solid var(--border-color); border-radius:8px;
-        padding:10px 20px; font-size:0.9em; z-index:9999; opacity:0; transition:opacity 0.3s;
-        pointer-events:none; white-space:nowrap; box-shadow:0 4px 12px rgba(0,0,0,0.4);">
-    </div>
+    <div id="sync-toast"></div>
+    <div class="titlebar">$ ./bruce-workout --tui &nbsp;<b>Bruce的硬核训练</b> &nbsp;</div>
     <div class="tabs" id="main-tabs">
-        <div class="tab active" data-target="today">📝 今日打卡</div>
-        <div class="tab" data-target="stats">📊 统计与回放</div>
-        <div class="tab" data-target="edit">⚙️ 计划定制</div>
-        <div class="tab" data-target="data">💾 数据管理</div>
-        <div class="tab" data-target="about">📔 关于软件</div>
-        <button id="theme-toggle" title="切换主题">🌸</button>
+        <div class="tab active" data-target="today" data-key="1">今日打卡</div>
+        <div class="tab" data-target="stats" data-key="2">统计回放</div>
+        <div class="tab" data-target="edit" data-key="3">计划定制</div>
+        <div class="tab" data-target="data" data-key="4">数据管理</div>
+        <div class="tab" data-target="about" data-key="5">关于</div>
+        <button id="theme-toggle" title="切换主题">mono</button>
     </div>
 
     <!-- Panel: Today -->
     <div id="today" class="panel active">
-        <h2>🔥 今天的战斗容量</h2>
+        <h2>今天的战斗容量</h2>
         <input type="date" id="date-picker" style="margin-bottom: 15px; width: auto;">
         <div class="custom-select" id="day-selector">
             <button type="button" class="custom-select-btn" data-placeholder="-- 选择今天的计划 --">
@@ -388,7 +297,7 @@
 
         <div id="exercise-list"></div>
         <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)" style="width:100%; margin-top:15px; display:none;">
-        <button id="save-btn" style="display: none; width: 100%; margin-top: 20px; font-size: 1.1em;">保存今日容量</button>
+        <button id="save-btn" style="display: none; width: 100%; margin-top: 20px; font-size: 1.05em;">[ 保存今日容量 ]</button>
         <div id="daily-feedback" style="margin-top: 15px;"></div>
     </div>
 
@@ -399,7 +308,7 @@
             <div class="heatmap-grid" id="heatmap"></div>
         </div>
         <div id="playback-area" class="playback-box">
-            <h3 id="pb-title" style="margin-top:0; color:#58a6ff;">点击上方的方块查看记录</h3>
+            <h3 id="pb-title">点击上方的方块查看记录</h3>
             <div id="pb-content"></div>
         </div>
         <h3 style="margin-top: 30px;">频次趋势</h3>
@@ -430,7 +339,7 @@
                 <button class="btn-outline" data-range="1y">近一年</button>
             </div>
         </div>
-        <p style="font-size:0.8em; color:var(--text-muted); margin:5px 0 0 0;">区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
+        <p style="font-size:0.8em; color:var(--text-muted); margin:5px 0 0 0;">// 区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
         <div class="vol-chart-wrapper" id="vol-chart-wrapper">
             <div id="volume-chart" style="width: max-content; min-width: 100%;"></div>
         </div>
@@ -440,8 +349,8 @@
 
     <!-- Panel: Edit -->
     <div id="edit" class="panel">
-        <h2>⚙️ 训练矩阵定制</h2>
-        <p style="color:var(--text-muted); font-size:0.9em;">完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
+        <h2>训练矩阵定制</h2>
+        <p style="color:var(--text-muted); font-size:0.9em;">// 完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
 
         <div class="edit-day-bar">
             <div class="custom-select" id="edit-day-selector">
@@ -450,24 +359,24 @@
                 </button>
                 <div class="custom-select-dropdown"></div>
             </div>
-            <button type="button" class="btn-outline" id="btn-add-day" title="新增一个训练日">＋ 新增训练日</button>
-            <button type="button" class="btn-danger" id="btn-del-day" title="删除当前训练日">🗑 删除此日</button>
+            <button type="button" class="btn-outline" id="btn-add-day" title="新增一个训练日">+ 新增训练日</button>
+            <button type="button" class="btn-danger" id="btn-del-day" title="删除当前训练日">x 删除此日</button>
         </div>
 
         <div class="edit-meta-box">
             <div class="edit-row" style="align-items:center;">
                 <span style="white-space:nowrap; color:var(--text-muted);">计划 ID</span>
-                <input type="text" id="ed-day-id" placeholder="如: day1 / push_day" spellcheck="false" style="font-family:monospace; width:170px;">
+                <input type="text" id="ed-day-id" placeholder="如: day1 / push_day" spellcheck="false" style="width:170px;">
                 <span id="day-count-badge" style="margin-left:auto; font-size:0.8em; color:var(--text-muted); white-space:nowrap;"></span>
             </div>
-            <div style="font-size:0.75em; color:var(--text-muted); margin:-4px 0 10px;">ID 是内部唯一标识（仅限字母、数字、_ 或 -），修改后点击「保存这天的设置」生效；重命名不影响历史记录。动作卡片中名称右侧的灰色小字为动作 ID，悬停/点击可修改。</div>
+            <div style="font-size:1em; color:var(--text-muted); margin:-4px 0 10px;">// ID 是内部唯一标识（仅限字母、数字、_ 或 -），修改后点击「保存这天的设置」生效；重命名不影响历史记录。动作卡片中名称右侧的灰色小字为动作 ID，悬停/点击可修改。</div>
             <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
                 <span style="white-space:nowrap; color: var(--text-muted);">本计划名</span>
-                <input type="text" id="ed-day-title" style="font-weight:bold; font-size:1.1em; max-width: 300px;">
+                <input type="text" id="ed-day-title" style="font-weight:bold; max-width: 300px;">
             </div>
-            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--accent);">
-                <input type="checkbox" id="ed-day-isrest" style="width:18px;height:18px; accent-color: var(--accent);">
-                <b>将这一天设为【休息日 / 有氧日】(不记录容量)</b>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-main);">
+                <input type="checkbox" id="ed-day-isrest" style="width:18px;height:18px;">
+                <b>将这一天设为 [休息日 / 有氧日] (不记录容量)</b>
             </label>
         </div>
 
@@ -477,80 +386,81 @@
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;">
-            <button style="flex: 2; min-width: 200px;" id="btn-save-edit">💾 保存这天的设置</button>
-            <button class="btn-danger" style="flex: 1; min-width: 150px; background: transparent;" id="btn-restore-default">🔄 恢复默认出厂</button>
+            <button style="flex: 2; min-width: 200px;" id="btn-save-edit">[ 保存这天的设置 ]</button>
+            <button class="btn-danger" style="flex: 1; min-width: 150px; background: transparent;" id="btn-restore-default">恢复默认出厂</button>
         </div>
-        <div id="edit-feedback" style="margin-top: 15px; color: var(--level-4); font-weight: bold;"></div>
+        <div id="edit-feedback" style="margin-top: 15px; color: var(--text-main); font-weight: bold;"></div>
     </div>
 
     <!-- Panel: Data -->
     <div id="data" class="panel">
-        <h2>💾 数据存档与迁移</h2>
-        <p style="color: var(--text-muted); font-size: 0.9em;">数据存储在本地，建议定期导出完整数据备份。</p>
-        <button id="btn-export">📥 导出完整数据 (JSON)</button>
+        <h2>数据存档与迁移</h2>
+        <p style="color: var(--text-muted); font-size: 0.9em;">// 数据存储在本地，建议定期导出完整数据备份。</p>
+        <button id="btn-export">导出完整数据 (JSON)</button>
         <div style="margin-top: 20px;">
             <input type="file" id="import-file" accept=".json" style="display:none">
-            <button class="btn-outline" onclick="$('#import-file').click()">📤 导入恢复数据 (JSON)</button>
+            <button class="btn-outline" onclick="$('#import-file').click()">导入恢复数据 (JSON)</button>
         </div>
         <div style="margin-top:30px; border-top:1px solid var(--border-color); padding-top:20px;">
-            <h3>☁️ GitHub 云同步</h3>
+            <h3>GitHub 云同步</h3>
             <p style="color:var(--text-muted); font-size:0.85em; margin-bottom:4px;">
-                通过 GitHub 仓库实现跨设备数据同步。需要创建一个 Fine-grained PAT。
+                // 通过 GitHub 仓库实现跨设备数据同步。需要创建一个 Fine-grained PAT。
             </p>
 
             <button type="button" class="guide-toggle" id="guide-toggle" onclick="this.classList.toggle('open'); $('#guide-steps').classList.toggle('open');">
-                <span class="arrow">👉</span> 首次配置教程
+                <span class="arrow"></span> 首次配置教程
             </button>
 
             <div class="guide-steps" id="guide-steps">
                 <div class="guide-step"><span class="guide-num">1</span><div>新建一个<b>私有仓库</b>（如 <code>my-workout-sync</code>），专门存放同步数据。</div></div>
-                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页 ↗</a>，点 <b class="g">Generate new token</b>。</div></div>
+                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页</a>，点 <b class="g">Generate new token</b>。</div></div>
                 <div class="guide-step"><span class="guide-num">3</span><div><b>Token name</b> 随意填，<b>Expiration</b> 建议选 90 天或 1 年。</div></div>
                 <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="g">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
                 <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="g">Add permissions</b>，勾选 <b class="y">Contents</b> 并设为 <b class="y">Read and write</b>，其余不动。</div></div>
-                <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="g">Generate token</b>，<b class="r">立刻复制</b> <code>github_pat_xxx…</code>（只显示一次）。</div></div>
-                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="g">💾 保存配置</b> 即可。</div></div>
-                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，建议先本地 <b class="g">📥 导出完整数据</b>，随时都可以通过 <b class="g">📤 导入恢复数据</b> 挽救回来。</div></div>
-                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="y">⬆️ 推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="y">⬇️ 拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
+                <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="g">Generate token</b>，<b class="r">立刻复制</b> <code>github_pat_xxx...</code>（只显示一次）。</div></div>
+                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="g">保存配置</b> 即可。</div></div>
+                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，建议先本地 <b class="g">导出完整数据</b>，随时都可以通过 <b class="g">导入恢复数据</b> 挽救回来。</div></div>
+                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="y">推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="y">拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
             </div>
             <div style="display:flex; flex-direction:column; gap:10px;">
-                <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)" style="width:100%; font-family:monospace;">
+                <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)" style="width:100%;">
                 <input type="text" id="gh-repo" placeholder="仓库 (格式: owner/repo)" style="width:100%;">
                 <input type="text" id="gh-path" placeholder="文件路径 (默认: workout_data.json)" style="width:100%;">
                 <input type="text" id="gh-msg" placeholder="Commit 信息模板 (默认: sync: {time})" style="width:100%;">
                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9em; color:var(--text-muted);">
-                    <input type="checkbox" id="gh-autosync" style="width:18px;height:18px; accent-color:var(--accent);">
+                    <input type="checkbox" id="gh-autosync" style="width:18px;height:18px;">
                     保存打卡 / 修改计划时自动推送到 GitHub
                 </label>
             </div>
             <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
-                <button id="btn-gh-save" class="btn-outline" style="flex:1; min-width:100px;">💾 保存配置</button>
-                <button id="btn-gh-push" style="flex:1; min-width:100px;">⬆️ 推送</button>
-                <button id="btn-gh-pull" class="btn-outline" style="flex:1; min-width:100px;">⬇️ 拉取</button>
-                <button id="btn-gh-history" class="btn-outline" style="flex:1; min-width:100px;">📜 历史版本</button>
+                <button id="btn-gh-save" class="btn-outline" style="flex:1; min-width:100px;">保存配置</button>
+                <button id="btn-gh-push" style="flex:1; min-width:100px;">push 推送</button>
+                <button id="btn-gh-pull" class="btn-outline" style="flex:1; min-width:100px;">pull 拉取</button>
+                <button id="btn-gh-history" class="btn-outline" style="flex:1; min-width:100px;">log 历史版本</button>
             </div>
             <div id="gh-status" style="margin-top:10px; font-size:0.9em; min-height:1.4em;"></div>
             <div id="gh-history" style="display:none; margin-top:12px;"></div>
         </div>
-        <button class="btn-outline btn-danger" style="margin-top: 40px;" id="btn-clear-data">⚠️ 清空本地所有数据</button>
+        <button class="btn-outline btn-danger" style="margin-top: 40px;" id="btn-clear-data">[!] 清空本地所有数据</button>
     </div>
 
     <!-- Panel: About -->
     <div id="about" class="panel">
-        <div style="text-align:center; padding:30px 0 20px;">
-            <svg height="48" width="48" viewBox="0 0 16 16" fill="var(--text-muted)" style="margin-bottom:12px;">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-            <h2 style="margin:0 0 4px;">Bruce的硬核训练</h2>
-            <p style="color:var(--text-muted); font-size:0.85em; margin:0;">单文件 · 多平台同步 · 健身打卡</p>
+        <div style="text-align:center; padding:20px 0 10px;">
+<pre class="ascii"> ____  ____  _   _  ____ _____
+| __ )|  _ \| | | |/ ___| ____|
+|  _ \| |_) | | | | |   |  _|
+| |_) |  _ <| |_| | |___| |___
+|____/|_| \_\\___/ \____|_____|</pre>
+            <p style="color:var(--text-muted); font-size:0.85em; margin:0;">单文件 | 多平台同步 | 健身打卡</p>
         </div>
-        <div style="border-top:1px solid var(--border-color); padding-top:15px; font-size:0.9em; color:var(--text-muted); line-height:2;">
-            <table style="border-collapse:collapse; font-size:0.9em; color:var(--text-muted); line-height:2;">
-                <tr><td style="padding-right:20px;"><b style="color:var(--text-main);">源代码</b></td><td><a href="https://github.com/Caturra000/bruce-workout" target="_blank" rel="noopener" style="color:#58a6ff;">GitHub ↗</a></td></tr>
-                <tr><td style="padding-right:20px;"><b style="color:var(--text-main);">许可协议</b></td><td>MPL-2.0 License</td></tr>
-                <tr><td style="padding-right:20px;"><b style="color:var(--text-main);"><i>Bruce</i></b></td><td>虚拟教练，你可想象为肌肉版的初音未来</td></tr>
+        <div style="border-top:1px solid var(--border-color); padding-top:15px; color:var(--text-muted); line-height:2;">
+            <table class="about-table">
+                <tr><td><b>源代码</b></td><td><a href="https://github.com/Caturra000/bruce-workout" target="_blank" rel="noopener">github.com/Caturra000/bruce-workout</a></td></tr>
+                <tr><td><b>许可协议</b></td><td>MPL-2.0 License</td></tr>
+                <tr><td><b>Bruce</b></td><td>虚拟教练，你可想象为肌肉版的初音未来</td></tr>
             </table>
-            <p style="margin-top:20px; font-size:0.8em; color:rgba(139,148,158,0.5);">© 2026 Caturra</p>
+            <p style="margin-top:20px; font-size:0.8em; color:var(--text-muted);">(c) 2026 Caturra</p>
         </div>
     </div>
 </div>
@@ -619,7 +529,7 @@
             if ($('#gh-path'))  $('#gh-path').value  = s.path  || '';
             if ($('#gh-msg')) $('#gh-msg').value = s.msg || '';
             if ($('#gh-autosync')) $('#gh-autosync').checked = !!s.autoSync;
-            if (s.lastSync) this.setStatus(`上次同步: ${s.lastSync}`, 'var(--text-muted)');
+            if (s.lastSync) this.setStatus(`last sync: ${s.lastSync}`, 'var(--text-muted)');
         },
 
         async saveSettings() {
@@ -632,7 +542,7 @@
                 lastSync: this.settings.lastSync || null,
             };
             await db.set('github_settings', this.settings);
-            this.setStatus('✅ 配置已保存', 'var(--level-4)');
+            this.setStatus('[OK] 配置已保存', 'var(--text-main)');
         },
 
         buildCommitMsg() {
@@ -654,15 +564,14 @@
 
         async push(silent = false) {
             if (!this.isReady()) {
-                if (!silent) this.setStatus('❌ 请先配置 Token 和仓库', 'var(--danger)');
+                if (!silent) this.setStatus('[ERR] 请先配置 Token 和仓库', 'var(--danger)');
                 return false;
             }
             const { token, repo, path } = this.settings;
             const filePath = path || 'workout_data.json';
-            if (!silent) this.setStatus('⏳ 正在推送…', 'var(--quick-fill)');
+            if (!silent) this.setStatus('[..] 正在推送', 'var(--quick-fill)');
 
             try {
-                // 1) 获取当前文件 SHA（若存在）
                 let sha = null;
                 const getResp = await fetch(
                     `https://api.github.com/repos/${repo}/contents/${filePath}?_t=${Date.now()}`,
@@ -675,7 +584,6 @@
                     throw new Error(errBody.message || `HTTP ${getResp.status}`);
                 }
 
-                // 2) 构建 & 推送
                 const content = JSON.stringify(buildExportData(), null, 2);
                 const body = {
                     message: this.buildCommitMsg(),
@@ -701,22 +609,22 @@
 
                 this.settings.lastSync = new Date().toLocaleString('zh-CN');
                 await db.set('github_settings', this.settings);
-                this.setStatus(`✅ 推送成功 (${this.settings.lastSync})`, 'var(--level-4)');
+                this.setStatus(`[OK] 推送成功 (${this.settings.lastSync})`, 'var(--text-main)');
                 return true;
             } catch (e) {
-                this.setStatus(`❌ 推送失败: ${e.message}`, 'var(--danger)');
+                this.setStatus(`[ERR] 推送失败: ${e.message}`, 'var(--danger)');
                 return false;
             }
         },
 
         async pull() {
             if (!this.isReady()) {
-                this.setStatus('❌ 请先配置 Token 和仓库', 'var(--danger)');
+                this.setStatus('[ERR] 请先配置 Token 和仓库', 'var(--danger)');
                 return;
             }
             const { token, repo, path } = this.settings;
             const filePath = path || 'workout_data.json';
-            this.setStatus('⏳ 正在拉取…', 'var(--quick-fill)');
+            this.setStatus('[..] 正在拉取', 'var(--quick-fill)');
 
             try {
                 const resp = await fetch(
@@ -732,12 +640,11 @@
                 );
                 const parsed = JSON.parse(decoded);
 
-                if (!confirm('⚠️ 拉取会将远程数据与本地合并（冲突时远程优先）。确定继续？')) {
+                if (!confirm('[!] 拉取会将远程数据与本地合并（冲突时远程优先）。确定继续？')) {
                     this.setStatus('已取消', 'var(--text-muted)');
                     return;
                 }
 
-                // 合并日志（远程覆盖同日）
                 const importedLogs = parsed.logs || {};
                 Object.entries(importedLogs).forEach(([d, v]) => {
                     if (/^\d{4}-\d{2}-\d{2}$/.test(d) && v && typeof v === 'object') state.logs[d] = v;
@@ -752,22 +659,22 @@
 
                 syncSelectOptions();
                 renderTodayPanel();
-                this.setStatus(`✅ 拉取成功 (${this.settings.lastSync})`, 'var(--level-4)');
-                alert('✅ 数据已从 GitHub 拉取并合并！');
+                this.setStatus(`[OK] 拉取成功 (${this.settings.lastSync})`, 'var(--text-main)');
+                alert('[OK] 数据已从 GitHub 拉取并合并。');
             } catch (e) {
-                this.setStatus(`❌ 拉取失败: ${e.message}`, 'var(--danger)');
+                this.setStatus(`[ERR] 拉取失败: ${e.message}`, 'var(--danger)');
             }
         },
 
         async fetchHistory() {
             if (!this.isReady()) {
-                this.setStatus('❌ 请先配置 Token 和仓库', 'var(--danger)');
+                this.setStatus('[ERR] 请先配置 Token 和仓库', 'var(--danger)');
                 return;
             }
             const { token, repo, path } = this.settings;
             const filePath = path || 'workout_data.json';
             const historyDiv = $('#gh-history');
-            this.setStatus('⏳ 正在获取历史版本…', 'var(--quick-fill)');
+            this.setStatus('[..] 正在获取历史版本', 'var(--quick-fill)');
 
             try {
                 const resp = await fetch(
@@ -784,36 +691,36 @@
                 }
 
                 historyDiv.style.display = 'block';
-                historyDiv.innerHTML = `<div style="font-size:0.85em; color:var(--text-muted); margin-bottom:8px;">最近 ${commits.length} 个版本（点击「恢复」拉取该版本）：</div>` +
+                historyDiv.innerHTML = `<div style="font-size:0.85em; color:var(--text-muted); margin-bottom:8px;">// 最近 ${commits.length} 个版本（点击「恢复」拉取该版本）：</div>` +
                     commits.map((c, i) => {
                         const date = new Date(c.commit.author.date);
                         const timeStr = `${toLocalDateStr(date)} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
                         const msg = c.commit.message || '(无信息)';
                         const sha = c.sha.slice(0, 7);
-                        const isCurrent = i === 0 ? ' <span style="color:var(--level-4); font-size:0.85em;">（最新）</span>' : '';
+                        const isCurrent = i === 0 ? ' <span style="color:var(--text-muted); font-size:0.85em;">(HEAD)</span>' : '';
                         return `<div class="gh-commit">
                             <div class="gh-commit-info">
                                 <div class="gh-commit-msg">${escapeHTML(msg)}${isCurrent}</div>
-                                <div class="gh-commit-meta"><span class="gh-commit-sha">${sha}</span> · ${timeStr}</div>
+                                <div class="gh-commit-meta"><span class="gh-commit-sha">${sha}</span> | ${timeStr}</div>
                             </div>
                             <button class="btn-outline" onclick="githubSync.pullFromCommit('${c.sha}','${escapeHTML(msg).replace(/'/g,"\\'")}')">恢复</button>
                         </div>`;
                     }).join('');
 
-                this.setStatus(`✅ 已加载 ${commits.length} 个历史版本`, 'var(--level-4)');
+                this.setStatus(`[OK] 已加载 ${commits.length} 个历史版本`, 'var(--text-main)');
                 historyDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } catch (e) {
                 historyDiv.style.display = 'none';
-                this.setStatus(`❌ 获取历史失败: ${e.message}`, 'var(--danger)');
+                this.setStatus(`[ERR] 获取历史失败: ${e.message}`, 'var(--danger)');
             }
         },
 
         async pullFromCommit(sha, msgHint) {
-            if (!confirm(`⚠️ 确定要恢复到此版本？\n\n"${msgHint}"\n\n本地数据将被该版本覆盖（建议先导出备份）。`)) return;
+            if (!confirm(`[!] 确定要恢复到此版本？\n\n"${msgHint}"\n\n本地数据将被该版本覆盖（建议先导出备份）。`)) return;
 
             const { token, repo, path } = this.settings;
             const filePath = path || 'workout_data.json';
-            this.setStatus('⏳ 正在恢复…', 'var(--quick-fill)');
+            this.setStatus('[..] 正在恢复', 'var(--quick-fill)');
 
             try {
                 const resp = await fetch(
@@ -842,20 +749,20 @@
                 syncSelectOptions();
                 renderTodayPanel();
 
-                this.setStatus(`✅ 已恢复到 ${sha.slice(0, 7)}`, 'var(--level-4)');
-                alert(`✅ 已成功恢复到版本 ${sha.slice(0, 7)}！`);
+                this.setStatus(`[OK] 已恢复到 ${sha.slice(0, 7)}`, 'var(--text-main)');
+                alert(`[OK] 已成功恢复到版本 ${sha.slice(0, 7)}`);
             } catch (e) {
-                this.setStatus(`❌ 恢复失败: ${e.message}`, 'var(--danger)');
+                this.setStatus(`[ERR] 恢复失败: ${e.message}`, 'var(--danger)');
             }
         },
 
         async autoSyncPush() {
             if (!this.settings.autoSync || !this.isReady()) return;
-            this.showToast('☁️ 正在同步到 GitHub…', 'var(--quick-fill)');
+            this.showToast('[..] 正在同步到 GitHub', 'var(--quick-fill)');
             const ok = await this.push(true);
             this.showToast(
-                ok ? '✅ 已同步到 GitHub' : '❌ GitHub 同步失败',
-                ok ? 'var(--level-4)' : 'var(--danger)'
+                ok ? '[OK] 已同步到 GitHub' : '[ERR] GitHub 同步失败',
+                ok ? 'var(--text-main)' : 'var(--danger)'
             );
         },
 
@@ -864,6 +771,7 @@
             if (!el) return;
             el.innerText = msg;
             el.style.color = color;
+            el.style.borderColor = color;
             el.style.opacity = '1';
             clearTimeout(this._toastTimer);
             this._toastTimer = setTimeout(() => el.style.opacity = '0', 3000);
@@ -871,8 +779,8 @@
     };
 
     const themeIconColors = {
-        default: { bg: '#0d1117', accent: '#39d353', themeColor: '#0d1117' },
-        pink:    { bg: '#ffe0ee', accent: '#ff0066', themeColor: '#ffe0ee' }
+        default: { bg: '#000000', accent: '#d4d4d4', themeColor: '#000000' },
+        pink:    { bg: '#000000', accent: '#ff3d9a', themeColor: '#000000' }
     };
 
     function makeIconDataURL(size, theme) {
@@ -880,16 +788,11 @@
         const c = document.createElement('canvas');
         c.width = c.height = size;
         const g = c.getContext('2d');
-        const r = size * 0.12;
-        g.beginPath();
-        g.moveTo(r, 0); g.lineTo(size - r, 0); g.arcTo(size, 0, size, r, r);
-        g.lineTo(size, size - r); g.arcTo(size, size, size - r, size, r);
-        g.lineTo(r, size); g.arcTo(0, size, 0, size - r, r);
-        g.lineTo(0, r); g.arcTo(0, 0, r, 0, r);
-        g.closePath();
-        g.fillStyle = colors.bg; g.fill();
+        g.fillStyle = colors.bg; g.fillRect(0, 0, size, size);
+        g.strokeStyle = colors.accent; g.lineWidth = Math.max(2, size * 0.03);
+        g.strokeRect(size * 0.08, size * 0.08, size * 0.84, size * 0.84);
         g.fillStyle = colors.accent;
-        g.font = `bold ${size * 0.55}px -apple-system,BlinkMacSystemFont,sans-serif`;
+        g.font = `bold ${size * 0.5}px Menlo, Consolas, "Courier New", monospace`;
         g.textAlign = 'center'; g.textBaseline = 'middle';
         g.fillText('B', size / 2, size / 2 * 1.05);
         return c.toDataURL('image/png');
@@ -899,7 +802,12 @@
         const colors = themeIconColors[theme] || themeIconColors.default;
         const bg     = colors.bg.replace('#', '%23');
         const accent = colors.accent.replace('#', '%23');
-        return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='${bg}'/><text x='50' y='55' text-anchor='middle' dominant-baseline='central' font-size='55' font-weight='bold' fill='${accent}'>B</text></svg>`;
+        return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='${bg}'/><rect x='8' y='8' width='84' height='84' fill='none' stroke='${accent}' stroke-width='3'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-family='Menlo,Consolas,monospace' font-size='50' font-weight='bold' fill='${accent}'>B</text></svg>`;
+    }
+
+    function updateThemeToggleLabel(theme) {
+        const btn = $('#theme-toggle');
+        if (btn) btn.innerText = theme === 'pink' ? 'pink' : 'mono';
     }
 
     function updateThemeAssets(theme) {
@@ -936,6 +844,7 @@
         $('link[rel="manifest"]').href = URL.createObjectURL(
             new Blob([JSON.stringify(manifest)], { type: 'application/json' })
         );
+        updateThemeToggleLabel(theme);
     }
 
     function setupPWA() {
@@ -1034,7 +943,7 @@
             $('#loading-screen').style.opacity = '0';
             setTimeout(() => $('#loading-screen').style.display = 'none', 300);
         } catch (e) {
-            $('#loading-screen').innerHTML = "加载失败，请确保存储权限已开启。";
+            $('#loading-screen').innerHTML = "[ERR] 加载失败，请确保存储权限已开启。";
         }
     });
 
@@ -1042,6 +951,13 @@
         // Tab 切换
         $('#main-tabs').addEventListener('click', e => {
             if (e.target.matches('.tab')) switchTab(e.target);
+        });
+        // 键盘数字快捷键切换 Tab
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            if (e.target.matches('input, textarea, select, [contenteditable]')) return;
+            const tab = $(`#main-tabs .tab[data-key="${e.key}"]`);
+            if (tab) switchTab(tab);
         });
         $('#theme-toggle').addEventListener('click', async () => {
             const el = document.documentElement;
@@ -1345,12 +1261,12 @@
 
         if (planObj.isRest) {
             const checked = savedLog && savedLog.score === 100 ? 'checked' : '';
-            listDiv.innerHTML = `<div class="card" style="border-color: var(--accent);">
-                <label class="rest-day-check" style="display:flex; align-items:center; gap:10px; font-size:1.1em; cursor:pointer; user-select:none;">
-                    <input type="checkbox" id="rest-check" style="width:25px;height:25px;" ${checked}>
+            listDiv.innerHTML = `<div class="card" style="border-color: var(--text-main);">
+                <label class="rest-day-check" style="display:flex; align-items:center; gap:10px; font-size:1.05em; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="rest-check" style="width:22px;height:22px;" ${checked}>
                     我今天乖乖休息/完成了有氧安排。
                 </label>
-                <div class="bruce-tip" style="margin-top:10px;">" 肌肉是在休息时生长的，不要有负罪感。 "</div>
+                <div class="bruce-tip" style="margin-top:10px;">肌肉是在休息时生长的，不要有负罪感。</div>
             </div>`;
         } else {
             listDiv.innerHTML = planObj.exercises.map(ex => {
@@ -1368,25 +1284,25 @@
                     }
                     setsHtml += `
                         <div class="set-row">
-                            <span class="set-label">第 ${i + 1} 组</span>
                             <input type="number" step="0.5" min="0" class="set-input set-w" placeholder="kg" value="${escapeHTML(w)}">
                             <span class="set-unit">x</span>
                             <input type="number" step="1" min="0" class="set-input set-r" placeholder="${measureType === 'time' ? '秒' : '次数'}" value="${escapeHTML(r)}">
                             <span class="set-unit">(${escapeHTML(ex.repsDesc)})</span>
                         </div>`;
                 }
+                setsHtml += '</div>';
 
                 return `
                     <div class="card" data-id="${escapeHTML(ex.id)}" data-core="${ex.isCore}" data-total-sets="${ex.sets}" data-measure="${measureType}" data-name="${escapeHTML(ex.name)}">
                         <div class="card-header">
                             <div>
-                                <span class="card-title">${escapeHTML(ex.name)} ${ex.isCore ? '🔥' : ''}</span>
-                                <span class="card-target">/ ${ex.sets}组</span>
+                                <span class="card-title">${escapeHTML(ex.name)}</span>${ex.isCore ? '<span class="core-mark">[core]</span>' : ''}
+                                <span class="card-target">/ ${ex.sets} 组</span>
                             </div>
-                            <button type="button" class="btn-quick js-quick-fill" data-exid="${escapeHTML(ex.id)}" data-repsdesc="${escapeHTML(ex.repsDesc)}">⚡ 填满</button>
+                            <button type="button" class="btn-quick js-quick-fill" data-exid="${escapeHTML(ex.id)}" data-repsdesc="${escapeHTML(ex.repsDesc)}">填满</button>
                         </div>
-                        <div class="bruce-tip">" ${escapeHTML(ex.tip)} "</div>
-                        ${setsHtml}</div>
+                        <div class="bruce-tip">${escapeHTML(ex.tip)}</div>
+                        ${setsHtml}
                     </div>`;
             }).join('');
         }
@@ -1413,7 +1329,7 @@
             entry.exercises = [];
         } else {
             const cards = $$('#exercise-list .card[data-id]');
-            if (!cards.length) return showFeedback({ warning: "当前计划没有动作，请先去“计划定制”里补充动作后再保存。" });
+            if (!cards.length) return showFeedback({ warning: "当前计划没有动作，请先去「计划定制」里补充动作后再保存。" });
 
             let totalTarget = 0, totalDone = 0, coreMissedName = "";
             entry.exercises = [];
@@ -1452,8 +1368,8 @@
 
         showFeedback(entry);
         const btn = $('#save-btn');
-        btn.innerText = "✅ 数据已保存"; btn.style.backgroundColor = "var(--level-4)";
-        setTimeout(() => { btn.innerText = "保存今日容量"; btn.style.backgroundColor = "var(--accent)"; }, 2000);
+        btn.innerText = "[OK] 数据已保存";
+        setTimeout(() => { btn.innerText = "[ 保存今日容量 ]"; }, 2000);
         githubSync.autoSyncPush();
     }
 
@@ -1461,18 +1377,18 @@
         let html = '';
         if (data.warning) html = `<div class="analysis-box warning-box">${data.warning}</div>`;
         else if (isRestDayLog(data)) {
-            html = data.score === 100 ? `<div class="analysis-box">Bruce: “很好的执行力，休息也是计划的一部分。”</div>`
-                 : `<div class="analysis-box warning-box">Bruce: “这天被设成了休息/有氧日，但你还没勾选完成。恢复也要认真对待。”</div>`;
+            html = data.score === 100 ? `<div class="analysis-box">Bruce: "很好的执行力，休息也是计划的一部分。"</div>`
+                 : `<div class="analysis-box warning-box">Bruce: "这天被设成了休息/有氧日，但你还没勾选完成。恢复也要认真对待。"</div>`;
         } else if (data.score === 0) {
-            html = `<div class="analysis-box warning-box">Bruce: “记录保存了，但今天没有完成任何有效组。下次别让空表格赢了你。”</div>`;
+            html = `<div class="analysis-box warning-box">Bruce: "记录保存了，但今天没有完成任何有效组。下次别让空表格赢了你。"</div>`;
         } else if (data.coreMissed) {
-            html = `<div class="analysis-box warning-box">Bruce: “嘿！你居然跳过了核心动作？容量再高，没有地基刺激，激素水平也上不去！”</div>`;
+            html = `<div class="analysis-box warning-box">Bruce: "嘿！你居然跳过了核心动作？容量再高，没有地基刺激，激素水平也上不去！"</div>`;
         } else if (data.score === 100) {
-            html = `<div class="analysis-box">Bruce: “完美！所有的组都吃下了。去补充碳水吧！”</div>`;
+            html = `<div class="analysis-box">Bruce: "完美！所有的组都吃下了。去补充碳水吧！"</div>`;
         } else if (data.score >= 60) {
-            html = `<div class="analysis-box">Bruce: “完成了 ${data.score}% 的容量。留得青山在，下次试着补齐。”</div>`;
+            html = `<div class="analysis-box">Bruce: "完成了 ${data.score}% 的容量。留得青山在，下次试着补齐。"</div>`;
         } else {
-            html = `<div class="analysis-box warning-box">Bruce: “只完成了不到一半？不要让数字欺骗你，要对得起你流的汗。”</div>`;
+            html = `<div class="analysis-box warning-box">Bruce: "只完成了不到一半？不要让数字欺骗你，要对得起你流的汗。"</div>`;
         }
         $('#daily-feedback').innerHTML = html;
     }
@@ -1540,16 +1456,16 @@
             cell.className = 'cell';
             cell.dataset.date = dateStr;
 
-            let level = 0, info = dateStr + " - 无记录";
+            let level = 0, info = dateStr + " | 无记录";
             const data = state.logs[dateStr];
             if (data) {
                 const title = data.title || state.plan[data.dayType]?.title || '未知计划';
                 if (isRestDayLog(data)) {
                     level = data.score > 0 ? 1 : 0;
-                    info = `${dateStr} - [休息/有氧${level?'':'未确认'}] ${title}`;
+                    info = `${dateStr} | [休息/有氧${level?'':'未确认'}] ${title}`;
                 } else {
                     level = data.score === 100 ? 4 : data.score >= 75 ? 3 : data.score >= 40 ? 2 : data.score > 0 ? 1 : 0;
-                    info = `${dateStr} - ${title} (${data.score}%)`;
+                    info = `${dateStr} | ${title} (${data.score}%)`;
                 }
             }
             cell.dataset.level = level;
@@ -1634,39 +1550,9 @@
         });
     }
 
-    function polygonToRoundedPath(pts, radius = 4) {
-        const n = pts.length;
-        if (n < 3) return '';
-        let d = '';
-
-        for (let i = 0; i < n; i++) {
-            const prev = pts[(i - 1 + n) % n];
-            const curr = pts[i];
-            const next = pts[(i + 1) % n];
-
-            const dInX = curr.x - prev.x, dInY = curr.y - prev.y;
-            const lenIn = Math.hypot(dInX, dInY);
-            const uInX = dInX / (lenIn || 1), uInY = dInY / (lenIn || 1);
-
-            const dOutX = next.x - curr.x, dOutY = next.y - curr.y;
-            const lenOut = Math.hypot(dOutX, dOutY);
-            const uOutX = dOutX / (lenOut || 1), uOutY = dOutY / (lenOut || 1);
-
-            const r = Math.min(radius, lenIn / 2, lenOut / 2);
-
-            const startX = curr.x - uInX * r;
-            const startY = curr.y - uInY * r;
-            const endX = curr.x + uOutX * r;
-            const endY = curr.y + uOutY * r;
-
-            if (i === 0) {
-                d += `M ${startX} ${startY} Q ${curr.x} ${curr.y} ${endX} ${endY} `;
-            } else {
-                d += `L ${startX} ${startY} Q ${curr.x} ${curr.y} ${endX} ${endY} `;
-            }
-        }
-        d += 'Z';
-        return d;
+    function polygonToPath(pts) {
+        if (pts.length < 3) return '';
+        return pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
     }
 
     function focusHeatmapMonth(month) {
@@ -1759,7 +1645,7 @@
             if (!isColinearX && !isColinearY) simplified.push(curr);
         }
 
-        const pathD = polygonToRoundedPath(simplified, 4);
+        const pathD = polygonToPath(simplified);
         svg.innerHTML = `<path d="${pathD}" class="heatmap-month-path" />`;
 
         clearTimeout(state._centerTimer);
@@ -1796,22 +1682,22 @@
         const data = state.logs[dateStr];
 
         if (!data) {
-            title.innerText = `📅 ${dateStr} - 无记录`; title.style.color = "var(--text-muted)";
+            title.innerText = `${dateStr} | 无记录`; title.style.color = "var(--text-muted)";
             content.innerHTML = "<p>这一天像风一样消散了，什么都没留下。</p>"; return;
         }
 
         const planTitle = data.title || state.plan[data.dayType]?.title || '未知计划';
-        title.innerText = `📅 ${dateStr} - ${planTitle}`; title.style.color = "#58a6ff";
+        title.innerText = `${dateStr} | ${planTitle}`; title.style.color = "var(--text-main)";
 
         if (isRestDayLog(data)) {
-            content.innerHTML = `<p>${data.score > 0 ? '✅ 这一天，你选择了休息或有氧，让身体进行恢复。' : '🕒 这一天被标记为休息/有氧日，但你还没有勾选完成。'}</p>
+            content.innerHTML = `<p>${data.score > 0 ? '[x] 这一天，你选择了休息或有氧，让身体进行恢复。' : '[ ] 这一天被标记为休息/有氧日，但你还没有勾选完成。'}</p>
                                  ${data.note ? `<p><strong>备注：</strong>${escapeHTML(data.note)}</p>` : ''}`;
             return;
         }
 
-        let html = `<p><strong>容量完成度：</strong><span style="color:${data.score > 0 ? 'var(--level-4)' : 'var(--text-muted)'}">${data.score}%</span></p>`;
+        let html = `<p><strong>容量完成度：</strong><span style="color:${data.score > 0 ? 'var(--accent)' : 'var(--text-muted)'}">${data.score}%</span></p>`;
         if (data.score === 0) html += `<p style="color:var(--danger)">这次记录已保存，但没有完成任何有效组。</p>`;
-        html += '<hr style="border-color:var(--border-color); margin: 15px 0;">';
+        html += '<hr>';
 
         if (!data.exercises || !data.exercises.length) html += `<p>没有可回放的动作明细。</p>`;
         else {
@@ -1821,7 +1707,7 @@
                 const tSets = ex.targetSets || Math.max((ex.weights||[]).length, (ex.reps||[]).length) || pEx.sets || 0;
                 const cSets = typeof ex.completedSets === 'number' ? ex.completedSets : (ex.weights||[]).reduce((a, w, i) => a + (hasSetActivity(w, ex.reps?.[i])?1:0), 0);
 
-                html += `<div style="margin-bottom: 12px;"><strong>${escapeHTML(ex.name || pEx.name)}</strong> (${cSets}/${tSets} 组)<div style="margin-top: 4px;">`;
+                html += `<div style="margin-bottom: 12px;"><strong>> ${escapeHTML(ex.name || pEx.name)}</strong> <span style="color:var(--text-muted)">(${cSets}/${tSets} 组)</span><div style="margin-top: 4px;">`;
                 if (cSets === 0) html += `<span class="playback-set" style="color:var(--danger)">未执行</span>`;
                 else {
                     const maxL = Math.max((ex.weights||[]).length, (ex.reps||[]).length);
@@ -1831,7 +1717,7 @@
                             const rStr = String(ex.reps?.[i] || '').trim();
                             const w = wStr && wStr !== '0' ? `${escapeHTML(wStr)}kg` : `自重`;
                             const r = rStr ? `${escapeHTML(rStr)}${mType==='time'?'秒':'次'}` : `?${mType==='time'?'秒':'次'}`;
-                            html += `<span class="playback-set">[第${i+1}组] ${w} x ${r}</span><br>`;
+                            html += `<span class="playback-set">[${i+1}] ${w} x ${r}</span><br>`;
                         }
                     }
                 }
@@ -1839,7 +1725,7 @@
             });
         }
         if (data.note) {
-            html += '<hr style="border-color:var(--border-color); margin: 15px 0;">';
+            html += '<hr>';
             html += `<p><strong>备注：</strong>${escapeHTML(data.note)}</p>`;
         }
         content.innerHTML = html;
@@ -1891,7 +1777,7 @@
         });
 
         if (volData.length === 0) {
-            chartDiv.innerHTML = `<p style="color:var(--text-muted); text-align:center; width:100%;">所选范围内暂无有效容量数据</p>`;
+            chartDiv.innerHTML = `<p style="color:var(--text-muted); text-align:center; width:100%;">// 所选范围内暂无有效容量数据</p>`;
             container.style.overflowX = 'hidden';
             chartDiv.style.width = '100%';
             chartDiv.style.minWidth = '0';
@@ -1958,7 +1844,7 @@
             else pathD += ` L ${x} ${y}`;
 
             if (showPoints) {
-                pointsHtml += `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" class="vol-point" data-date="${d.date}" data-vol="${d.vol.toFixed(1)}" style="cursor:pointer;" />`;
+                pointsHtml += `<rect x="${x - 3}" y="${y - 3}" width="6" height="6" fill="var(--accent)" class="vol-point" data-date="${d.date}" data-vol="${d.vol.toFixed(1)}" />`;
             }
 
             const m = d.date.split('-')[1];
@@ -1970,18 +1856,18 @@
 
         const topY = padT;
         const botY = padT + innerH;
-        const strokeWidth = showPoints ? 2 : 1.5;
+        const strokeWidth = showPoints ? 1.5 : 1;
         const svgWidthAttr = isScrollable ? svgW : '100%';
 
         chartDiv.innerHTML = `
             <svg width="${svgWidthAttr}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="overflow: visible; display: block;">
-                <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,2" />
+                <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,3" />
                 <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol.toFixed(0)}</text>
 
                 <line x1="${padL}" y1="${botY}" x2="${svgW - padR}" y2="${botY}" stroke="var(--border-color)" />
                 <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol.toFixed(0)}</text>
 
-                <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="${strokeWidth}" stroke-linejoin="round" stroke-linecap="round" />
+                <path d="${pathD}" fill="none" stroke="var(--text-main)" stroke-width="${strokeWidth}" stroke-linejoin="miter" stroke-linecap="square" />
                 ${pointsHtml}
                 ${monthMarks}
             </svg>
@@ -1998,7 +1884,7 @@
         if (!showPoints) return;
 
         const showTooltip = (p) => {
-            p.setAttribute('r', 6);
+            p.classList.add('hot');
             const tt = $('#global-tooltip');
             tt.innerText = `${p.dataset.date} | ${p.dataset.vol} 容量`;
             tt.style.opacity = '1';
@@ -2014,7 +1900,7 @@
         };
 
         const hideTooltip = () => {
-            chartDiv.querySelectorAll('.vol-point').forEach(pt => pt.setAttribute('r', 4));
+            chartDiv.querySelectorAll('.vol-point').forEach(pt => pt.classList.remove('hot'));
             $('#global-tooltip').style.opacity = '0';
         };
 
@@ -2052,7 +1938,7 @@
             if (d.startsWith(year) && !isRestDayLog(data) && data.score > 0) { days++; total += data.score; }
         });
         $('#ai-analysis').innerHTML = days === 0
-            ? `<p>${escapeHTML(year)} 年还没有容量记录。种一棵树最好的时间是十年前，其次是现在。</p>`
+            ? `<p style="color:var(--text-muted)">// ${escapeHTML(year)} 年还没有容量记录。种一棵树最好的时间是十年前，其次是现在。</p>`
             : `<div class="analysis-box"><strong>${escapeHTML(year)} 年</strong><br>
                有效训练 (不含纯休息日) <span style="color:var(--accent); font-size:1.2em; font-weight:bold">${days}</span> 天<br>
                平均容量完成度 <span style="color:var(--accent); font-size:1.2em; font-weight:bold">${Math.round(total/days)}%</span></div>`;
@@ -2061,6 +1947,31 @@
     /* ==========================================
      * 5. Edit 面板核心逻辑 (计划定制)
      * ========================================== */
+    function exerciseCardHTML(ex) {
+        return `
+            <div class="card" data-id="${escapeHTML(ex.id)}">
+                <div class="edit-row">
+                    <input type="text" class="ed-name" value="${escapeHTML(ex.name)}" placeholder="动作名称" style="font-weight:bold;">
+                    <input type="text" class="ed-exid" value="${escapeHTML(ex.id)}" spellcheck="false" title="动作ID（仅字母/数字/_/-，本计划内唯一，点击修改）">
+                    <label style="align-items: center;"><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> core</label>
+                    <button class="btn-danger" type="button" style="margin-left:auto;">x 删除</button>
+                </div>
+                <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <label style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="color:var(--text-muted); font-size:1em;">目标组数</span>
+                        <input type="number" class="ed-sets" value="${ex.sets}" min="1" max="20">
+                    </label>
+                    <label style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="color:var(--text-muted); font-size:1em;">要求</span>
+                        <input type="text" class="ed-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
+                    </label>
+                </div>
+                <div class="edit-row" style="margin-bottom:0;">
+                    <input type="text" class="ed-tip" value="${escapeHTML(ex.tip)}" placeholder="教练骚话或要点 (选填)" style="width:100%;">
+                </div>
+            </div>`;
+    }
+
     function renderEditPanel() {
         const day = $('#edit-day-selector').value;
         if (!day || !state.plan[day]) {
@@ -2074,57 +1985,16 @@
         $('#ed-day-title').value = p.title;
         $('#ed-day-isrest').checked = p.isRest;
         $('#edit-exercise-wrapper').style.display = p.isRest ? 'none' : 'block';
-        $('#day-count-badge').innerText = `当前共 ${Object.keys(state.plan).length} 个训练日`;
+        $('#day-count-badge').innerText = `total: ${Object.keys(state.plan).length} days`;
 
-        $('#edit-exercise-list').innerHTML = (p.exercises || []).map(ex => `
-            <div class="card" data-id="${escapeHTML(ex.id)}">
-                <div class="edit-row">
-                    <input type="text" class="ed-name" value="${escapeHTML(ex.name)}" placeholder="动作名称" style="font-weight:bold;">
-                    <input type="text" class="ed-exid" value="${escapeHTML(ex.id)}" spellcheck="false" title="动作ID（仅字母/数字/_/-，本计划内唯一，点击修改）">
-                    <label style="align-items: center;"><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> 🔥核心</label>
-                    <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
-                </div>
-                <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <label style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--text-muted); font-size:0.85em;">目标组数</span>
-                        <input type="number" class="ed-sets" value="${ex.sets}" min="1" max="20">
-                    </label>
-                    <label style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--text-muted); font-size:0.85em;">要求</span>
-                        <input type="text" class="ed-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
-                    </label>
-                </div>
-                <div class="edit-row" style="margin-bottom:0;">
-                    <input type="text" class="ed-tip" value="${escapeHTML(ex.tip)}" placeholder="教练骚话或要点 (选填)" style="width:100%;">
-                </div>
-            </div>`).join('');
+        $('#edit-exercise-list').innerHTML = (p.exercises || []).map(exerciseCardHTML).join('');
         $('#edit-feedback').innerText = '';
     }
 
     function addExerciseToEdit() {
-        const id = genExId();
-        $('#edit-exercise-list').insertAdjacentHTML('beforeend', `
-            <div class="card" data-id="${id}">
-                <div class="edit-row">
-                    <input type="text" class="ed-name" value="" placeholder="新动作名称" style="font-weight:bold;">
-                    <input type="text" class="ed-exid" value="${id}" spellcheck="false" title="动作ID（仅字母/数字/_/-，本计划内唯一，点击修改）">
-                    <label style="align-items: center;"><input type="checkbox" class="ed-core" > 🔥核心</label>
-                    <button class="btn-danger" type="button" style="margin-left:auto;">删除</button>
-                </div>
-                <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <label style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--text-muted); font-size:0.85em;">目标组数</span>
-                        <input type="number" class="ed-sets" value="3" min="1" max="20">
-                    </label>
-                    <label style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--text-muted); font-size:0.85em;">要求</span>
-                        <input type="text" class="ed-reps" value="8-12次" placeholder="如: 8-10次">
-                    </label>
-                </div>
-                <div class="edit-row" style="margin-bottom:0;">
-                    <input type="text" class="ed-tip" value="" placeholder="教练骚话或要点 (选填)" style="width:100%;">
-                </div>
-            </div>`);
+        $('#edit-exercise-list').insertAdjacentHTML('beforeend', exerciseCardHTML({
+            id: genExId(), name: '', sets: 3, repsDesc: '8-12次', tip: '', isCore: false
+        }));
     }
 
     async function addNewDay() {
@@ -2142,7 +2012,7 @@
         syncSelectOptions();
         $('#edit-day-selector').value = id;
 
-        $('#edit-feedback').innerText = `✅ 已新增计划 [${id}]，现在可以自由定制它！`;
+        $('#edit-feedback').innerText = `[OK] 已新增计划 [${id}]，现在可以自由定制它`;
         setTimeout(() => $('#edit-feedback').innerText = '', 3000);
         githubSync.autoSyncPush();
     }
@@ -2152,7 +2022,7 @@
         if (!id || !state.plan[id]) return;
 
         if (Object.keys(state.plan).length <= 1) {
-            $('#edit-feedback').innerText = '❌ 至少要保留一个训练日';
+            $('#edit-feedback').innerText = '[ERR] 至少要保留一个训练日';
             setTimeout(() => $('#edit-feedback').innerText = '', 3000);
             return;
         }
@@ -2163,7 +2033,7 @@
 
         syncSelectOptions();
 
-        $('#edit-feedback').innerText = `🗑 已删除计划 [${id}]`;
+        $('#edit-feedback').innerText = `[DEL] 已删除计划 [${id}]`;
         setTimeout(() => $('#edit-feedback').innerText = '', 3000);
         githubSync.autoSyncPush();
     }
@@ -2177,11 +2047,11 @@
         let newExs = [];
 
         if (!/^[A-Za-z0-9_\-]{1,30}$/.test(newId)) {
-            fb.innerText = '❌ 计划ID无效：仅限 1-30 位字母、数字、下划线或横杠（如 day1 / push_A）';
+            fb.innerText = '[ERR] 计划ID无效：仅限 1-30 位字母、数字、下划线或横杠（如 day1 / push_A）';
             return;
         }
         if (newId !== oldId && state.plan[newId] !== undefined) {
-            fb.innerText = `❌ ID [${newId}] 已被其他计划占用，请换一个`;
+            fb.innerText = `[ERR] ID [${newId}] 已被其他计划占用，请换一个`;
             return;
         }
 
@@ -2191,11 +2061,11 @@
                 const exId = (card.querySelector('.ed-exid').value || '').trim();
                 const exName = card.querySelector('.ed-name').value.trim() || '未命名动作';
                 if (!/^[A-Za-z0-9_\-]{1,30}$/.test(exId)) {
-                    fb.innerText = `❌ 动作「${exName}」的ID无效：仅限 1-30 位字母、数字、下划线或横杠`;
+                    fb.innerText = `[ERR] 动作「${exName}」的ID无效：仅限 1-30 位字母、数字、下划线或横杠`;
                     return;
                 }
                 if (seenExIds.has(exId)) {
-                    fb.innerText = `❌ 动作ID [${exId}] 在本计划中重复，请换一个`;
+                    fb.innerText = `[ERR] 动作ID [${exId}] 在本计划中重复，请换一个`;
                     return;
                 }
                 seenExIds.add(exId);
@@ -2208,7 +2078,7 @@
                     isCore: card.querySelector('.ed-core').checked
                 });
             }
-            if (!newExs.length) { fb.innerText = '❌ 非休息日至少保留一个动作。'; return; }
+            if (!newExs.length) { fb.innerText = '[ERR] 非休息日至少保留一个动作。'; return; }
         }
 
         if (newId !== oldId) {
@@ -2235,21 +2105,21 @@
 
         if ($('#today').classList.contains('active')) renderTodayPanel();
         fb.innerText = newId !== oldId
-            ? `✅ [${oldId}] → [${newId}] 已保存（历史打卡不受影响）`
-            : `✅ [${title}] 已保存！`;
+            ? `[OK] [${oldId}] -> [${newId}] 已保存（历史打卡不受影响）`
+            : `[OK] [${title}] 已保存`;
         setTimeout(() => fb.innerText = '', 3000);
         githubSync.autoSyncPush();
     }
 
     async function restoreDefaultPlan() {
-        if (confirm("⚠️ 恢复默认训练计划！你的历史打卡记录不会受影响。确定恢复吗？")) {
+        if (confirm("[!] 恢复默认训练计划！你的历史打卡记录不会受影响。确定恢复吗？")) {
             await db.set('appData_plan', null);
             state.plan = JSON.parse(JSON.stringify(defaultWorkoutPlan));
             syncSelectOptions();
             renderEditPanel();
             if ($('#today').classList.contains('active')) renderTodayPanel();
             if ($('#stats').classList.contains('active')) { renderYearTabs(); renderStats(state.statsYear); }
-            alert("已成功恢复默认计划。");
+            alert("[OK] 已成功恢复默认计划。");
         }
     }
 
@@ -2323,17 +2193,17 @@
 
                 await db.set('appData_logs', state.logs);
                 await db.set('appData_plan', state.plan);
-                alert("✅ 数据导入成功！");
+                alert("[OK] 数据导入成功。");
                 location.reload();
             } catch (err) {
-                alert("❌ 文件格式错误或内容无效！");
+                alert("[ERR] 文件格式错误或内容无效。");
             } finally { e.target.value = ''; }
         };
         reader.readAsText(file);
     }
 
     async function clearData() {
-        if (confirm("⚠️ 确定要清空？如果没有备份 JSON，数据将永远消失。")) {
+        if (confirm("[!] 确定要清空？如果没有备份 JSON，数据将永远消失。")) {
             await db.set('appData_logs', null);
             await db.set('appData_plan', null);
             location.reload();
