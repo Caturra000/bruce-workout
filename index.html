@@ -79,14 +79,14 @@
         .btn-danger:hover { background: var(--danger); color: var(--bg-color); border-color: var(--danger); }
 
         /* ============ 标签栏 ============ */
-        .tabs { display: flex; align-items: center; gap: 4px; border: 1px solid var(--border-color); border-bottom: none; padding: 6px 8px; overflow-x: auto; }
+        .tabs { display: flex; align-items: center; gap: 4px; padding: 6px 0; overflow-x: auto; }
         .tab { padding: 3px 10px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; }
         .tab:hover { color: var(--text-main); }
         .tab.active { background: var(--text-main); color: var(--bg-color); }
         #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 2px 8px; font-size: 0.85em; font-weight: normal; flex-shrink: 0; }
         #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
-        .panel { display: none; background: var(--panel-bg); border: 1px solid var(--border-color); padding: 20px; box-sizing: border-box; }
+        .panel { display: none; background: var(--panel-bg); padding: 20px 0; box-sizing: border-box; }
         .panel.active { display: block; }
 
         /* ============ 自定义下拉 ============ */
@@ -250,7 +250,7 @@
             .set-row { justify-content: space-between; }
             .set-input { width: 30%; flex-grow: 0; }
             .btn-quick { width: 100%; text-align: center; margin-top: 5px; margin-left: 0; }
-            .panel { padding: 15px 10px; }
+            .panel { padding: 15px 0; }
             .edit-day-bar { flex-wrap: wrap; }
             .edit-day-bar .custom-select { min-width: 100%; }
             .edit-day-bar button { flex: 1; }
