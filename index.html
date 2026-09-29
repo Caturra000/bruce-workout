@@ -120,9 +120,11 @@
         .bruce-tip { font-size: 15px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
         .bruce-tip::before { content: '// '; }
         .sets-container { display: flex; flex-direction: column; gap: 10px; }
-        .set-row { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; }
+        .set-row { display: flex; align-items: center; gap: 11px; flex-wrap: nowrap; }
         .set-label { width: 50px; font-size: 15px; color: var(--text-muted); }
         .set-row .set-input { width: 100px; text-align: center; flex-grow: 1; max-width: 125px; }
+        .set-row .set-unit { flex: 0 0 auto; }
+        .set-row .set-unit:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .set-unit { color: var(--text-muted); font-size: 15px; }
 
         .edit-meta-box { border: 1px dashed var(--border-color); padding: 18px; margin-bottom: 24px; }
@@ -263,10 +265,8 @@
             .panel { padding: 21px 0; }
             .card { padding: 14px; margin-bottom: 13px; }
             .card-title { font-size: 17px; }
-            .set-row { gap: 8px; flex-wrap: nowrap; }
+            .set-row { gap: 8px; }
             .set-row .set-input { width: auto; max-width: none; min-width: 0; flex: 1 1 0; }
-            .set-row .set-unit { flex: 0 0 auto; }
-            .set-row .set-unit:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
             .btn-quick { width: 100%; text-align: center; margin: 4px 0 0; }
             .edit-day-bar .custom-select { min-width: 100%; }
             .edit-day-bar > button { flex: 1; }
@@ -294,7 +294,7 @@
 
 <div class="container">
     <div id="sync-toast"></div>
-    <div class="titlebar">$ ./bruce-workout --tui &nbsp;<b>Bruce的硬核训练</b></div>
+    <div class="titlebar">$ ./bruce-workout --tui</div>
     <div class="tabs" id="main-tabs">
         <div class="tab active" data-target="today" data-key="1">今日打卡</div>
         <div class="tab" data-target="stats" data-key="2">统计回放</div>
