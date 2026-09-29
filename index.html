@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bruce的硬核训练</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23000000'/><rect x='8' y='8' width='84' height='84' fill='none' stroke='%23d4d4d4' stroke-width='3'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-family='Menlo,Consolas,monospace' font-size='50' font-weight='bold' fill='%23d4d4d4'>B</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23000000'/><text x='50' y='49' text-anchor='middle' dominant-baseline='central' font-family='Menlo,Consolas,monospace' font-size='98' font-weight='bold' fill='%23d4d4d4'>B</text></svg>">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,141 +18,144 @@
         /* ============ 主题变量 ============ */
         :root {
             color-scheme: dark;
-            --font: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+            --font: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", "Courier New", "SimSun", "宋体", "Songti SC", "STSong", "Noto Serif CJK SC", "Noto Serif SC", monospace;
             --bg-color: #000000; --panel-bg: #000000;
-            --text-main: #d4d4d4; --text-muted: #7c7c7c;
-            --border-color: #4a4a4a;
-            --accent: #ffffff; --accent-hover: #ffffff;
-            --danger: #ff5f5f; --quick-fill: #b0b0b0;
+            --text-main: #d4d4d4; --text-muted: #929292;
+            --border-color: #555555;
+            --accent: #ffffff;
+            --danger: #ff6868; --quick-fill: #bcbcbc;
+            --date-icon-filter: brightness(0) saturate(100%) invert(83%);
             --level-0: #141414; --level-1: #3c3c3c; --level-2: #707070; --level-3: #a8a8a8; --level-4: #e8e8e8;
         }
         [data-theme="pink"] {
-            --text-main: #ff8fc8; --text-muted: #a0527e;
-            --border-color: #6e2f52;
-            --accent: #ff3d9a; --accent-hover: #ff5cab;
-            --danger: #ff5f5f; --quick-fill: #d977ab;
-            --level-0: #1c0912; --level-1: #561c3d; --level-2: #9f2a68; --level-3: #de4b97; --level-4: #ff9ad2;
+            --text-main: #ff52a8; --text-muted: #d15e98;
+            --border-color: #8f285b;
+            --accent: #ff0080;
+            --danger: #ff3399; --quick-fill: #ff73b9;
+            --date-icon-filter: brightness(0) saturate(100%) invert(66%) sepia(99%) saturate(6000%) hue-rotate(310deg) brightness(101%) contrast(101%);
+            --level-0: #290818; --level-1: #80194c; --level-2: #d6207b; --level-3: #ff47a3; --level-4: #ff8cc6;
         }
 
         /* ============ 基础 ============ */
-        * { border-radius: 0 !important; }
-        body { font-family: var(--font); font-size: 14px; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 16px 10px; display: flex; justify-content: center; line-height: 1.5; }
-        .container { max-width: 800px; width: 100%; box-sizing: border-box; }
+        * { border-radius: 0 !important; box-sizing: border-box; }
+        body { font-family: var(--font); font-size: 17px; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 24px 20px 50px; display: flex; justify-content: center; line-height: 1.65; min-width: 320px; }
+        .container { max-width: 1040px; width: 100%; box-sizing: border-box; }
         a { color: var(--text-main); text-decoration: underline; }
         a:hover { color: var(--accent); }
         b, strong { color: var(--text-main); }
 
-        h2, h3 { display: flex; align-items: center; gap: 10px; font-size: 1em; font-weight: bold; margin: 0 0 15px; color: var(--text-main); }
+        h2, h3 { display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: bold; margin: 0 0 22px; color: var(--text-main); line-height: 1.45; }
         h2::before, h3::before { content: '\2500\2500'; color: var(--border-color); flex-shrink: 0; }
         h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
 
-        .titlebar { color: var(--text-muted); font-size: 0.85em; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .titlebar { color: var(--text-muted); font-size: 15px; margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .titlebar b { color: var(--text-main); }
 
         /* ============ 表单 ============ */
-        input, select, button { font-family: inherit; font-size: inherit; }
+        input, select, button { font-family: var(--font); font-size: 16px; line-height: 1.4; }
         input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.75); cursor: pointer; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: var(--date-icon-filter); cursor: pointer; }
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] {
-            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 8px; box-sizing: border-box;
+            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; box-sizing: border-box; min-height: 42px; max-width: 100%;
         }
         input:focus { outline: none; border-color: var(--text-main); }
+        input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         ::placeholder { color: var(--text-muted); opacity: 1; }
 
         input[type="checkbox"] {
-            appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin: 0;
+            appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin: 0;
             border: 1px solid var(--border-color); background: var(--bg-color);
             display: inline-grid; place-content: center; cursor: pointer; flex-shrink: 0; vertical-align: middle;
         }
-        input[type="checkbox"]::before { content: 'x'; font-size: 12px; line-height: 1; font-weight: bold; color: var(--text-main); transform: scale(0); }
+        input[type="checkbox"]::before { content: 'x'; font-size: 15px; line-height: 1; font-weight: bold; color: var(--text-main); transform: scale(0); }
         input[type="checkbox"]:checked { border-color: var(--text-main); }
         input[type="checkbox"]:checked::before { transform: scale(1); }
 
-        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: 8px 16px; font-weight: bold; cursor: pointer; }
+        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 17px; font-weight: bold; cursor: pointer; min-height: 42px; touch-action: manipulation; }
         button:hover { background: var(--accent); border-color: var(--accent); }
         .btn-outline { background: transparent; color: var(--text-main); border-color: var(--border-color); }
         .btn-outline:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
-        .btn-quick { background: transparent; color: var(--quick-fill); border: 1px solid var(--quick-fill); padding: 3px 8px; font-size: 0.85em; font-weight: normal; margin-left: auto; }
+        .btn-quick { background: transparent; color: var(--quick-fill); border: 1px solid var(--quick-fill); padding: 6px 12px; font-size: 15px; font-weight: normal; margin-left: auto; min-height: 38px; }
         .btn-quick:hover { background: var(--quick-fill); color: var(--bg-color); border-color: var(--quick-fill); }
-        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 4px 8px; font-size: 0.85em; }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 6px 11px; font-size: 15px; min-height: 38px; }
         .btn-danger:hover { background: var(--danger); color: var(--bg-color); border-color: var(--danger); }
 
         /* ============ 标签栏 ============ */
-        .tabs { display: flex; align-items: center; gap: 4px; padding: 6px 0; overflow-x: auto; }
-        .tab { padding: 3px 10px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; }
+        .tabs { display: flex; align-items: center; gap: 5px; padding: 8px 0; overflow-x: auto; }
+        .tab { padding: 7px 13px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; min-height: 42px; display: inline-flex; align-items: center; flex-shrink: 0; touch-action: manipulation; }
         .tab:hover { color: var(--text-main); }
         .tab.active { background: var(--text-main); color: var(--bg-color); }
-        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 2px 8px; font-size: 0.85em; font-weight: normal; flex-shrink: 0; }
+        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 11px; font-size: 15px; font-weight: normal; flex-shrink: 0; min-height: 38px; }
         #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
-        .panel { display: none; background: var(--panel-bg); padding: 20px 0; box-sizing: border-box; }
+        .panel { display: none; background: var(--panel-bg); padding: 27px 0; box-sizing: border-box; }
         .panel.active { display: block; }
 
         /* ============ 自定义下拉 ============ */
-        .custom-select { position: relative; width: 100%; margin-bottom: 15px; }
-        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 30px 6px 8px; cursor: pointer; box-sizing: border-box; font-weight: normal; }
+        .custom-select { position: relative; width: 100%; margin-bottom: 18px; }
+        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 36px 9px 11px; cursor: pointer; box-sizing: border-box; font-weight: normal; min-height: 44px; }
         .custom-select-btn:hover { background: var(--bg-color); border-color: var(--text-main); }
-        .custom-select-btn::after { content: 'v'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85em; pointer-events: none; }
+        .custom-select-btn::after { content: 'v'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; pointer-events: none; }
         .custom-select.open .custom-select-btn::after { content: '^'; }
-        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 280px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
+        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar { width: 8px; }
         .custom-select-dropdown::-webkit-scrollbar-track { background: var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-color); }
         .custom-select.open .custom-select-dropdown { display: block; }
-        .custom-select-option { padding: 6px 10px; cursor: pointer; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .custom-select-option { padding: 8px 12px; cursor: pointer; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 42px; }
         .custom-select-option::before { content: '  '; white-space: pre; color: var(--text-muted); }
         .custom-select-option.selected::before { content: '> '; }
         .custom-select-option:hover { background: var(--text-main); color: var(--bg-color); }
         .custom-select-option:hover::before { color: var(--bg-color); }
 
         /* ============ 卡片 ============ */
-        .card { border: 1px solid var(--border-color); padding: 12px; margin-bottom: 12px; background: var(--bg-color); position: relative; }
-        .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px; }
-        .card-title { font-weight: bold; color: var(--text-main); }
+        .card { border: 1px solid var(--border-color); padding: 17px; margin-bottom: 16px; background: var(--bg-color); position: relative; }
+        .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px dashed var(--border-color); padding-bottom: 12px; }
+        .card-title { font-weight: bold; color: var(--text-main); font-size: 18px; }
         .card-title::before { content: '> '; color: var(--text-muted); }
-        .card-target { font-size: 0.85em; color: var(--text-muted); }
-        .core-mark { color: var(--accent); font-size: 0.8em; margin-left: 6px; }
+        .card-target { font-size: 15px; color: var(--text-muted); }
+        .core-mark { color: var(--accent); font-size: 15px; margin-left: 8px; }
 
-        .bruce-tip { font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px; }
+        .bruce-tip { font-size: 15px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
         .bruce-tip::before { content: '// '; }
-        .sets-container { display: flex; flex-direction: column; gap: 8px; }
-        .set-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .set-label { width: 50px; font-size: 0.85em; color: var(--text-muted); }
-        .set-input { width: 80px; text-align: center; flex-grow: 1; max-width: 100px; }
-        .set-unit { color: var(--text-muted); font-size: 0.85em; }
+        .sets-container { display: flex; flex-direction: column; gap: 10px; }
+        .set-row { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; }
+        .set-label { width: 50px; font-size: 15px; color: var(--text-muted); }
+        .set-row .set-input { width: 100px; text-align: center; flex-grow: 1; max-width: 125px; }
+        .set-unit { color: var(--text-muted); font-size: 15px; }
 
-        .edit-meta-box { border: 1px dashed var(--border-color); padding: 15px; margin-bottom: 20px; }
+        .edit-meta-box { border: 1px dashed var(--border-color); padding: 18px; margin-bottom: 24px; }
         .edit-meta-box .edit-row:first-child { flex-wrap: nowrap; }
         .edit-meta-box .edit-row:first-child #ed-day-id { flex: 1; min-width: 0; width: auto; }
         .edit-meta-box .edit-row:first-child #day-count-badge { flex-shrink: 0; }
-        .edit-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .edit-row label { display: flex; gap: 6px; font-size: 0.9em; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
-        .card input[type="text"].ed-name { flex: 1; min-width: 150px; }
+        .edit-row { display: flex; gap: 11px; margin-bottom: 12px; flex-wrap: wrap; }
+        .edit-row label { display: flex; gap: 7px; font-size: 16px; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
+        .card input[type="text"].ed-name { flex: 1; min-width: 170px; }
         .card input[type="text"].ed-exid {
-            width: 110px; flex-shrink: 0; font-size: 0.8em; text-align: center;
-            color: var(--text-muted); background: transparent; border: 1px dashed transparent; padding: 3px 6px;
+            width: 135px; flex-shrink: 0; font-size: 14px; text-align: center;
+            color: var(--text-muted); background: transparent; border: 1px dashed transparent; padding: 5px 7px; min-height: 38px;
         }
         .card input[type="text"].ed-exid:hover { border-color: var(--border-color); cursor: text; }
         .card input[type="text"].ed-exid:focus { outline: none; border-color: var(--text-main); border-style: solid; color: var(--text-main); }
 
-        .edit-day-bar { display: flex; gap: 8px; align-items: stretch; margin-bottom: 15px; flex-wrap: wrap; }
-        .edit-day-bar .custom-select { flex: 1; min-width: 200px; margin-bottom: 0; }
-        .edit-day-bar button { white-space: nowrap; padding: 6px 12px; }
+        .edit-day-bar { display: flex; gap: 9px; align-items: stretch; margin-bottom: 19px; flex-wrap: wrap; }
+        .edit-day-bar .custom-select { flex: 1; min-width: 240px; margin-bottom: 0; }
+        .edit-day-bar button { white-space: nowrap; padding: 7px 13px; }
 
         /* ============ 统计 ============ */
-        .year-selector { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; }
-        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 3px 10px; font-weight: normal; }
+        .year-selector { display: flex; gap: 8px; margin-bottom: 19px; overflow-x: auto; }
+        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 5px 13px; font-weight: normal; min-height: 40px; }
         .year-btn:hover { background: transparent; color: var(--text-main); border-color: var(--border-color); }
         .year-btn.active, .year-btn.active:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        .heatmap-wrapper { overflow-x: auto; padding: 6px 0 15px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
+        .heatmap-wrapper { overflow-x: auto; padding: 8px 0 18px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
         .heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
         .heatmap-wrapper.is-scrolling { pointer-events: none; }
 
-        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; gap: 4px; width: max-content; padding: 6px 8px; }
-        .cell { width: 14px; height: 14px; box-sizing: border-box; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; }
+        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 17px); grid-auto-flow: column; gap: 5px; width: max-content; padding: 8px 10px; }
+        .cell { width: 17px; height: 17px; box-sizing: border-box; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; touch-action: manipulation; }
         .cell[data-level="1"] { background: var(--level-1); }
         .cell[data-level="2"] { background: var(--level-2); }
         .cell[data-level="3"] { background: var(--level-3); }
@@ -160,37 +163,39 @@
         .cell:hover { border-color: var(--text-main); }
         .cell.selected { border-color: var(--accent); }
 
-        .heatmap-grid.has-selection .cell { opacity: 0.15; }
+        .heatmap-grid.has-selection .cell { opacity: 0.2; }
         .heatmap-grid.has-selection .cell.selected { opacity: 1; }
         .heatmap-grid.has-selection .heatmap-month-svg { opacity: 0.2; }
 
         .heatmap-month-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible; transition: opacity 0.2s; }
         .heatmap-month-path { fill: var(--text-main); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 1.5px; stroke-linejoin: miter; }
 
-        .global-tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: 4px 8px; font-size: 12px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
+        .global-tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: 7px 10px; font-size: 15px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
 
-        .playback-box { border: 1px solid var(--border-color); padding: 15px; margin-top: 20px; display: none; }
-        .playback-set { font-size: 0.9em; color: var(--text-muted); margin-left: 15px; }
-        .playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: 15px 0; }
+        .playback-box { border: 1px solid var(--border-color); padding: 18px; margin-top: 24px; display: none; }
+        #playback-title { display: block; }
+        #playback-title::before, #playback-title::after { content: none; }
+        .playback-set { font-size: 15px; color: var(--text-muted); margin-left: 18px; }
+        .playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: 18px 0; }
 
-        .vol-chart-wrapper { overflow-x: auto; margin-top: 15px; padding: 15px 0 5px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+        .vol-chart-wrapper { overflow-x: auto; margin-top: 18px; padding: 18px 0 8px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         .vol-chart-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
         .vol-chart-wrapper svg { display: block; }
         .vol-point { cursor: pointer; transform-box: fill-box; transform-origin: center; }
-        .vol-point.hot { transform: scale(1.6); }
+        .vol-point.hot { transform: scale(1.5); }
 
-        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 150px auto; gap: 0 4px; margin-top: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
+        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 175px auto; gap: 0 5px; margin-top: 36px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
         .bar-cell { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .bar { width: 100%; max-width: 35px; background: var(--level-3); position: relative; }
+        .bar { width: 100%; max-width: 42px; background: var(--level-3); position: relative; }
         .bar-cell:hover .bar { background: var(--text-main); }
         .bar-cell.active-month .bar { background: var(--accent); }
-        .bar:hover::after { content: attr(data-val); position: absolute; top: -24px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: 1px 6px; font-size: 12px; font-weight: bold; z-index: 2; white-space: nowrap; }
-        .month-label { font-size: 12px; color: var(--text-muted); text-align: center; padding-top: 5px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .bar:hover::after { content: attr(data-val); position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: 3px 7px; font-size: 14px; font-weight: bold; z-index: 2; white-space: nowrap; }
+        .month-label { font-size: 14px; color: var(--text-muted); text-align: center; padding-top: 7px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .month-label:hover { color: var(--text-main); }
         .month-label.active-month { color: var(--accent); font-weight: bold; }
 
-        .analysis-box { border: 1px solid var(--border-color); padding: 12px 15px; margin-top: 20px; }
+        .analysis-box { border: 1px solid var(--border-color); padding: 16px 18px; margin-top: 24px; }
         .warning-box { border-color: var(--danger); }
 
         /* ============ 加载页 ============ */
@@ -199,73 +204,86 @@
         @keyframes blink { 50% { opacity: 0; } }
 
         /* ============ 教程 / GitHub ============ */
-        .guide-toggle { display: flex; align-items: center; gap: 8px; padding: 6px 10px; margin-bottom: 12px; cursor: pointer; color: var(--text-main); font-size: 0.85em; font-weight: normal; background: transparent; border: 1px dashed var(--border-color); width: 100%; text-align: left; }
+        .guide-toggle { display: flex; align-items: center; gap: 9px; padding: 9px 12px; margin-bottom: 15px; cursor: pointer; color: var(--text-main); font-size: 15px; font-weight: normal; background: transparent; border: 1px dashed var(--border-color); width: 100%; text-align: left; }
         .guide-toggle:hover { background: transparent; border-color: var(--text-main); }
         .guide-toggle .arrow::before { content: '[+]'; color: var(--text-muted); }
         .guide-toggle.open { margin-bottom: 0; }
         .guide-toggle.open .arrow::before { content: '[-]'; }
-        .guide-steps { display: none; margin: 0 0 12px; padding: 6px 10px; border: 1px dashed var(--border-color); border-top: none; }
+        .guide-steps { display: none; margin: 0 0 15px; padding: 8px 12px; border: 1px dashed var(--border-color); border-top: none; }
         .guide-steps.open { display: block; }
-        .guide-step { display: flex; gap: 10px; padding: 5px 0; font-size: 0.84em; color: var(--text-muted); line-height: 1.7; }
+        .guide-step { display: flex; gap: 11px; padding: 7px 0; font-size: 15px; color: var(--text-muted); line-height: 1.7; }
         .guide-step + .guide-step { border-top: 1px dotted var(--border-color); }
         .guide-num { flex-shrink: 0; color: var(--text-main); }
         .guide-num::before { content: '['; }
         .guide-num::after { content: ']'; }
         .guide-step b { color: var(--text-main); }
-        .guide-step code { border: 1px solid var(--border-color); padding: 0 4px; font-family: inherit; font-size: 0.95em; }
+        .guide-step code { border: 1px solid var(--border-color); padding: 0 5px; font-family: inherit; font-size: 14px; overflow-wrap: anywhere; }
         .guide-step .g { color: var(--text-main); }
         .guide-step .y { color: var(--quick-fill); }
         .guide-step .r { color: var(--danger); }
 
-        .gh-commit { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border-color); margin-bottom: 6px; font-size: 0.85em; }
+        .gh-commit { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color); margin-bottom: 8px; font-size: 15px; }
         .gh-commit:hover { border-color: var(--text-main); }
         .gh-commit-info { flex: 1; min-width: 0; }
         .gh-commit-msg { color: var(--text-main); font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .gh-commit-meta { color: var(--text-muted); font-size: 0.9em; margin-top: 2px; }
+        .gh-commit-meta { color: var(--text-muted); font-size: 14px; margin-top: 3px; }
         .gh-commit-sha { color: var(--text-main); }
-        .gh-commit button { flex-shrink: 0; padding: 3px 10px; font-size: 0.85em; }
+        .gh-commit button { flex-shrink: 0; }
 
         /* ============ 关于 ============ */
-        .ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 11px; line-height: 1.15; margin: 10px 0 8px; overflow-x: auto; max-width: 100%; }
-        .about-table { border-collapse: collapse; font-size: 0.9em; color: var(--text-muted); line-height: 2; width: 100%; }
-        .about-table td { padding-right: 20px; vertical-align: top; }
+        .ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.2; margin: 12px 0 10px; overflow-x: auto; max-width: 100%; }
+        .about-table { border-collapse: collapse; font-size: 16px; color: var(--text-muted); line-height: 2; width: 100%; }
+        .about-table td { padding-right: 24px; vertical-align: top; }
         .about-table td:first-child { white-space: nowrap; width: 1%; }
         .about-table td:last-child { padding-right: 0; overflow-wrap: anywhere; }
 
-        #sync-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: 8px 16px; font-size: 0.9em; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+        #sync-toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 15px; font-size: 15px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis; }
 
         @supports (-webkit-touch-callout: none) { select, input { font-size: 16px; } }
 
-        .vol-settings-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; font-size: 0.9em; color: var(--text-muted); }
-        .vol-input-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
-        .vol-input-group label { display: flex; align-items: center; gap: 5px; }
-        .vol-input-group input[type="number"] { width: 70px; }
-        .vol-date-range { display: flex; align-items: center; gap: 8px; }
-        .vol-date-range input[type="date"] { width: 135px; }
-        .vol-zoom-controls { margin-left: auto; display: flex; gap: 5px; align-items: center; }
-        .vol-zoom-controls button { padding: 3px 10px; font-weight: bold; }
-        .vol-input-group button.btn-outline { padding: 3px 12px; font-size: 0.9em; }
-        .vol-quick-range { display: flex; gap: 8px; flex-wrap: wrap; }
-        .vol-quick-range button { flex: 1; min-width: 60px; padding: 5px 8px; font-size: 0.85em; text-align: center; }
+        .vol-settings-bar { display: flex; flex-direction: column; gap: 15px; margin-bottom: 13px; font-size: 16px; color: var(--text-muted); }
+        .vol-input-group { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+        .vol-input-group label { display: flex; align-items: center; gap: 7px; }
+        .vol-input-group input[type="number"] { width: 85px; }
+        .vol-date-range { display: flex; align-items: center; gap: 9px; }
+        .date-field { position: relative; display: block; width: 160px; flex-shrink: 0; }
+        .date-field input[type="date"] { width: 100%; }
+        .date-ph { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
+        .date-field.has-value .date-ph, .date-field.is-focus .date-ph { display: none; }
+        .date-field:not(.has-value):not(.is-focus) input[type="date"] { color: transparent; }
+        .vol-zoom-controls { margin-left: auto; display: flex; gap: 7px; align-items: center; }
+        .vol-zoom-controls button { padding: 5px 12px; font-weight: bold; min-width: 44px; }
+        .vol-input-group button.btn-outline { padding: 5px 12px; }
+        .vol-quick-range { display: flex; gap: 9px; flex-wrap: wrap; }
+        .vol-quick-range button { flex: 1; min-width: 85px; padding: 7px 10px; text-align: center; }
 
-        @media (max-width: 600px) {
-            .set-row { justify-content: space-between; }
-            .set-input { width: 30%; flex-grow: 0; }
-            .btn-quick { width: 100%; text-align: center; margin-top: 5px; margin-left: 0; }
-            .panel { padding: 15px 0; }
-            .edit-day-bar { flex-wrap: wrap; }
+        @media (max-width: 700px) {
+            body { padding: 16px 12px 36px; font-size: 16px; }
+            h2, h3 { font-size: 18px; }
+            .panel { padding: 21px 0; }
+            .card { padding: 14px; margin-bottom: 13px; }
+            .card-title { font-size: 17px; }
+            .set-row { gap: 8px; flex-wrap: nowrap; }
+            .set-row .set-input { width: auto; max-width: none; min-width: 0; flex: 1 1 0; }
+            .set-row .set-unit { flex: 0 0 auto; }
+            .set-row .set-unit:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .btn-quick { width: 100%; text-align: center; margin: 4px 0 0; }
             .edit-day-bar .custom-select { min-width: 100%; }
-            .edit-day-bar button { flex: 1; }
-            .vol-input-group { width: 100%; flex-direction: column; align-items: stretch; gap: 10px; }
+            .edit-day-bar > button { flex: 1; }
+            .edit-meta-box { padding: 13px; }
+            .vol-input-group { width: 100%; flex-direction: column; align-items: stretch; gap: 11px; }
             .vol-input-group label { justify-content: space-between; width: 100%; }
-            .vol-input-group input[type="number"] { width: auto; flex: 1; margin-left: 10px; }
-            .vol-input-group button.btn-outline { width: 100%; padding: 8px 12px; }
-            .vol-date-range { flex-wrap: wrap; justify-content: space-between; }
-            .vol-date-range input[type="date"] { width: calc(50% - 15px); flex: 1; }
+            .vol-input-group input[type="number"] { width: auto; flex: 1; min-width: 0; margin-left: 10px; }
+            .vol-input-group button.btn-outline { width: 100%; }
+            .vol-date-range { width: 100%; flex-wrap: wrap; }
+            .date-field { width: 0; min-width: 0; flex: 1; }
             .vol-zoom-controls { margin-left: 0; justify-content: flex-end; }
-            .vol-zoom-controls button { padding: 6px 16px; font-size: 1.1em; }
-            .vol-quick-range button { padding: 8px 4px; font-size: 0.9em; }
-            .vol-chart-wrapper { min-height: 220px; }
+            .vol-quick-range button { min-width: 70px; }
+            .vol-chart-wrapper { min-height: 240px; }
+            .heatmap-grid { grid-template-rows: repeat(7, 15px); gap: 4px; }
+            .cell { width: 15px; height: 15px; }
+            .trend-chart { grid-template-rows: 155px auto; gap: 0 2px; }
+            .month-label { font-size: 12px; }
         }
     </style>
 </head>
@@ -276,7 +294,7 @@
 
 <div class="container">
     <div id="sync-toast"></div>
-    <div class="titlebar">$ ./bruce-workout --tui &nbsp;<b>Bruce的硬核训练</b> &nbsp;</div>
+    <div class="titlebar">$ ./bruce-workout --tui &nbsp;<b>Bruce的硬核训练</b></div>
     <div class="tabs" id="main-tabs">
         <div class="tab active" data-target="today" data-key="1">今日打卡</div>
         <div class="tab" data-target="stats" data-key="2">统计回放</div>
@@ -289,7 +307,7 @@
     <!-- Panel: Today -->
     <div id="today" class="panel active">
         <h2>今天的战斗容量</h2>
-        <input type="date" id="date-picker" style="margin-bottom: 15px; width: auto;">
+        <input type="date" id="date-picker" style="margin-bottom: 18px; width: auto;">
         <div class="custom-select" id="day-selector">
             <button type="button" class="custom-select-btn" data-placeholder="-- 选择今天的计划 --">
                 <span class="custom-select-label">-- 选择今天的计划 --</span>
@@ -298,9 +316,9 @@
         </div>
 
         <div id="exercise-list"></div>
-        <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)" style="width:100%; margin-top:15px; display:none;">
-        <button id="save-btn" style="display: none; width: 100%; margin-top: 20px; font-size: 1.05em;">[ 保存今日容量 ]</button>
-        <div id="daily-feedback" style="margin-top: 15px;"></div>
+        <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)" style="width:100%; margin-top:18px; display:none;">
+        <button id="save-btn" style="display: none; width: 100%; margin-top: 24px; font-size: 17px;">[ 保存今日容量 ]</button>
+        <div id="daily-feedback" style="margin-top: 18px;"></div>
     </div>
 
     <!-- Panel: Stats -->
@@ -310,12 +328,12 @@
             <div class="heatmap-grid" id="heatmap"></div>
         </div>
         <div id="playback-area" class="playback-box">
-            <h3 id="pb-title">点击上方的方块查看记录</h3>
-            <div id="pb-content"></div>
+            <h3 id="playback-title">点击上方的方块查看记录</h3>
+            <div id="playback-content"></div>
         </div>
-        <h3 style="margin-top: 30px;">频次趋势</h3>
+        <h3 style="margin-top: 38px;">频次趋势</h3>
         <div class="trend-chart" id="trend-chart"></div>
-        <h3 style="margin-top: 30px;">容量趋势</h3>
+        <h3 style="margin-top: 38px;">容量趋势</h3>
         <div class="vol-settings-bar">
             <div class="vol-input-group">
                 <label>全局自重<input type="number" id="vol-bodyweight" step="0.5" placeholder="如：60"> kg</label>
@@ -324,10 +342,9 @@
             </div>
             <div class="vol-input-group">
                 <div class="vol-date-range">
-                    <label>区间</label>
-                    <input type="date" id="vol-start-date">
-                    <span>-</span>
-                    <input type="date" id="vol-end-date">
+                    <label>区间范围</label>
+                    <span class="date-field"><input type="date" id="vol-start-date"><span class="date-ph">年/月/日</span></span>
+                    <span class="date-field"><input type="date" id="vol-end-date"><span class="date-ph">年/月/日</span></span>
                 </div>
                 <div class="vol-zoom-controls">
                     <button id="btn-vol-zoom-out" class="btn-outline">-</button>
@@ -341,18 +358,18 @@
                 <button class="btn-outline" data-range="1y">近一年</button>
             </div>
         </div>
-        <p style="font-size:0.8em; color:var(--text-muted); margin:5px 0 0 0;">// 区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
+        <p style="font-size:15px; color:var(--text-muted); margin:7px 0 0 0;">// 区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
         <div class="vol-chart-wrapper" id="vol-chart-wrapper">
             <div id="volume-chart" style="width: max-content; min-width: 100%;"></div>
         </div>
-        <h3 style="margin-top: 30px;">年度统计</h3>
+        <h3 style="margin-top: 38px;">年度统计</h3>
         <div id="ai-analysis"></div>
     </div>
 
     <!-- Panel: Edit -->
     <div id="edit" class="panel">
         <h2>训练矩阵定制</h2>
-        <p style="color:var(--text-muted); font-size:0.9em;">// 完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
+        <p style="color:var(--text-muted); font-size:16px;">// 完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
 
         <div class="edit-day-bar">
             <div class="custom-select" id="edit-day-selector">
@@ -368,44 +385,44 @@
         <div class="edit-meta-box">
             <div class="edit-row" style="align-items:center;">
                 <span style="white-space:nowrap; color:var(--text-muted);">计划 ID</span>
-                <input type="text" id="ed-day-id" placeholder="如: day1 / push_day" spellcheck="false" style="width:170px;">
-                <span id="day-count-badge" style="margin-left:auto; font-size:0.8em; color:var(--text-muted); white-space:nowrap;"></span>
+                <input type="text" id="ed-day-id" placeholder="如: day1 / push_day" spellcheck="false" style="width:200px;">
+                <span id="day-count-badge" style="margin-left:auto; font-size:14px; color:var(--text-muted); white-space:nowrap;"></span>
             </div>
-            <div style="font-size:1em; color:var(--text-muted); margin:-4px 0 10px;">// ID 是内部唯一标识（仅限字母、数字、_ 或 -），修改后点击「保存这天的设置」生效；重命名不影响历史记录。动作卡片中名称右侧的灰色小字为动作 ID，悬停/点击可修改。</div>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+            <div style="font-size:15px; color:var(--text-muted); margin:-3px 0 13px;">// ID 是内部唯一标识（仅限字母、数字、_ 或 -），修改后点击「保存这天的设置」生效；重命名不影响历史记录。动作卡片中名称右侧的灰色小字为动作 ID，悬停/点击可修改。</div>
+            <div style="display: flex; gap: 11px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
                 <span style="white-space:nowrap; color: var(--text-muted);">本计划名</span>
-                <input type="text" id="ed-day-title" style="font-weight:bold; max-width: 300px;">
+                <input type="text" id="ed-day-title" style="font-weight:bold; width: min(100%, 380px);">
             </div>
-            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-main);">
-                <input type="checkbox" id="ed-day-isrest" style="width:18px;height:18px;">
+            <label style="display: flex; align-items: center; gap: 9px; cursor: pointer; color: var(--text-main);">
+                <input type="checkbox" id="ed-day-isrest">
                 <b>将这一天设为 [休息日 / 有氧日] (不记录容量)</b>
             </label>
         </div>
 
         <div id="edit-exercise-wrapper">
             <div id="edit-exercise-list"></div>
-            <button class="btn-outline" style="width: 100%; margin-top: 10px; border-style: dashed;" id="btn-add-exercise">+ 新增动作</button>
+            <button class="btn-outline" style="width: 100%; margin-top: 12px; border-style: dashed;" id="btn-add-exercise">+ 新增动作</button>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 11px; margin-top: 28px; flex-wrap: wrap;">
             <button style="flex: 2; min-width: 200px;" id="btn-save-edit">[ 保存这天的设置 ]</button>
             <button class="btn-danger" style="flex: 1; min-width: 150px; background: transparent;" id="btn-restore-default">恢复默认出厂</button>
         </div>
-        <div id="edit-feedback" style="margin-top: 15px; color: var(--text-main); font-weight: bold;"></div>
+        <div id="edit-feedback" style="margin-top: 18px; color: var(--text-main); font-weight: bold;"></div>
     </div>
 
     <!-- Panel: Data -->
     <div id="data" class="panel">
         <h2>数据存档与迁移</h2>
-        <p style="color: var(--text-muted); font-size: 0.9em;">// 数据存储在本地，建议定期导出完整数据备份。</p>
+        <p style="color: var(--text-muted); font-size: 16px;">// 数据存储在本地，建议定期导出完整数据备份。</p>
         <button id="btn-export">导出完整数据 (JSON)</button>
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 24px;">
             <input type="file" id="import-file" accept=".json" style="display:none">
             <button class="btn-outline" onclick="$('#import-file').click()">导入恢复数据 (JSON)</button>
         </div>
-        <div style="margin-top:30px; border-top:1px solid var(--border-color); padding-top:20px;">
+        <div style="margin-top:38px; border-top:1px solid var(--border-color); padding-top:24px;">
             <h3>GitHub 云同步</h3>
-            <p style="color:var(--text-muted); font-size:0.85em; margin-bottom:4px;">
+            <p style="color:var(--text-muted); font-size:15px; margin-bottom:8px;">
                 // 通过 GitHub 仓库实现跨设备数据同步。需要创建一个 Fine-grained PAT。
             </p>
 
@@ -424,45 +441,45 @@
                 <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，建议先本地 <b class="g">导出完整数据</b>，随时都可以通过 <b class="g">导入恢复数据</b> 挽救回来。</div></div>
                 <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="y">推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="y">拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
             </div>
-            <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; flex-direction:column; gap:11px;">
                 <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)" style="width:100%;">
                 <input type="text" id="gh-repo" placeholder="仓库 (格式: owner/repo)" style="width:100%;">
                 <input type="text" id="gh-path" placeholder="文件路径 (默认: workout_data.json)" style="width:100%;">
                 <input type="text" id="gh-msg" placeholder="Commit 信息模板 (默认: sync: {time})" style="width:100%;">
-                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9em; color:var(--text-muted);">
-                    <input type="checkbox" id="gh-autosync" style="width:18px;height:18px;">
+                <label style="display:flex; align-items:center; gap:9px; cursor:pointer; font-size:15px; color:var(--text-muted);">
+                    <input type="checkbox" id="gh-autosync">
                     保存打卡 / 修改计划时自动推送到 GitHub
                 </label>
             </div>
-            <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
-                <button id="btn-gh-save" class="btn-outline" style="flex:1; min-width:100px;">保存配置</button>
-                <button id="btn-gh-push" style="flex:1; min-width:100px;">push 推送</button>
-                <button id="btn-gh-pull" class="btn-outline" style="flex:1; min-width:100px;">pull 拉取</button>
-                <button id="btn-gh-history" class="btn-outline" style="flex:1; min-width:100px;">log 历史版本</button>
+            <div style="display:flex; gap:11px; margin-top:18px; flex-wrap:wrap;">
+                <button id="btn-gh-save" class="btn-outline" style="flex:1; min-width:120px;">保存配置</button>
+                <button id="btn-gh-push" style="flex:1; min-width:120px;">push 推送</button>
+                <button id="btn-gh-pull" class="btn-outline" style="flex:1; min-width:120px;">pull 拉取</button>
+                <button id="btn-gh-history" class="btn-outline" style="flex:1; min-width:120px;">log 历史版本</button>
             </div>
-            <div id="gh-status" style="margin-top:10px; font-size:0.9em; min-height:1.4em;"></div>
-            <div id="gh-history" style="display:none; margin-top:12px;"></div>
+            <div id="gh-status" style="margin-top:13px; font-size:15px; min-height:1.5em; overflow-wrap:anywhere;"></div>
+            <div id="gh-history" style="display:none; margin-top:15px;"></div>
         </div>
-        <button class="btn-outline btn-danger" style="margin-top: 40px;" id="btn-clear-data">[!] 清空本地所有数据</button>
+        <button class="btn-outline btn-danger" style="margin-top: 48px;" id="btn-clear-data">[!] 清空本地所有数据</button>
     </div>
 
     <!-- Panel: About -->
     <div id="about" class="panel">
-        <div style="text-align:center; padding:20px 0 10px;">
+        <div style="text-align:center; padding:24px 0 13px;">
 <pre class="ascii"> ____  ____  _   _  ____ _____
 | __ )|  _ \| | | |/ ___| ____|
 |  _ \| |_) | | | | |   |  _|
 | |_) |  _ <| |_| | |___| |___
 |____/|_| \_\\___/ \____|_____|</pre>
-            <p style="color:var(--text-muted); font-size:0.85em; margin:0;">单文件 | 多平台同步 | 健身打卡</p>
+            <p style="color:var(--text-muted); font-size:15px; margin:0;">单文件 | 多平台同步 | 健身打卡</p>
         </div>
-        <div style="border-top:1px solid var(--border-color); padding-top:15px; color:var(--text-muted); line-height:2;">
+        <div style="border-top:1px solid var(--border-color); padding-top:19px; color:var(--text-muted); line-height:2;">
             <table class="about-table">
                 <tr><td><b>源代码</b></td><td><a href="https://github.com/Caturra000/bruce-workout" target="_blank" rel="noopener">github.com/Caturra000/bruce-workout</a></td></tr>
                 <tr><td><b>许可协议</b></td><td>MPL-2.0 License</td></tr>
                 <tr><td><b>Bruce</b></td><td>虚拟教练，你可想象为肌肉版的初音未来</td></tr>
             </table>
-            <p style="margin-top:20px; font-size:0.8em; color:var(--text-muted);">(c) 2026 Caturra</p>
+            <p style="margin-top:24px; font-size:15px; color:var(--text-muted);">(c) 2026 Caturra</p>
         </div>
     </div>
 </div>
@@ -782,7 +799,7 @@
 
     const themeIconColors = {
         default: { bg: '#000000', accent: '#d4d4d4', themeColor: '#000000' },
-        pink:    { bg: '#000000', accent: '#ff3d9a', themeColor: '#000000' }
+        pink:    { bg: '#000000', accent: '#ff0080', themeColor: '#000000' }
     };
 
     function makeIconDataURL(size, theme) {
@@ -791,12 +808,10 @@
         c.width = c.height = size;
         const g = c.getContext('2d');
         g.fillStyle = colors.bg; g.fillRect(0, 0, size, size);
-        g.strokeStyle = colors.accent; g.lineWidth = Math.max(2, size * 0.03);
-        g.strokeRect(size * 0.08, size * 0.08, size * 0.84, size * 0.84);
         g.fillStyle = colors.accent;
-        g.font = `bold ${size * 0.5}px Menlo, Consolas, "Courier New", monospace`;
+        g.font = `bold ${size * 0.98}px Menlo, Consolas, "Courier New", monospace`;
         g.textAlign = 'center'; g.textBaseline = 'middle';
-        g.fillText('B', size / 2, size / 2 * 1.05);
+        g.fillText('B', size / 2, size / 2 * 1.145);
         return c.toDataURL('image/png');
     }
 
@@ -804,7 +819,7 @@
         const colors = themeIconColors[theme] || themeIconColors.default;
         const bg     = colors.bg.replace('#', '%23');
         const accent = colors.accent.replace('#', '%23');
-        return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='${bg}'/><rect x='8' y='8' width='84' height='84' fill='none' stroke='${accent}' stroke-width='3'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-family='Menlo,Consolas,monospace' font-size='50' font-weight='bold' fill='${accent}'>B</text></svg>`;
+        return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='${bg}'/><text x='50' y='49' text-anchor='middle' dominant-baseline='central' font-family='Menlo,Consolas,monospace' font-size='98' font-weight='bold' fill='${accent}'>B</text></svg>`;
     }
 
     function updateThemeToggleLabel(theme) {
@@ -902,7 +917,7 @@
         plan: null,
         statsYear: String(new Date().getFullYear()),
         currentRenderedPlan: null,
-        volStepX: window.innerWidth <= 600 ? 35 : 25,
+        volStepX: window.innerWidth <= 700 ? 42 : 32,
         volManualZoom: false,
         focusedMonth: null,
         activePlaybackDate: null
@@ -948,6 +963,14 @@
             $('#loading-screen').innerHTML = "[ERR] 加载失败，请确保存储权限已开启。";
         }
     });
+
+    function syncDateField(el) {
+        if (!el) return;
+        const field = el.closest('.date-field');
+        if (!field) return;
+        field.classList.toggle('has-value', !!el.value);
+        field.classList.toggle('is-focus', document.activeElement === el);
+    }
 
     function bindEvents() {
         // Tab 切换
@@ -1046,7 +1069,7 @@
 
         $('#btn-vol-zoom-in').addEventListener('click', () => {
             state.volManualZoom = true;
-            state.volStepX = Math.min(120, state.volStepX * 1.25);
+            state.volStepX = Math.min(140, state.volStepX * 1.25);
             renderVolumeChart(state.statsYear);
         });
         $('#btn-vol-zoom-out').addEventListener('click', () => {
@@ -1055,8 +1078,14 @@
             renderVolumeChart(state.statsYear);
         });
 
-        $('#vol-start-date').addEventListener('change', () => renderVolumeChart(state.statsYear));
-        $('#vol-end-date').addEventListener('change', () => renderVolumeChart(state.statsYear));
+        ['vol-start-date', 'vol-end-date'].forEach(id => {
+            const el = $('#' + id);
+            if (!el) return;
+            el.addEventListener('change', () => { syncDateField(el); renderVolumeChart(state.statsYear); });
+            el.addEventListener('focus', () => syncDateField(el));
+            el.addEventListener('blur', () => syncDateField(el));
+            syncDateField(el);
+        });
 
         $$('.vol-quick-range button').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1069,6 +1098,8 @@
 
                 $('#vol-start-date').value = toLocalDateStr(start);
                 $('#vol-end-date').value = toLocalDateStr();
+                syncDateField($('#vol-start-date'));
+                syncDateField($('#vol-end-date'));
 
                 state.volManualZoom = false;
 
@@ -1414,8 +1445,8 @@
         renderYearTabs();
         renderStats(year);
         $('#playback-area').style.display = 'none';
-        if ($('#vol-start-date')) $('#vol-start-date').value = '';
-        if ($('#vol-end-date')) $('#vol-end-date').value = '';
+        if ($('#vol-start-date')) { $('#vol-start-date').value = ''; syncDateField($('#vol-start-date')); }
+        if ($('#vol-end-date')) { $('#vol-end-date').value = ''; syncDateField($('#vol-end-date')); }
 
         const count = Object.keys(state.logs).filter(d => d.startsWith(year) && !isRestDayLog(state.logs[d])).length;
         autoFitVolStepX(count);
@@ -1424,17 +1455,17 @@
     function getVolAvailableWidth() {
         const wrapper = $('#vol-chart-wrapper');
         if (wrapper && wrapper.clientWidth > 0) return wrapper.clientWidth;
-        return window.innerWidth <= 600 ? window.innerWidth - 40 : 760;
+        return Math.max(280, window.innerWidth - 32);
     }
 
     function autoFitVolStepX(dataLength) {
-        if (!dataLength) { state.volStepX = 25; return; }
+        if (!dataLength) { state.volStepX = 32; return; }
         const wrapper = $('#vol-chart-wrapper');
         const containerWidth = (wrapper && wrapper.clientWidth > 0)
             ? wrapper.clientWidth
             : getVolAvailableWidth();
         const usableWidth = Math.max(1, containerWidth - 60);
-        state.volStepX = Math.max(1, Math.min(35, usableWidth / dataLength));
+        state.volStepX = Math.max(1, Math.min(42, usableWidth / dataLength));
     }
 
     function renderStats(year) {
@@ -1538,7 +1569,7 @@
         const wrapper = $('#heatmap-scroll-area');
         const target = $(`#heatmap .cell[data-date="${toLocalDateStr()}"]`) || $('#heatmap .cell:last-child');
         if (target) {
-            const left = target.offsetLeft - wrapper.clientWidth / 2 + target.clientWidth / 2;
+            const left = target.offsetLeft + target.clientWidth / 2 - wrapper.clientWidth * 0.8;
             animateScrollLeft(wrapper, left, 380);
         }
     }
@@ -1662,11 +1693,11 @@
     }
 
     function renderPlayback(dateStr) {
-        const pb = $('#playback-area'), title = $('#pb-title'), content = $('#pb-content');
+        const playback = $('#playback-area'), title = $('#playback-title'), content = $('#playback-content');
         const heatmap = $('#heatmap');
 
-        if (state.activePlaybackDate === dateStr && pb.style.display !== 'none') {
-            pb.style.display = 'none';
+        if (state.activePlaybackDate === dateStr && playback.style.display !== 'none') {
+            playback.style.display = 'none';
             state.activePlaybackDate = null;
             heatmap.classList.remove('has-selection');
             $$('#heatmap .cell.selected').forEach(c => c.classList.remove('selected'));
@@ -1680,7 +1711,7 @@
         if (activeCell) activeCell.classList.add('selected');
         heatmap.classList.add('has-selection');
 
-        pb.style.display = 'block';
+        playback.style.display = 'block';
         const data = state.logs[dateStr];
 
         if (!data) {
@@ -1801,8 +1832,8 @@
         const yRange = maxVol - minVol;
 
         const maxLabelLen = Math.max(String(maxVol.toFixed(0)).length, String(minVol.toFixed(0)).length);
-        const padL = Math.max(40, maxLabelLen * 7 + 5);
-        const padR = 20, padT = 20, padB = 25;
+        const padL = Math.max(58, maxLabelLen * 9 + 8);
+        const padR = 25, padT = 24, padB = 33;
         const totalPad = padL + padR;
 
         const containerWidth = container.clientWidth || getVolAvailableWidth();
@@ -1815,7 +1846,7 @@
 
         state.volStepX = stepX;
 
-        const showPoints = stepX >= 10;
+        const showPoints = stepX >= 12;
 
         const svgW = volData.length * stepX + totalPad;
         const isScrollable = svgW > containerWidth + 1;
@@ -1830,7 +1861,7 @@
             chartDiv.style.minWidth = '0';
         }
 
-        const svgH = 180;
+        const svgH = 220;
         const innerH = svgH - padT - padB;
 
         let pathD = "";
