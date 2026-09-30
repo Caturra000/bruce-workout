@@ -35,6 +35,44 @@
             --date-icon-filter: brightness(0) saturate(100%) invert(66%) sepia(99%) saturate(6000%) hue-rotate(310deg) brightness(101%) contrast(101%);
             --level-0: #290818; --level-1: #80194c; --level-2: #d6207b; --level-3: #ff47a3; --level-4: #ff8cc6;
         }
+        [data-theme="miku"] {
+            --text-main: #39c5bb; --text-muted: #2f9d95;
+            --border-color: #1e6b66;
+            --accent: #00e5d5;
+            --danger: #ff5c8a; --quick-fill: #6fe3d9;
+            --date-icon-filter: brightness(0) saturate(100%) invert(86%) sepia(44%) saturate(680%) hue-rotate(117deg) brightness(88%) contrast(72%);
+            --level-0: #052220; --level-1: #0c4f4a; --level-2: #1a938a; --level-3: #39c5bb; --level-4: #9af0e8;
+        }
+        [data-theme="page"] {
+            color-scheme: light;
+            --bg-color: #ffffff; --panel-bg: #ffffff;
+            --text-main: #000000; --text-muted: #6e6e6e;
+            --border-color: #c8c8c8;
+            --accent: #000000;
+            --danger: #d81f3d; --quick-fill: #444444;
+            --date-icon-filter: brightness(0);
+            --level-0: #ededed; --level-1: #c9c9c9; --level-2: #8f8f8f; --level-3: #4d4d4d; --level-4: #111111;
+        }
+        [data-theme="miku-light"] {
+            color-scheme: light;
+            --bg-color: #ffffff; --panel-bg: #ffffff;
+            --text-main: #0e8f86; --text-muted: #5c9d97;
+            --border-color: #b7d9d5;
+            --accent: #00a99a;
+            --danger: #d81f3d; --quick-fill: #3bb3a9;
+            --date-icon-filter: brightness(0) saturate(100%) invert(86%) sepia(44%) saturate(680%) hue-rotate(117deg) brightness(88%) contrast(72%);
+            --level-0: #e3f4f2; --level-1: #b3e2dc; --level-2: #6fc9c0; --level-3: #22a397; --level-4: #0b6b63;
+        }
+        [data-theme="pink-light"] {
+            color-scheme: light;
+            --bg-color: #ffffff; --panel-bg: #ffffff;
+            --text-main: #d6006e; --text-muted: #b06a8c;
+            --border-color: #e8bcd4;
+            --accent: #ff0080;
+            --danger: #d81f3d; --quick-fill: #e05a9e;
+            --date-icon-filter: brightness(0) saturate(100%) invert(66%) sepia(99%) saturate(6000%) hue-rotate(310deg) brightness(101%) contrast(101%);
+            --level-0: #fbe4f0; --level-1: #f4b8d6; --level-2: #e874ae; --level-3: #d6207b; --level-4: #8a1c52;
+        }
 
         /* ============ 基础 ============ */
         * { border-radius: 0 !important; box-sizing: border-box; }
@@ -301,7 +339,7 @@
         <div class="tab" data-target="edit" data-key="3">计划定制</div>
         <div class="tab" data-target="data" data-key="4">数据管理</div>
         <div class="tab" data-target="about" data-key="5">关于</div>
-        <button id="theme-toggle" title="切换主题">mono</button>
+        <button id="theme-toggle" title="切换主题">dark</button>
     </div>
 
     <!-- Panel: Today -->
@@ -799,8 +837,13 @@
 
     const themeIconColors = {
         default: { bg: '#000000', accent: '#d4d4d4', themeColor: '#000000' },
-        pink:    { bg: '#000000', accent: '#ff0080', themeColor: '#000000' }
+        pink:    { bg: '#000000', accent: '#ff0080', themeColor: '#000000' },
+        miku:    { bg: '#000000', accent: '#39c5bb', themeColor: '#000000' },
+        page:    { bg: '#ffffff', accent: '#000000', themeColor: '#ffffff' },
+        'miku-light': { bg: '#ffffff', accent: '#0e8f86', themeColor: '#ffffff' },
+        'pink-light': { bg: '#ffffff', accent: '#d6006e', themeColor: '#ffffff' }
     };
+    const THEMES = ['default', 'miku', 'pink', 'page', 'miku-light', 'pink-light'];
 
     function makeIconDataURL(size, theme) {
         const colors = themeIconColors[theme] || themeIconColors.default;
@@ -824,7 +867,8 @@
 
     function updateThemeToggleLabel(theme) {
         const btn = $('#theme-toggle');
-        if (btn) btn.innerText = theme === 'pink' ? 'pink' : 'mono';
+        if (!btn) return;
+        btn.innerText = theme === 'default' ? 'dark' : theme.replace('-light', '');
     }
 
     function updateThemeAssets(theme) {
@@ -931,7 +975,8 @@
             state.logs = (await db.get('appData_logs')) || {};
             state.plan = (await db.get('appData_plan')) || JSON.parse(JSON.stringify(defaultWorkoutPlan));
 
-            const savedTheme = (await db.get('app_theme')) || 'default';
+            let savedTheme = (await db.get('app_theme')) || 'default';
+            if (!THEMES.includes(savedTheme)) savedTheme = 'default';
             if (savedTheme !== 'default') {
                 document.documentElement.dataset.theme = savedTheme;
             }
@@ -986,15 +1031,15 @@
         });
         $('#theme-toggle').addEventListener('click', async () => {
             const el = document.documentElement;
-            if (el.dataset.theme === 'pink') {
+            const cur = el.dataset.theme || 'default';
+            const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+            if (next === 'default') {
                 delete el.dataset.theme;
-                updateThemeAssets('default');
-                await db.set('app_theme', null);
             } else {
-                el.dataset.theme = 'pink';
-                updateThemeAssets('pink');
-                await db.set('app_theme', 'pink');
+                el.dataset.theme = next;
             }
+            updateThemeAssets(next);
+            await db.set('app_theme', next === 'default' ? null : next);
         });
 
         // Today 面板
