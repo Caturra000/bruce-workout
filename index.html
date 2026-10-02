@@ -19,6 +19,7 @@
         :root {
             color-scheme: dark;
             --font: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", "Courier New", "SimSun", "宋体", "Songti SC", "STSong", "Noto Serif CJK SC", "Noto Serif SC", monospace;
+            --font-serif: "SimSun", "宋体", "Songti SC", "STSong", "Noto Serif CJK SC", "Noto Serif SC", "Courier New", Consolas, Menlo, monospace;
             --bg-color: #000000; --panel-bg: #000000;
             --text-main: #d4d4d4; --text-muted: #929292;
             --border-color: #555555;
@@ -83,14 +84,17 @@
         b, strong { color: var(--text-main); }
 
         h2, h3 { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: bold; margin: 0 0 22px; color: var(--text-main); line-height: 1.45; }
-        h2::before, h3::before { content: '\2500\2500'; color: var(--border-color); flex-shrink: 0; }
+        h2::before, h3::before { content: ''; width: 2em; border-top: 1px solid var(--border-color); flex-shrink: 0; }
         h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
 
         .titlebar { color: var(--text-muted); font-size: 15px; margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .titlebar b { color: var(--text-main); }
 
         /* ============ 表单 ============ */
-        input, select, button { font-family: var(--font); font-size: 16px; line-height: 1.4; }
+        input, select, button { font-family: var(--font-serif); font-size: 16px; line-height: 1.4; }
+        .set-input, .card input.ed-exid { font-family: var(--font); }
+        .set-input::placeholder { font-family: var(--font-serif); }
+        h2, h3, .card-title, .card-target, .core-mark, .bruce-tip, .set-unit, .about-table, .guide-step, .gh-commit, .playback-box, .rest-day-check, #daily-feedback, #sync-toast, #gh-status, .global-tooltip, .analysis-box, button, .date-ph, .trend-chart, .vol-chart-wrapper { font-family: var(--font-serif); }
         input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: var(--date-icon-filter); cursor: pointer; }
@@ -257,7 +261,7 @@
         .guide-num::before { content: '['; }
         .guide-num::after { content: ']'; }
         .guide-step b { color: var(--text-main); }
-        .guide-step code { border: 1px solid var(--border-color); padding: 0 5px; font-family: inherit; font-size: 14px; overflow-wrap: anywhere; }
+        .guide-step code { border: 1px solid var(--border-color); padding: 0 5px; font-family: var(--font); font-size: 14px; overflow-wrap: anywhere; }
         .guide-step .g { color: var(--text-main); }
         .guide-step .y { color: var(--quick-fill); }
         .guide-step .r { color: var(--danger); }
@@ -517,7 +521,7 @@
                 <tr><td><b>许可协议</b></td><td>MPL-2.0 License</td></tr>
                 <tr><td><b>Bruce</b></td><td>虚拟教练，你可想象为肌肉版的初音未来</td></tr>
             </table>
-            <p style="margin-top:24px; font-size:15px; color:var(--text-muted);">(c) 2026 Caturra</p>
+            <p style="margin-top:24px; font-size:15px; color:var(--text-muted); font-family:var(--font-serif);">(c) 2026 Caturra</p>
         </div>
     </div>
 </div>
@@ -2018,8 +2022,8 @@
         $('#ai-analysis').innerHTML = days === 0
             ? `<p style="color:var(--text-muted)">// ${escapeHTML(year)} 年还没有容量记录。种一棵树最好的时间是十年前，其次是现在。</p>`
             : `<div class="analysis-box"><strong>${escapeHTML(year)} 年</strong><br>
-               有效训练 (不含纯休息日) <span style="color:var(--accent); font-size:1.2em; font-weight:bold">${days}</span> 天<br>
-               平均容量完成度 <span style="color:var(--accent); font-size:1.2em; font-weight:bold">${Math.round(total/days)}%</span></div>`;
+               有效训练 (不含纯休息日) <span style="color:var(--accent); font-size:1em; font-weight:bold">${days}</span> 天<br>
+               平均容量完成度 <span style="color:var(--accent); font-size:1em; font-weight:bold">${Math.round(total/days)}%</span></div>`;
     }
 
     /* ==========================================
