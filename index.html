@@ -110,8 +110,9 @@
         input[type=number] { -moz-appearance: textfield; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: var(--date-icon-filter); cursor: pointer; }
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] {
-            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; min-height: 42px; max-width: 100%;
+            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; height: 42px; max-width: 100%;
         }
+        input[type="date"] { padding-top: 8px; padding-bottom: 8px; }
         input:focus, select:focus { border-color: var(--text-main); outline: none; }
         input:hover, select:hover { border-color: var(--text-main); }
         button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -126,22 +127,20 @@
         input[type="checkbox"]:checked { border-color: var(--text-main); }
         input[type="checkbox"]:checked::before { transform: scale(1); }
 
-        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 17px; font-weight: bold; cursor: pointer; min-height: 42px; touch-action: manipulation; }
+        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 17px; font-weight: bold; cursor: pointer; height: 42px; touch-action: manipulation; }
         button:hover { background: var(--accent); border-color: var(--accent); }
         .btn-outline { background: transparent; color: var(--text-main); border-color: var(--border-color); }
         .btn-outline:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
-        .btn-quick { background: transparent; color: var(--quick-fill); border: 1px solid var(--quick-fill); padding: 6px 12px; font-size: 15px; font-weight: normal; margin-left: auto; min-height: 38px; }
-        .btn-quick:hover { background: var(--quick-fill); color: var(--bg-color); border-color: var(--quick-fill); }
-        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 6px 11px; font-size: 15px; min-height: 38px; }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 6px 11px; font-size: 15px; }
         .btn-danger:hover { background: var(--danger); color: var(--bg-color); border-color: var(--danger); }
 
         /* ============ 标签栏 ============ */
         .tabs { display: flex; align-items: center; gap: 5px; padding: 8px 0; overflow-x: auto; }
-        .tab { padding: 7px 13px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; min-height: 42px; display: inline-flex; align-items: center; flex-shrink: 0; touch-action: manipulation; }
+        .tab { padding: 7px 13px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; height: 42px; display: inline-flex; align-items: center; flex-shrink: 0; touch-action: manipulation; }
         .tab:hover { color: var(--text-main); }
         .tab.active { background: var(--text-main); color: var(--bg-color); }
         .tab.active:not(.is-just-activated):hover { background: var(--accent); color: var(--bg-color); }
-        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 11px; font-size: 15px; font-weight: normal; flex-shrink: 0; min-height: 38px; }
+        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 11px; font-size: 15px; font-weight: normal; flex-shrink: 0; }
         #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
         .panel { display: none; background: var(--panel-bg); padding: 27px 0; }
@@ -149,11 +148,11 @@
 
         /* ============ 自定义下拉 ============ */
         .custom-select { position: relative; width: 100%; margin-bottom: 18px; }
-        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 36px 9px 11px; cursor: pointer; font-weight: normal; min-height: 44px; }
+        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 36px 9px 11px; cursor: pointer; font-weight: normal; height: 42px; }
         .custom-select-btn:hover { background: var(--bg-color); border-color: var(--text-main); }
         .custom-select-btn::after { content: ''; position: absolute; right: 12px; top: 50%; margin-top: -6px; width: 13px; height: 13px; background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center / 1px 11px no-repeat; pointer-events: none; }
         .custom-select.is-open .custom-select-btn::after { background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat; }
-        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
+        .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 310px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar { width: 8px; }
         .custom-select-dropdown::-webkit-scrollbar-track { background: var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-color); }
@@ -228,7 +227,7 @@
         /* ============ 统计 ============ */
         .section-title { margin-top: 38px; }
         .year-tabs { display: flex; gap: 8px; margin-bottom: 19px; overflow-x: auto; }
-        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 5px 13px; font-weight: normal; min-height: 40px; }
+        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 5px 13px; font-weight: normal; }
         .year-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
         .year-btn.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
         .year-btn.active:not(.is-just-activated):hover { background: var(--accent); color: var(--bg-color); border-color: var(--accent); }
@@ -268,7 +267,7 @@
         .vol-input-group { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
         .vol-input-group label { display: flex; align-items: center; gap: 7px; }
         .vol-input-group input[type="number"] { width: 85px; }
-        .vol-date-range { display: flex; align-items: center; gap: 9px; }
+        .vol-date-range { display: flex; align-items: center; gap: 7px; }
         .vol-date-field { position: relative; display: block; width: 160px; flex-shrink: 0; }
         .vol-date-field input[type="date"] { width: 100%; }
         .vol-date-ph { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
@@ -368,7 +367,6 @@
             .card { padding: 14px; margin-bottom: 13px; }
             .set-row { gap: 8px; }
             .set-row .set-input { width: auto; max-width: none; min-width: 0; flex: 1 1 0; }
-            .btn-quick { width: 100%; text-align: center; margin: 4px 0 0; }
             .edit-day-bar .custom-select { min-width: 100%; }
             .edit-day-bar > button { flex: 1; }
             .edit-meta-box { padding: 13px; }
@@ -595,7 +593,6 @@
     const toNumOrNull = v => (v === '' || v === null || v === undefined) ? null : (isNaN(Number(v)) ? v : Number(v));
     const toLocalDateStr = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const inferMeasureType = s => (s || '').includes('力竭') ? 'amrap' : /[秒分]/.test(s) ? 'time' : 'reps';
-    const parseTargetValue = s => inferMeasureType(s) === 'amrap' ? '' : ((String(s || '').match(/\d+/g) || []).pop() || '');
     const hasSetActivity = (w, r) => String(r || '').trim() !== '';
     const isRestDayLog = data => !!(data && (data.isRest || (Array.isArray(data.exercises) && data.exercises.length === 0)));
     const genExId = () => 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
@@ -1125,11 +1122,6 @@
         });
         $('#day-selector').addEventListener('change', renderTodayPanel);
         $('#btn-save-today').addEventListener('click', saveTodayLog);
-        $('#exercise-list').addEventListener('click', e => {
-            if (e.target.matches('.btn-quick')) {
-                quickFill(e.target.dataset.exid, e.target.dataset.repsdesc);
-            }
-        });
         $('#exercise-list').addEventListener('input', e => {
             const t = e.target;
             if (!t.matches('.set-w, .set-r')) return;
@@ -1351,24 +1343,6 @@
         return '';
     }
 
-    function quickFill(exId, repsDesc) {
-        const item = document.querySelector(`#exercise-list .card[data-id="${CSS.escape(exId)}"]`);
-        if (!item) return;
-        const targetVal = parseTargetValue(repsDesc);
-        const wInputs = item.querySelectorAll('.set-w'), rInputs = item.querySelectorAll('.set-r');
-
-        wInputs.forEach((wInput, i) => {
-            if (!wInput.value) {
-                wInput.value = getHistoryWeight(exId, i);
-                wInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-            if (targetVal !== '') {
-                rInputs[i].value = targetVal;
-                rInputs[i].dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        });
-    }
-
     function buildRenderedPlan(day, savedLog) {
         const livePlan = state.plan[day] || { title: '未知计划', isRest: true, exercises: [] };
         if (!savedLog || savedLog.dayType !== day) return JSON.parse(JSON.stringify(livePlan));
@@ -1462,7 +1436,6 @@
                                 <span class="card-title">${escapeHTML(ex.name)}</span>${ex.isCore ? '<span class="card-core">[core]</span>' : ''}
                                 <span class="card-target">/ ${ex.sets} 组</span>
                             </div>
-                            <button type="button" class="btn-quick" data-exid="${escapeHTML(ex.id)}" data-repsdesc="${escapeHTML(ex.repsDesc)}">填满</button>
                         </div>
                         <div class="card-tip">${escapeHTML(ex.tip)}</div>
                         ${setsHtml}
