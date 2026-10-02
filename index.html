@@ -112,8 +112,9 @@
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] {
             background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; min-height: 42px; max-width: 100%;
         }
-        input:focus { border-color: var(--text-main); }
-        input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        input:focus, select:focus { border-color: var(--text-main); outline: none; }
+        input:hover, select:hover { border-color: var(--text-main); }
+        button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         ::placeholder { color: var(--text-muted); opacity: 1; }
 
         input[type="checkbox"] {
@@ -139,6 +140,7 @@
         .tab { padding: 7px 13px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; min-height: 42px; display: inline-flex; align-items: center; flex-shrink: 0; touch-action: manipulation; }
         .tab:hover { color: var(--text-main); }
         .tab.active { background: var(--text-main); color: var(--bg-color); }
+        .tab.active:not(.is-just-activated):hover { background: var(--accent); color: var(--bg-color); }
         #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 11px; font-size: 15px; font-weight: normal; flex-shrink: 0; min-height: 38px; }
         #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
@@ -216,7 +218,7 @@
         #btn-add-exercise { width: 100%; margin-top: 12px; border-style: dashed; }
         .edit-actions { display: flex; gap: 11px; margin-top: 28px; flex-wrap: wrap; }
         #btn-save-edit { flex: 2; min-width: 200px; }
-        #btn-restore-default { flex: 1; min-width: 150px; background: transparent; }
+        #btn-restore-default { flex: 1; min-width: 150px; }
         #edit-feedback { margin-top: 18px; color: var(--text-main); font-weight: bold; }
 
         .edit-day-bar { display: flex; gap: 9px; align-items: stretch; margin-bottom: 19px; flex-wrap: wrap; }
@@ -227,8 +229,9 @@
         .section-title { margin-top: 38px; }
         .year-tabs { display: flex; gap: 8px; margin-bottom: 19px; overflow-x: auto; }
         .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 5px 13px; font-weight: normal; min-height: 40px; }
-        .year-btn:hover { background: transparent; color: var(--text-main); border-color: var(--border-color); }
-        .year-btn.active, .year-btn.active:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .year-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .year-btn.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+        .year-btn.active:not(.is-just-activated):hover { background: var(--accent); color: var(--bg-color); border-color: var(--accent); }
 
         #heatmap-wrapper { overflow-x: auto; padding: 8px 0 18px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
         #heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
@@ -1077,10 +1080,22 @@
         field.classList.toggle('is-focus', document.activeElement === el);
     }
 
+    function activateNoFlash(clicked, activate) {
+        const wasActive = clicked.classList.contains('active');
+        const container = clicked.parentElement;
+        activate();
+        if (wasActive || !container) return;
+        const active = container.querySelector('.active');
+        if (!active) return;
+        active.classList.add('is-just-activated');
+        active.addEventListener('mouseleave', () => active.classList.remove('is-just-activated'), { once: true });
+    }
+
     function bindEvents() {
         // Tab 切换
         $('#main-tabs').addEventListener('click', e => {
-            if (e.target.matches('.tab')) switchTab(e.target);
+            if (!e.target.matches('.tab')) return;
+            activateNoFlash(e.target, () => switchTab(e.target));
         });
         // 键盘数字快捷键切换 Tab
         document.addEventListener('keydown', e => {
@@ -1158,7 +1173,8 @@
 
         // Stats 面板
         $('#year-tabs').addEventListener('click', e => {
-            if (e.target.matches('.year-btn')) changeStatsYear(e.target.innerText);
+            if (!e.target.matches('.year-btn')) return;
+            activateNoFlash(e.target, () => changeStatsYear(e.target.innerText));
         });
         $('#btn-save-vol-settings').addEventListener('click', async () => {
             const volSettings = {
