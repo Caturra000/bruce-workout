@@ -12,8 +12,8 @@
     <link rel="manifest" href='data:application/manifest+json,{"display":"standalone","start_url":"./","name":"Bruce的硬核训练","short_name":"Bruce","background_color":"%23000000","theme_color":"%23000000"}'>
     <style>
         /* ============ 滚动条 ============ */
-        html, .tabs, .year-selector { scrollbar-width: none; -ms-overflow-style: none; }
-        html::-webkit-scrollbar, .tabs::-webkit-scrollbar, .year-selector::-webkit-scrollbar { display: none; }
+        html, .tabs, .year-tabs { scrollbar-width: none; -ms-overflow-style: none; }
+        html::-webkit-scrollbar, .tabs::-webkit-scrollbar, .year-tabs::-webkit-scrollbar { display: none; }
 
         /* ============ 主题变量 ============ */
         :root {
@@ -78,7 +78,7 @@
         /* ============ 基础 ============ */
         * { border-radius: 0 !important; box-sizing: border-box; }
         body { font-family: var(--font); font-size: 17px; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 24px 20px 50px; display: flex; justify-content: center; line-height: 1.65; min-width: 320px; }
-        .container { max-width: 1040px; width: 100%; box-sizing: border-box; }
+        .container { max-width: 1040px; width: 100%; }
         a { color: var(--text-main); text-decoration: underline; }
         a:hover { color: var(--accent); }
         b, strong { color: var(--text-main); }
@@ -88,20 +88,31 @@
         h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
 
         .titlebar { color: var(--text-muted); font-size: 15px; margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .titlebar b { color: var(--text-main); }
+
+        /* ============ 基础：通用工具 ============ */
+        .u-muted { color: var(--text-muted); }
+        .u-danger { color: var(--danger); }
+        .u-hint { color: var(--text-muted); font-size: 15px; margin-bottom: 8px; }
+        .u-hint-lg { color: var(--text-muted); font-size: 16px; }
+        .u-label { white-space: nowrap; color: var(--text-muted); }
+        .u-check { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+        .u-check--muted { font-size: 15px; color: var(--text-muted); }
+        .u-mt-4 { margin-top: 4px; }
+        .u-mt-10 { margin-top: 10px; }
+        .u-ml-auto { margin-left: auto; }
 
         /* ============ 表单 ============ */
         input, select, button { font-family: var(--font-serif); font-size: 16px; line-height: 1.4; }
-        .set-input, .card input.ed-exid { font-family: var(--font); }
+        .set-input { font-family: var(--font); }
         .set-input::placeholder { font-family: var(--font-serif); }
-        h2, h3, .card-title, .card-target, .core-mark, .bruce-tip, .set-unit, .about-table, .guide-step, .gh-commit, .playback-box, .rest-day-check, #daily-feedback, #sync-toast, #gh-status, .global-tooltip, .analysis-box, button, .date-ph, .trend-chart, .vol-chart-wrapper { font-family: var(--font-serif); }
+        h2, h3, .card-title, .card-target, .card-core, .card-tip, .set-unit, .about-table, .guide-step, .gh-commit, #playback-box, .card-rest-label, #daily-feedback, #sync-toast, #gh-status, .tooltip, .analysis-box, .about-copy, .vol-date-ph, .trend-chart, .vol-chart-wrapper { font-family: var(--font-serif); }
         input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: var(--date-icon-filter); cursor: pointer; }
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] {
-            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; box-sizing: border-box; min-height: 42px; max-width: 100%;
+            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; min-height: 42px; max-width: 100%;
         }
-        input:focus { outline: none; border-color: var(--text-main); }
+        input:focus { border-color: var(--text-main); }
         input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         ::placeholder { color: var(--text-muted); opacity: 1; }
 
@@ -131,23 +142,23 @@
         #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 11px; font-size: 15px; font-weight: normal; flex-shrink: 0; min-height: 38px; }
         #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
-        .panel { display: none; background: var(--panel-bg); padding: 27px 0; box-sizing: border-box; }
+        .panel { display: none; background: var(--panel-bg); padding: 27px 0; }
         .panel.active { display: block; }
 
         /* ============ 自定义下拉 ============ */
         .custom-select { position: relative; width: 100%; margin-bottom: 18px; }
-        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 36px 9px 11px; cursor: pointer; box-sizing: border-box; font-weight: normal; min-height: 44px; }
+        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 36px 9px 11px; cursor: pointer; font-weight: normal; min-height: 44px; }
         .custom-select-btn:hover { background: var(--bg-color); border-color: var(--text-main); }
         .custom-select-btn::after { content: ''; position: absolute; right: 12px; top: 50%; margin-top: -6px; width: 13px; height: 13px; background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center / 1px 11px no-repeat; pointer-events: none; }
-        .custom-select.open .custom-select-btn::after { background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat; }
+        .custom-select.is-open .custom-select-btn::after { background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat; }
         .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar { width: 8px; }
         .custom-select-dropdown::-webkit-scrollbar-track { background: var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-color); }
-        .custom-select.open .custom-select-dropdown { display: block; }
+        .custom-select.is-open .custom-select-dropdown { display: block; }
         .custom-select-option { padding: 8px 12px; cursor: pointer; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 42px; }
         .custom-select-option::before { content: '  '; white-space: pre; color: var(--text-muted); }
-        .custom-select-option.selected::before { content: '> '; }
+        .custom-select-option.is-selected::before { content: '> '; }
         .custom-select-option:hover { background: var(--text-main); color: var(--bg-color); }
         .custom-select-option:hover::before { color: var(--bg-color); }
 
@@ -157,104 +168,152 @@
         .card-title { font-weight: bold; color: var(--text-main); font-size: 17px; }
         .card-title::before { content: '> '; color: var(--text-muted); }
         .card-target { font-size: 15px; color: var(--text-muted); }
-        .core-mark { color: var(--accent); font-size: 15px; margin-left: 8px; }
+        .card-core { color: var(--accent); font-size: 15px; margin-left: 8px; }
 
-        .bruce-tip { font-size: 15px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
-        .bruce-tip::before { content: '// '; }
+        .card-tip { font-size: 15px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
+        .card-tip::before { content: '// '; }
+        .card-tip:last-child { margin-bottom: 0; }
         .sets-container { display: flex; flex-direction: column; gap: 10px; }
         .set-row { display: flex; align-items: center; gap: 11px; flex-wrap: nowrap; }
-        .set-label { width: 50px; font-size: 15px; color: var(--text-muted); }
         .set-row .set-input { width: 100px; text-align: center; flex-grow: 1; max-width: 125px; }
         .set-row .set-unit { flex: 0 0 auto; }
         .set-row .set-unit:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .set-unit { color: var(--text-muted); font-size: 15px; }
 
+        /* ============ 卡片：今日打卡面板 ============ */
+        #date-picker { margin-bottom: 18px; width: auto; }
+        #daily-note { width: 100%; margin-top: 18px; display: none; }
+        #btn-save-today { width: 100%; margin-top: 24px; font-size: 17px; display: none; }
+        #daily-feedback { margin-top: 18px; }
+        .card--rest { border-color: var(--text-main); }
+        .card-rest-label { user-select: none; }
+        input[type="checkbox"].card-rest-check { width: 22px; height: 22px; }
+
+        /* ============ 卡片：编辑（计划定制） ============ */
         .edit-meta-box { border: 1px dashed var(--border-color); padding: 18px; margin-bottom: 24px; }
-        .edit-meta-box .edit-row:first-child { flex-wrap: nowrap; }
-        .edit-meta-box .edit-row:first-child #ed-day-id { flex: 1; min-width: 0; width: auto; }
-        .edit-meta-box .edit-row:first-child #day-count-badge { flex-shrink: 0; }
         .edit-row { display: flex; gap: 11px; margin-bottom: 12px; flex-wrap: wrap; }
+        .edit-row--center { align-items: center; }
+        .edit-row--id { flex-wrap: nowrap; }
+        .edit-row--id #edit-day-id { flex: 1; min-width: 0; }
+        .edit-row--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .edit-row--last { margin-bottom: 0; }
         .edit-row label { display: flex; gap: 7px; font-size: 16px; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
-        .card input[type="text"].ed-name { flex: 1; min-width: 170px; }
-        .card input[type="text"].ed-exid {
-            width: 135px; flex-shrink: 0; font-size: 14px; text-align: center;
+        .card input[type="text"].edit-name { flex: 1; min-width: 170px; font-weight: bold; }
+        .card input[type="text"].edit-exid {
+            width: 135px; flex-shrink: 0; font-size: 14px; text-align: center; font-family: var(--font);
             color: var(--text-muted); background: transparent; border: 1px dashed transparent; padding: 5px 7px; min-height: 38px;
         }
-        .card input[type="text"].ed-exid:hover { border-color: var(--border-color); cursor: text; }
-        .card input[type="text"].ed-exid:focus { outline: none; border-color: var(--text-main); border-style: solid; color: var(--text-main); }
+        .card input[type="text"].edit-exid:hover { border-color: var(--border-color); cursor: text; }
+        .card input[type="text"].edit-exid:focus { outline: none; border-color: var(--text-main); border-style: solid; color: var(--text-main); }
+
+        #edit-day-count { margin-left: auto; font-size: 14px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+        .edit-note { font-size: 15px; color: var(--text-muted); margin: -3px 0 13px; }
+        #edit-day-title { font-weight: bold; width: min(100%, 380px); }
+        .edit-tip { width: 100%; }
+        .edit-core-label { align-items: center; }
+        .edit-row label.edit-stack { display: flex; flex-direction: column; gap: 7px; }
+        .edit-stack-label { color: var(--text-muted); font-size: 1em; }
+        #btn-add-exercise { width: 100%; margin-top: 12px; border-style: dashed; }
+        .edit-actions { display: flex; gap: 11px; margin-top: 28px; flex-wrap: wrap; }
+        #btn-save-edit { flex: 2; min-width: 200px; }
+        #btn-restore-default { flex: 1; min-width: 150px; background: transparent; }
+        #edit-feedback { margin-top: 18px; color: var(--text-main); font-weight: bold; }
 
         .edit-day-bar { display: flex; gap: 9px; align-items: stretch; margin-bottom: 19px; flex-wrap: wrap; }
         .edit-day-bar .custom-select { flex: 1; min-width: 240px; margin-bottom: 0; }
         .edit-day-bar button { white-space: nowrap; padding: 7px 13px; }
 
         /* ============ 统计 ============ */
-        .year-selector { display: flex; gap: 8px; margin-bottom: 19px; overflow-x: auto; }
+        .section-title { margin-top: 38px; }
+        .year-tabs { display: flex; gap: 8px; margin-bottom: 19px; overflow-x: auto; }
         .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 5px 13px; font-weight: normal; min-height: 40px; }
         .year-btn:hover { background: transparent; color: var(--text-main); border-color: var(--border-color); }
         .year-btn.active, .year-btn.active:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
-        .heatmap-wrapper { overflow-x: auto; padding: 8px 0 18px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
-        .heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
-        .heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
-        .heatmap-wrapper.is-scrolling { pointer-events: none; }
+        #heatmap-wrapper { overflow-x: auto; padding: 8px 0 18px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; will-change: scroll-position; -webkit-overflow-scrolling: touch; overflow-anchor: none; }
+        #heatmap-wrapper::-webkit-scrollbar { height: 8px; display: block; }
+        #heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
+        #heatmap-wrapper.is-scrolling { pointer-events: none; }
 
         .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 17px); grid-auto-flow: column; gap: 5px; width: max-content; padding: 8px 10px; }
-        .cell { width: 17px; height: 17px; box-sizing: border-box; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; touch-action: manipulation; }
-        .cell[data-level="1"] { background: var(--level-1); }
-        .cell[data-level="2"] { background: var(--level-2); }
-        .cell[data-level="3"] { background: var(--level-3); }
-        .cell[data-level="4"] { background: var(--level-4); }
-        .cell:hover { border-color: var(--text-main); }
-        .cell.selected { border-color: var(--accent); }
+        .heatmap-cell { width: 17px; height: 17px; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; touch-action: manipulation; }
+        .heatmap-cell[data-level="1"] { background: var(--level-1); }
+        .heatmap-cell[data-level="2"] { background: var(--level-2); }
+        .heatmap-cell[data-level="3"] { background: var(--level-3); }
+        .heatmap-cell[data-level="4"] { background: var(--level-4); }
+        .heatmap-cell:hover { border-color: var(--text-main); }
+        .heatmap-cell.is-selected { border-color: var(--accent); }
 
-        .heatmap-grid.has-selection .cell { opacity: 0.2; }
-        .heatmap-grid.has-selection .cell.selected { opacity: 1; }
+        .heatmap-grid.has-selection .heatmap-cell { opacity: 0.2; }
+        .heatmap-grid.has-selection .heatmap-cell.is-selected { opacity: 1; }
         .heatmap-grid.has-selection .heatmap-month-svg { opacity: 0.2; }
 
         .heatmap-month-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible; transition: opacity 0.2s; }
         .heatmap-month-path { fill: var(--text-main); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 1.5px; stroke-linejoin: miter; }
 
-        .global-tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: 7px 10px; font-size: 15px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
+        .tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: 7px 10px; font-size: 15px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
 
-        .playback-box { border: 1px solid var(--border-color); padding: 18px; margin-top: 24px; display: none; }
+        #playback-box { border: 1px solid var(--border-color); padding: 18px; margin-top: 24px; display: none; }
         #playback-title { display: block; }
         #playback-title::before, #playback-title::after { content: none; }
         .playback-set { font-size: 15px; color: var(--text-muted); margin-left: 18px; }
-        .playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: 18px 0; }
+        .playback-set.u-danger { color: var(--danger); }
+        .playback-ex { margin-bottom: 12px; }
+        #playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: 18px 0; }
+
+        .vol-settings-bar { display: flex; flex-direction: column; gap: 15px; margin-bottom: 13px; font-size: 16px; color: var(--text-muted); }
+        .vol-input-group { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+        .vol-input-group label { display: flex; align-items: center; gap: 7px; }
+        .vol-input-group input[type="number"] { width: 85px; }
+        .vol-date-range { display: flex; align-items: center; gap: 9px; }
+        .vol-date-field { position: relative; display: block; width: 160px; flex-shrink: 0; }
+        .vol-date-field input[type="date"] { width: 100%; }
+        .vol-date-ph { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
+        .vol-date-field.has-value .vol-date-ph, .vol-date-field.is-focus .vol-date-ph { display: none; }
+        .vol-date-field:not(.has-value):not(.is-focus) input[type="date"] { color: transparent; }
+        .vol-zoom-controls { margin-left: auto; display: flex; gap: 7px; align-items: center; }
+        .vol-zoom-controls button { padding: 5px 12px; font-weight: bold; min-width: 44px; }
+        .vol-input-group button.btn-outline { padding: 5px 12px; }
+        .vol-quick-range { display: flex; gap: 9px; flex-wrap: wrap; }
+        .vol-quick-range button { flex: 1; min-width: 85px; padding: 7px 10px; text-align: center; }
 
         .vol-chart-wrapper { overflow-x: auto; margin-top: 18px; padding: 18px 0 8px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         .vol-chart-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
-        .vol-chart-wrapper svg { display: block; }
+        .vol-chart-wrapper svg { display: block; overflow: visible; }
+        .vol-hint { font-size: 15px; color: var(--text-muted); margin: 7px 0 0; }
+        #vol-chart { width: max-content; min-width: 100%; }
+        .vol-empty { color: var(--text-muted); text-align: center; width: 100%; }
         .vol-point { cursor: pointer; transform-box: fill-box; transform-origin: center; }
-        .vol-point.hot { transform: scale(1.5); }
+        .vol-point.is-hot { transform: scale(1.5); }
 
         .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 175px auto; gap: 0 5px; margin-top: 36px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
-        .bar-cell { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .bar { width: 100%; max-width: 42px; background: var(--level-3); position: relative; }
-        .bar-cell:hover .bar { background: var(--text-main); }
-        .bar-cell.active-month .bar { background: var(--accent); }
-        .bar:hover::after { content: attr(data-val); position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: 3px 7px; font-size: 14px; font-weight: bold; z-index: 2; white-space: nowrap; }
-        .month-label { font-size: 14px; color: var(--text-muted); text-align: center; padding-top: 7px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .month-label:hover { color: var(--text-main); }
-        .month-label.active-month { color: var(--accent); font-weight: bold; }
+        .trend-col { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .trend-bar { width: 100%; max-width: 42px; background: var(--level-3); position: relative; }
+        .trend-col:hover .trend-bar { background: var(--text-main); }
+        .trend-col.is-active .trend-bar { background: var(--accent); }
+        .trend-bar:hover::after { content: attr(data-val); position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: 3px 7px; font-size: 14px; font-weight: bold; z-index: 2; white-space: nowrap; }
+        .trend-month { font-size: 14px; color: var(--text-muted); text-align: center; padding-top: 7px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .trend-month:hover { color: var(--text-main); }
+        .trend-month.is-active { color: var(--accent); font-weight: bold; }
 
         .analysis-box { border: 1px solid var(--border-color); padding: 16px 18px; margin-top: 24px; }
-        .warning-box { border-color: var(--danger); }
+        .analysis-box--warning { border-color: var(--danger); }
+        .stat-value { color: var(--accent); font-weight: bold; }
 
         /* ============ 加载页 ============ */
         #loading-screen { position: fixed; inset: 0; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 10000; color: var(--text-main); transition: opacity 0.3s; }
-        .cursor { display: inline-block; width: 0.6em; height: 1em; background: var(--text-main); vertical-align: -0.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+        .loading-cursor { display: inline-block; width: 0.6em; height: 1em; background: var(--text-main); vertical-align: -0.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
         /* ============ 教程 / GitHub ============ */
         .guide-toggle { display: flex; align-items: center; gap: 9px; padding: 9px 12px; margin-bottom: 15px; cursor: pointer; color: var(--text-main); font-size: 15px; font-weight: normal; background: transparent; border: 1px dashed var(--border-color); width: 100%; text-align: left; }
         .guide-toggle:hover { background: transparent; border-color: var(--text-main); }
-        .guide-toggle .arrow::before { content: '[+]'; color: var(--text-muted); }
-        .guide-toggle.open { margin-bottom: 0; }
-        .guide-toggle.open .arrow::before { content: '[-]'; }
+        .guide-toggle .guide-toggle-icon::before { content: '[+]'; color: var(--text-muted); }
+        .guide-toggle.is-open { margin-bottom: 0; }
+        .guide-toggle.is-open .guide-toggle-icon::before { content: '[-]'; }
         .guide-steps { display: none; margin: 0 0 15px; padding: 8px 12px; border: 1px dashed var(--border-color); border-top: none; }
-        .guide-steps.open { display: block; }
+        .guide-steps.is-open { display: block; }
         .guide-step { display: flex; gap: 11px; padding: 7px 0; font-size: 15px; color: var(--text-muted); line-height: 1.7; }
         .guide-step + .guide-step { border-top: 1px dotted var(--border-color); }
         .guide-num { flex-shrink: 0; color: var(--text-main); }
@@ -262,9 +321,9 @@
         .guide-num::after { content: ']'; }
         .guide-step b { color: var(--text-main); }
         .guide-step code { border: 1px solid var(--border-color); padding: 0 5px; font-family: var(--font); font-size: 14px; overflow-wrap: anywhere; }
-        .guide-step .g { color: var(--text-main); }
-        .guide-step .y { color: var(--quick-fill); }
-        .guide-step .r { color: var(--danger); }
+        .guide-step .guide-main { color: var(--text-main); }
+        .guide-step .guide-warn { color: var(--quick-fill); }
+        .guide-step .guide-danger { color: var(--danger); }
 
         .gh-commit { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color); margin-bottom: 8px; font-size: 15px; }
         .gh-commit:hover { border-color: var(--text-main); }
@@ -273,40 +332,38 @@
         .gh-commit-meta { color: var(--text-muted); font-size: 14px; margin-top: 3px; }
         .gh-commit-sha { color: var(--text-main); }
         .gh-commit button { flex-shrink: 0; }
+        .gh-head { color: var(--text-muted); font-size: 14px; }
+
+        .gh-section { margin-top: 38px; border-top: 1px solid var(--border-color); padding-top: 24px; }
+        .gh-fields { display: flex; flex-direction: column; gap: 11px; }
+        .gh-fields > input { width: 100%; }
+        .gh-actions { display: flex; gap: 11px; margin-top: 18px; flex-wrap: wrap; }
+        .gh-actions > button { flex: 1; min-width: 120px; }
+        #gh-status { margin-top: 13px; font-size: 15px; min-height: 1.5em; overflow-wrap: anywhere; }
+        #gh-history { margin-top: 15px; display: none; }
+        #import-wrap { margin-top: 24px; }
+        #import-file { display: none; }
+        #btn-clear-data { margin-top: 48px; }
 
         /* ============ 关于 ============ */
-        .ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.2; margin: 12px 0 10px; overflow-x: auto; max-width: 100%; }
+        .about-ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.2; margin: 12px 0 10px; overflow-x: auto; max-width: 100%; }
         .about-table { border-collapse: collapse; font-size: 16px; color: var(--text-muted); line-height: 2; width: 100%; }
         .about-table td { padding-right: 24px; vertical-align: top; }
         .about-table td:first-child { white-space: nowrap; width: 1%; }
         .about-table td:last-child { padding-right: 0; overflow-wrap: anywhere; }
+        .about-head { text-align: center; padding: 24px 0 13px; }
+        .about-head p { color: var(--text-muted); font-size: 15px; margin: 0; }
+        .about-foot { border-top: 1px solid var(--border-color); padding-top: 19px; color: var(--text-muted); line-height: 2; }
+        .about-copy { margin-top: 24px; font-size: 15px; color: var(--text-muted); }
 
         #sync-toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 15px; font-size: 15px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis; }
 
         @supports (-webkit-touch-callout: none) { select, input { font-size: 16px; } }
 
-        .vol-settings-bar { display: flex; flex-direction: column; gap: 15px; margin-bottom: 13px; font-size: 16px; color: var(--text-muted); }
-        .vol-input-group { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-        .vol-input-group label { display: flex; align-items: center; gap: 7px; }
-        .vol-input-group input[type="number"] { width: 85px; }
-        .vol-date-range { display: flex; align-items: center; gap: 9px; }
-        .date-field { position: relative; display: block; width: 160px; flex-shrink: 0; }
-        .date-field input[type="date"] { width: 100%; }
-        .date-ph { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
-        .date-field.has-value .date-ph, .date-field.is-focus .date-ph { display: none; }
-        .date-field:not(.has-value):not(.is-focus) input[type="date"] { color: transparent; }
-        .vol-zoom-controls { margin-left: auto; display: flex; gap: 7px; align-items: center; }
-        .vol-zoom-controls button { padding: 5px 12px; font-weight: bold; min-width: 44px; }
-        .vol-input-group button.btn-outline { padding: 5px 12px; }
-        .vol-quick-range { display: flex; gap: 9px; flex-wrap: wrap; }
-        .vol-quick-range button { flex: 1; min-width: 85px; padding: 7px 10px; text-align: center; }
-
         @media (max-width: 700px) {
             body { padding: 16px 12px 36px; font-size: 16px; }
-            h2, h3 { font-size: 17px; }
             .panel { padding: 21px 0; }
             .card { padding: 14px; margin-bottom: 13px; }
-            .card-title { font-size: 17px; }
             .set-row { gap: 8px; }
             .set-row .set-input { width: auto; max-width: none; min-width: 0; flex: 1 1 0; }
             .btn-quick { width: 100%; text-align: center; margin: 4px 0 0; }
@@ -318,21 +375,21 @@
             .vol-input-group input[type="number"] { width: auto; flex: 1; min-width: 0; margin-left: 10px; }
             .vol-input-group button.btn-outline { width: 100%; }
             .vol-date-range { width: 100%; flex-wrap: wrap; }
-            .date-field { width: 0; min-width: 0; flex: 1; }
+            .vol-date-field { width: 0; min-width: 0; flex: 1; }
             .vol-zoom-controls { margin-left: 0; justify-content: flex-end; }
             .vol-quick-range button { min-width: 70px; }
             .vol-chart-wrapper { min-height: 240px; }
             .heatmap-grid { grid-template-rows: repeat(7, 15px); gap: 4px; }
-            .cell { width: 15px; height: 15px; }
+            .heatmap-cell { width: 15px; height: 15px; }
             .trend-chart { grid-template-rows: 155px auto; gap: 0 2px; }
-            .month-label { font-size: 12px; }
+            .trend-month { font-size: 12px; }
         }
     </style>
 </head>
 <body>
 
-<div id="loading-screen"><span>&gt; loading data</span><span class="cursor"></span></div>
-<div id="global-tooltip" class="global-tooltip"></div>
+<div id="loading-screen"><span>&gt; loading data</span><span class="loading-cursor"></span></div>
+<div id="global-tooltip" class="tooltip"></div>
 
 <div class="container">
     <div id="sync-toast"></div>
@@ -349,7 +406,7 @@
     <!-- Panel: Today -->
     <div id="today" class="panel active">
         <h2>今天的战斗容量</h2>
-        <input type="date" id="date-picker" style="margin-bottom: 18px; width: auto;">
+        <input type="date" id="date-picker">
         <div class="custom-select" id="day-selector">
             <button type="button" class="custom-select-btn" data-placeholder="-- 选择今天的计划 --">
                 <span class="custom-select-label">-- 选择今天的计划 --</span>
@@ -358,24 +415,24 @@
         </div>
 
         <div id="exercise-list"></div>
-        <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)" style="width:100%; margin-top:18px; display:none;">
-        <button id="save-btn" style="display: none; width: 100%; margin-top: 24px; font-size: 17px;">[ 保存今日容量 ]</button>
-        <div id="daily-feedback" style="margin-top: 18px;"></div>
+        <input type="text" id="daily-note" placeholder="今日总体备注 (状态、饮食等，选填)">
+        <button id="btn-save-today">[ 保存今日容量 ]</button>
+        <div id="daily-feedback"></div>
     </div>
 
     <!-- Panel: Stats -->
     <div id="stats" class="panel">
-        <div class="year-selector" id="year-tabs"></div>
-        <div class="heatmap-wrapper" id="heatmap-scroll-area">
+        <div class="year-tabs" id="year-tabs"></div>
+        <div id="heatmap-wrapper">
             <div class="heatmap-grid" id="heatmap"></div>
         </div>
-        <div id="playback-area" class="playback-box">
+        <div id="playback-box">
             <h3 id="playback-title">点击上方的方块查看记录</h3>
             <div id="playback-content"></div>
         </div>
-        <h3 style="margin-top: 38px;">频次趋势</h3>
+        <h3 class="section-title">频次趋势</h3>
         <div class="trend-chart" id="trend-chart"></div>
-        <h3 style="margin-top: 38px;">容量趋势</h3>
+        <h3 class="section-title">容量趋势</h3>
         <div class="vol-settings-bar">
             <div class="vol-input-group">
                 <label>全局自重<input type="number" id="vol-bodyweight" step="0.5" placeholder="如：60"> kg</label>
@@ -385,8 +442,8 @@
             <div class="vol-input-group">
                 <div class="vol-date-range">
                     <label>区间范围</label>
-                    <span class="date-field"><input type="date" id="vol-start-date"><span class="date-ph">年/月/日</span></span>
-                    <span class="date-field"><input type="date" id="vol-end-date"><span class="date-ph">年/月/日</span></span>
+                    <span class="vol-date-field"><input type="date" id="vol-start-date"><span class="vol-date-ph">年/月/日</span></span>
+                    <span class="vol-date-field"><input type="date" id="vol-end-date"><span class="vol-date-ph">年/月/日</span></span>
                 </div>
                 <div class="vol-zoom-controls">
                     <button id="btn-vol-zoom-out" class="btn-outline">-</button>
@@ -400,18 +457,18 @@
                 <button class="btn-outline" data-range="1y">近一年</button>
             </div>
         </div>
-        <p style="font-size:15px; color:var(--text-muted); margin:7px 0 0 0;">// 区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
+        <p class="vol-hint">// 区间留空则跟随上方选中年份；填写后可跨年精确筛选区间。</p>
         <div class="vol-chart-wrapper" id="vol-chart-wrapper">
-            <div id="volume-chart" style="width: max-content; min-width: 100%;"></div>
+            <div id="vol-chart"></div>
         </div>
-        <h3 style="margin-top: 38px;">年度统计</h3>
-        <div id="ai-analysis"></div>
+        <h3 class="section-title">年度统计</h3>
+        <div id="year-analysis"></div>
     </div>
 
     <!-- Panel: Edit -->
     <div id="edit" class="panel">
         <h2>训练矩阵定制</h2>
-        <p style="color:var(--text-muted); font-size:16px;">// 完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
+        <p class="u-hint-lg">// 完全重塑你的分化表。修改此处<b>不影响</b>过去的历史打卡快照。</p>
 
         <div class="edit-day-bar">
             <div class="custom-select" id="edit-day-selector">
@@ -425,103 +482,103 @@
         </div>
 
         <div class="edit-meta-box">
-            <div class="edit-row" style="align-items:center;">
-                <span style="white-space:nowrap; color:var(--text-muted);">计划 ID</span>
-                <input type="text" id="ed-day-id" placeholder="如: day1 / push_day" spellcheck="false" style="width:200px;">
-                <span id="day-count-badge" style="margin-left:auto; font-size:14px; color:var(--text-muted); white-space:nowrap;"></span>
+            <div class="edit-row edit-row--center edit-row--id">
+                <span class="u-label">计划 ID</span>
+                <input type="text" id="edit-day-id" placeholder="如: day1 / push_day" spellcheck="false">
+                <span id="edit-day-count"></span>
             </div>
-            <div style="font-size:15px; color:var(--text-muted); margin:-3px 0 13px;">// ID 是内部唯一标识（仅限字母、数字、_ 或 -），修改后点击「保存这天的设置」生效；重命名不影响历史记录。动作卡片中名称右侧的灰色小字为动作 ID，悬停/点击可修改。</div>
-            <div style="display: flex; gap: 11px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
-                <span style="white-space:nowrap; color: var(--text-muted);">本计划名</span>
-                <input type="text" id="ed-day-title" style="font-weight:bold; width: min(100%, 380px);">
+            <div class="edit-note">// ID 是内部唯一标识（仅限字母、数字、_ 或 -），修改后点击「保存这天的设置」生效；重命名不影响历史记录。动作卡片中名称右侧的灰色小字为动作 ID，悬停/点击可修改。</div>
+            <div class="edit-row edit-row--center">
+                <span class="u-label">本计划名</span>
+                <input type="text" id="edit-day-title">
             </div>
-            <label style="display: flex; align-items: center; gap: 9px; cursor: pointer; color: var(--text-main);">
-                <input type="checkbox" id="ed-day-isrest">
+            <label class="u-check">
+                <input type="checkbox" id="edit-day-rest">
                 <b>将这一天设为 [休息日 / 有氧日] (不记录容量)</b>
             </label>
         </div>
 
         <div id="edit-exercise-wrapper">
             <div id="edit-exercise-list"></div>
-            <button class="btn-outline" style="width: 100%; margin-top: 12px; border-style: dashed;" id="btn-add-exercise">+ 新增动作</button>
+            <button class="btn-outline" id="btn-add-exercise">+ 新增动作</button>
         </div>
 
-        <div style="display: flex; gap: 11px; margin-top: 28px; flex-wrap: wrap;">
-            <button style="flex: 2; min-width: 200px;" id="btn-save-edit">[ 保存这天的设置 ]</button>
-            <button class="btn-danger" style="flex: 1; min-width: 150px; background: transparent;" id="btn-restore-default">恢复默认出厂</button>
+        <div class="edit-actions">
+            <button id="btn-save-edit">[ 保存这天的设置 ]</button>
+            <button class="btn-danger" id="btn-restore-default">恢复默认出厂</button>
         </div>
-        <div id="edit-feedback" style="margin-top: 18px; color: var(--text-main); font-weight: bold;"></div>
+        <div id="edit-feedback"></div>
     </div>
 
     <!-- Panel: Data -->
     <div id="data" class="panel">
         <h2>数据存档与迁移</h2>
-        <p style="color: var(--text-muted); font-size: 16px;">// 数据存储在本地，建议定期导出完整数据备份。</p>
+        <p class="u-hint-lg">// 数据存储在本地，建议定期导出完整数据备份。</p>
         <button id="btn-export">导出完整数据 (JSON)</button>
-        <div style="margin-top: 24px;">
-            <input type="file" id="import-file" accept=".json" style="display:none">
-            <button class="btn-outline" onclick="$('#import-file').click()">导入恢复数据 (JSON)</button>
+        <div id="import-wrap">
+            <input type="file" id="import-file" accept=".json">
+            <button class="btn-outline" id="btn-import">导入恢复数据 (JSON)</button>
         </div>
-        <div style="margin-top:38px; border-top:1px solid var(--border-color); padding-top:24px;">
+        <div class="gh-section">
             <h3>GitHub 云同步</h3>
-            <p style="color:var(--text-muted); font-size:15px; margin-bottom:8px;">
+            <p class="u-hint">
                 // 通过 GitHub 仓库实现跨设备数据同步。需要创建一个 Fine-grained PAT。
             </p>
 
-            <button type="button" class="guide-toggle" id="guide-toggle" onclick="this.classList.toggle('open'); $('#guide-steps').classList.toggle('open');">
-                <span class="arrow"></span> 首次配置教程
+            <button type="button" class="guide-toggle" id="guide-toggle">
+                <span class="guide-toggle-icon"></span> 首次配置教程
             </button>
 
             <div class="guide-steps" id="guide-steps">
                 <div class="guide-step"><span class="guide-num">1</span><div>新建一个<b>私有仓库</b>（如 <code>my-workout-sync</code>），专门存放同步数据。</div></div>
-                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页</a>，点 <b class="g">Generate new token</b>。</div></div>
+                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页</a>，点 <b class="guide-main">Generate new token</b>。</div></div>
                 <div class="guide-step"><span class="guide-num">3</span><div><b>Token name</b> 随意填，<b>Expiration</b> 建议选 90 天或 1 年。</div></div>
-                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="g">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
-                <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="g">Add permissions</b>，勾选 <b class="y">Contents</b> 并设为 <b class="y">Read and write</b>，其余不动。</div></div>
-                <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="g">Generate token</b>，<b class="r">立刻复制</b> <code>github_pat_xxx...</code>（只显示一次）。</div></div>
-                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="g">保存配置</b> 即可。</div></div>
-                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="r">错误</b>操作，建议先本地 <b class="g">导出完整数据</b>，随时都可以通过 <b class="g">导入恢复数据</b> 挽救回来。</div></div>
-                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="y">推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="y">拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
+                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="guide-main">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
+                <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="guide-main">Add permissions</b>，勾选 <b class="guide-warn">Contents</b> 并设为 <b class="guide-warn">Read and write</b>，其余不动。</div></div>
+                <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="guide-main">Generate token</b>，<b class="guide-danger">立刻复制</b> <code>github_pat_xxx...</code>（只显示一次）。</div></div>
+                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="guide-main">保存配置</b> 即可。</div></div>
+                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="guide-danger">错误</b>操作，建议先本地 <b class="guide-main">导出完整数据</b>，随时都可以通过 <b class="guide-main">导入恢复数据</b> 挽救回来。</div></div>
+                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="guide-warn">推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="guide-warn">拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
             </div>
-            <div style="display:flex; flex-direction:column; gap:11px;">
-                <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)" style="width:100%;">
-                <input type="text" id="gh-repo" placeholder="仓库 (格式: owner/repo)" style="width:100%;">
-                <input type="text" id="gh-path" placeholder="文件路径 (默认: workout_data.json)" style="width:100%;">
-                <input type="text" id="gh-msg" placeholder="Commit 信息模板 (默认: sync: {time})" style="width:100%;">
-                <label style="display:flex; align-items:center; gap:9px; cursor:pointer; font-size:15px; color:var(--text-muted);">
+            <div class="gh-fields">
+                <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)">
+                <input type="text" id="gh-repo" placeholder="仓库 (格式: owner/repo)">
+                <input type="text" id="gh-path" placeholder="文件路径 (默认: workout_data.json)">
+                <input type="text" id="gh-msg" placeholder="Commit 信息模板 (默认: sync: {time})">
+                <label class="u-check u-check--muted">
                     <input type="checkbox" id="gh-autosync">
                     保存打卡 / 修改计划时自动推送到 GitHub
                 </label>
             </div>
-            <div style="display:flex; gap:11px; margin-top:18px; flex-wrap:wrap;">
-                <button id="btn-gh-save" class="btn-outline" style="flex:1; min-width:120px;">保存配置</button>
-                <button id="btn-gh-push" style="flex:1; min-width:120px;">push 推送</button>
-                <button id="btn-gh-pull" class="btn-outline" style="flex:1; min-width:120px;">pull 拉取</button>
-                <button id="btn-gh-history" class="btn-outline" style="flex:1; min-width:120px;">log 历史版本</button>
+            <div class="gh-actions">
+                <button id="btn-gh-save" class="btn-outline">保存配置</button>
+                <button id="btn-gh-push">push 推送</button>
+                <button id="btn-gh-pull" class="btn-outline">pull 拉取</button>
+                <button id="btn-gh-history" class="btn-outline">log 历史版本</button>
             </div>
-            <div id="gh-status" style="margin-top:13px; font-size:15px; min-height:1.5em; overflow-wrap:anywhere;"></div>
-            <div id="gh-history" style="display:none; margin-top:15px;"></div>
+            <div id="gh-status"></div>
+            <div id="gh-history"></div>
         </div>
-        <button class="btn-outline btn-danger" style="margin-top: 48px;" id="btn-clear-data">[!] 清空本地所有数据</button>
+        <button class="btn-danger" id="btn-clear-data">[!] 清空本地所有数据</button>
     </div>
 
     <!-- Panel: About -->
     <div id="about" class="panel">
-        <div style="text-align:center; padding:24px 0 13px;">
-<pre class="ascii"> ____  ____  _   _  ____ _____
+        <div class="about-head">
+<pre class="about-ascii"> ____  ____  _   _  ____ _____
 | __ )|  _ \| | | |/ ___| ____|
 |  _ \| |_) | | | | |   |  _|
 | |_) |  _ <| |_| | |___| |___
 |____/|_| \_\\___/ \____|_____|</pre>
-            <p style="color:var(--text-muted); font-size:15px; margin:0;">单文件 | 多平台同步 | 健身打卡</p>
+            <p>单文件 | 多平台同步 | 健身打卡</p>
         </div>
-        <div style="border-top:1px solid var(--border-color); padding-top:19px; color:var(--text-muted); line-height:2;">
+        <div class="about-foot">
             <table class="about-table">
                 <tr><td><b>源代码</b></td><td><a href="https://github.com/Caturra000/bruce-workout" target="_blank" rel="noopener">github.com/Caturra000/bruce-workout</a></td></tr>
                 <tr><td><b>许可协议</b></td><td>MPL-2.0 License</td></tr>
                 <tr><td><b>Bruce</b></td><td>虚拟教练，你可想象为肌肉版的初音未来</td></tr>
             </table>
-            <p style="margin-top:24px; font-size:15px; color:var(--text-muted); font-family:var(--font-serif);">(c) 2026 Caturra</p>
+            <p class="about-copy">(c) 2026 Caturra</p>
         </div>
     </div>
 </div>
@@ -752,19 +809,19 @@
                 }
 
                 historyDiv.style.display = 'block';
-                historyDiv.innerHTML = `<div style="font-size:0.85em; color:var(--text-muted); margin-bottom:8px;">// 最近 ${commits.length} 个版本（点击「恢复」拉取该版本）：</div>` +
+                historyDiv.innerHTML = `<div class="u-hint">// 最近 ${commits.length} 个版本（点击「恢复」拉取该版本）：</div>` +
                     commits.map((c, i) => {
                         const date = new Date(c.commit.author.date);
                         const timeStr = `${toLocalDateStr(date)} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
                         const msg = c.commit.message || '(无信息)';
                         const sha = c.sha.slice(0, 7);
-                        const isCurrent = i === 0 ? ' <span style="color:var(--text-muted); font-size:0.85em;">(HEAD)</span>' : '';
+                        const isCurrent = i === 0 ? ' <span class="gh-head">(HEAD)</span>' : '';
                         return `<div class="gh-commit">
                             <div class="gh-commit-info">
                                 <div class="gh-commit-msg">${escapeHTML(msg)}${isCurrent}</div>
                                 <div class="gh-commit-meta"><span class="gh-commit-sha">${sha}</span> | ${timeStr}</div>
                             </div>
-                            <button class="btn-outline" onclick="githubSync.pullFromCommit('${c.sha}','${escapeHTML(msg).replace(/'/g,"\\'")}')">恢复</button>
+                            <button class="btn-outline" data-gh-restore data-sha="${c.sha}" data-msg="${escapeHTML(msg)}">恢复</button>
                         </div>`;
                     }).join('');
 
@@ -1015,7 +1072,7 @@
 
     function syncDateField(el) {
         if (!el) return;
-        const field = el.closest('.date-field');
+        const field = el.closest('.vol-date-field');
         if (!field) return;
         field.classList.toggle('has-value', !!el.value);
         field.classList.toggle('is-focus', document.activeElement === el);
@@ -1053,9 +1110,9 @@
             renderTodayPanel();
         });
         $('#day-selector').addEventListener('change', renderTodayPanel);
-        $('#save-btn').addEventListener('click', saveTodayLog);
+        $('#btn-save-today').addEventListener('click', saveTodayLog);
         $('#exercise-list').addEventListener('click', e => {
-            if (e.target.matches('.js-quick-fill')) {
+            if (e.target.matches('.btn-quick')) {
                 quickFill(e.target.dataset.exid, e.target.dataset.repsdesc);
             }
         });
@@ -1078,10 +1135,10 @@
 
         // Edit 面板
         $('#edit-day-selector').addEventListener('change', renderEditPanel);
-        $('#ed-day-isrest').addEventListener('change', () => {
-            $('#edit-exercise-wrapper').style.display = $('#ed-day-isrest').checked ? 'none' : 'block';
+        $('#edit-day-rest').addEventListener('change', () => {
+            $('#edit-exercise-wrapper').style.display = $('#edit-day-rest').checked ? 'none' : 'block';
         });
-        $('#ed-day-id').addEventListener('input', e => {
+        $('#edit-day-id').addEventListener('input', e => {
             const cleaned = e.target.value.replace(/[^\w\-]/g, '');
             if (cleaned !== e.target.value) e.target.value = cleaned;
         });
@@ -1090,7 +1147,7 @@
             if (e.target.matches('.btn-danger')) e.target.closest('.card').remove();
         });
         $('#edit-exercise-list').addEventListener('input', e => {
-            if (e.target.matches('.ed-exid')) {
+            if (e.target.matches('.edit-exid')) {
                 const cleaned = e.target.value.replace(/[^\w\-]/g, '');
                 if (cleaned !== e.target.value) e.target.value = cleaned;
             }
@@ -1174,14 +1231,23 @@
 
         // Data 面板
         $('#btn-export').addEventListener('click', exportJSON);
+        $('#btn-import').addEventListener('click', () => $('#import-file').click());
         $('#import-file').addEventListener('change', importJSON);
         $('#btn-clear-data').addEventListener('click', clearData);
+        $('#guide-toggle').addEventListener('click', () => {
+            $('#guide-toggle').classList.toggle('is-open');
+            $('#guide-steps').classList.toggle('is-open');
+        });
 
         // GitHub 同步按钮
         $('#btn-gh-save').addEventListener('click', () => githubSync.saveSettings());
         $('#btn-gh-push').addEventListener('click', () => githubSync.push());
         $('#btn-gh-pull').addEventListener('click', () => githubSync.pull());
         $('#btn-gh-history').addEventListener('click', () => githubSync.fetchHistory());
+        $('#gh-history').addEventListener('click', e => {
+            const btn = e.target.closest('[data-gh-restore]');
+            if (btn) githubSync.pullFromCommit(btn.dataset.sha, btn.dataset.msg);
+        });
     }
 
     function switchTab(tabEl) {
@@ -1208,7 +1274,7 @@
             const label = el.querySelector('.custom-select-label');
             const opt = el._value ? el.querySelector(`.custom-select-option[data-value="${CSS.escape(el._value)}"]`) : null;
             if (label) label.textContent = opt ? opt.textContent : (el.querySelector('.custom-select-btn').dataset.placeholder || '');
-            el.querySelectorAll('.custom-select-option').forEach(o => o.classList.toggle('selected', o.dataset.value === el._value));
+            el.querySelectorAll('.custom-select-option').forEach(o => o.classList.toggle('is-selected', o.dataset.value === el._value));
         };
         Object.defineProperty(el, 'value', {
             get() { return el._value; },
@@ -1220,15 +1286,15 @@
             }
         });
         el.querySelector('.custom-select-btn').addEventListener('click', () => {
-            document.querySelectorAll('.custom-select.open').forEach(s => { if (s !== el) s.classList.remove('open'); });
-            el.classList.toggle('open');
+            document.querySelectorAll('.custom-select.is-open').forEach(s => { if (s !== el) s.classList.remove('is-open'); });
+            el.classList.toggle('is-open');
         });
         el.querySelector('.custom-select-dropdown').addEventListener('click', e => {
             const opt = e.target.closest('.custom-select-option');
-            if (opt) { el.value = opt.dataset.value; el.classList.remove('open'); }
+            if (opt) { el.value = opt.dataset.value; el.classList.remove('is-open'); }
         });
         document.addEventListener('click', e => {
-            if (!el.contains(e.target)) el.classList.remove('open');
+            if (!el.contains(e.target)) el.classList.remove('is-open');
         });
     }
 
@@ -1325,7 +1391,7 @@
     function renderTodayPanel() {
         const day = $('#day-selector').value;
         const listDiv = $('#exercise-list');
-        const saveBtn = $('#save-btn');
+        const saveBtn = $('#btn-save-today');
         const noteInput = $('#daily-note');
         const feedbackDiv = $('#daily-feedback');
 
@@ -1343,12 +1409,12 @@
 
         if (planObj.isRest) {
             const checked = savedLog && savedLog.score === 100 ? 'checked' : '';
-            listDiv.innerHTML = `<div class="card" style="border-color: var(--text-main);">
-                <label class="rest-day-check" style="display:flex; align-items:center; gap:10px; font-size:1em; cursor:pointer; user-select:none;">
-                    <input type="checkbox" id="rest-check" style="width:22px;height:22px;" ${checked}>
+            listDiv.innerHTML = `<div class="card card--rest">
+                <label class="u-check card-rest-label">
+                    <input type="checkbox" id="rest-check" class="card-rest-check" ${checked}>
                     我今天乖乖休息/完成了有氧安排。
                 </label>
-                <div class="bruce-tip" style="margin-top:10px;">肌肉是在休息时生长的，不要有负罪感。</div>
+                <div class="card-tip u-mt-10">肌肉是在休息时生长的，不要有负罪感。</div>
             </div>`;
         } else {
             listDiv.innerHTML = planObj.exercises.map(ex => {
@@ -1378,12 +1444,12 @@
                     <div class="card" data-id="${escapeHTML(ex.id)}" data-core="${ex.isCore}" data-total-sets="${ex.sets}" data-measure="${measureType}" data-name="${escapeHTML(ex.name)}">
                         <div class="card-header">
                             <div>
-                                <span class="card-title">${escapeHTML(ex.name)}</span>${ex.isCore ? '<span class="core-mark">[core]</span>' : ''}
+                                <span class="card-title">${escapeHTML(ex.name)}</span>${ex.isCore ? '<span class="card-core">[core]</span>' : ''}
                                 <span class="card-target">/ ${ex.sets} 组</span>
                             </div>
-                            <button type="button" class="btn-quick js-quick-fill" data-exid="${escapeHTML(ex.id)}" data-repsdesc="${escapeHTML(ex.repsDesc)}">填满</button>
+                            <button type="button" class="btn-quick" data-exid="${escapeHTML(ex.id)}" data-repsdesc="${escapeHTML(ex.repsDesc)}">填满</button>
                         </div>
-                        <div class="bruce-tip">${escapeHTML(ex.tip)}</div>
+                        <div class="card-tip">${escapeHTML(ex.tip)}</div>
                         ${setsHtml}
                     </div>`;
             }).join('');
@@ -1449,7 +1515,7 @@
         if (state._draft) delete state._draft[draftKey];
 
         showFeedback(entry);
-        const btn = $('#save-btn');
+        const btn = $('#btn-save-today');
         btn.innerText = "[OK] 数据已保存";
         setTimeout(() => { btn.innerText = "[ 保存今日容量 ]"; }, 2000);
         githubSync.autoSyncPush();
@@ -1457,20 +1523,20 @@
 
     function showFeedback(data) {
         let html = '';
-        if (data.warning) html = `<div class="analysis-box warning-box">${data.warning}</div>`;
+        if (data.warning) html = `<div class="analysis-box analysis-box--warning">${data.warning}</div>`;
         else if (isRestDayLog(data)) {
             html = data.score === 100 ? `<div class="analysis-box">Bruce: "很好的执行力，休息也是计划的一部分。"</div>`
-                 : `<div class="analysis-box warning-box">Bruce: "这天被设成了休息/有氧日，但你还没勾选完成。恢复也要认真对待。"</div>`;
+                 : `<div class="analysis-box analysis-box--warning">Bruce: "这天被设成了休息/有氧日，但你还没勾选完成。恢复也要认真对待。"</div>`;
         } else if (data.score === 0) {
-            html = `<div class="analysis-box warning-box">Bruce: "记录保存了，但今天没有完成任何有效组。下次别让空表格赢了你。"</div>`;
+            html = `<div class="analysis-box analysis-box--warning">Bruce: "记录保存了，但今天没有完成任何有效组。下次别让空表格赢了你。"</div>`;
         } else if (data.coreMissed) {
-            html = `<div class="analysis-box warning-box">Bruce: "嘿！你居然跳过了核心动作？容量再高，没有地基刺激，激素水平也上不去！"</div>`;
+            html = `<div class="analysis-box analysis-box--warning">Bruce: "嘿！你居然跳过了核心动作？容量再高，没有地基刺激，激素水平也上不去！"</div>`;
         } else if (data.score === 100) {
             html = `<div class="analysis-box">Bruce: "完美！所有的组都吃下了。去补充碳水吧！"</div>`;
         } else if (data.score >= 60) {
             html = `<div class="analysis-box">Bruce: "完成了 ${data.score}% 的容量。留得青山在，下次试着补齐。"</div>`;
         } else {
-            html = `<div class="analysis-box warning-box">Bruce: "只完成了不到一半？不要让数字欺骗你，要对得起你流的汗。"</div>`;
+            html = `<div class="analysis-box analysis-box--warning">Bruce: "只完成了不到一半？不要让数字欺骗你，要对得起你流的汗。"</div>`;
         }
         $('#daily-feedback').innerHTML = html;
     }
@@ -1493,7 +1559,7 @@
         clearHeatmapMonthFocus();
         renderYearTabs();
         renderStats(year);
-        $('#playback-area').style.display = 'none';
+        $('#playback-box').style.display = 'none';
         if ($('#vol-start-date')) { $('#vol-start-date').value = ''; syncDateField($('#vol-start-date')); }
         if ($('#vol-end-date')) { $('#vol-end-date').value = ''; syncDateField($('#vol-end-date')); }
 
@@ -1527,7 +1593,7 @@
 
         for (let i = 0; i < startDate.getDay(); i++) {
             const empty = document.createElement('div');
-            empty.className = 'cell'; empty.style.visibility = 'hidden';
+            empty.className = 'heatmap-cell'; empty.style.visibility = 'hidden';
             heatmap.appendChild(empty);
         }
 
@@ -1535,7 +1601,7 @@
         while (d <= endDate) {
             const dateStr = toLocalDateStr(d);
             const cell = document.createElement('div');
-            cell.className = 'cell';
+            cell.className = 'heatmap-cell';
             cell.dataset.date = dateStr;
 
             let level = 0, info = dateStr + " | 无记录";
@@ -1615,8 +1681,8 @@
     }
 
     function centerHeatmap() {
-        const wrapper = $('#heatmap-scroll-area');
-        const target = $(`#heatmap .cell[data-date="${toLocalDateStr()}"]`) || $('#heatmap .cell:last-child');
+        const wrapper = $('#heatmap-wrapper');
+        const target = $(`#heatmap .heatmap-cell[data-date="${toLocalDateStr()}"]`) || $('#heatmap .heatmap-cell:last-child');
         if (target) {
             const left = target.offsetLeft + target.clientWidth / 2 - wrapper.clientWidth * 0.8;
             animateScrollLeft(wrapper, left, 380);
@@ -1627,8 +1693,8 @@
         state.focusedMonth = null;
         const svg = $('#heatmap-month-svg');
         if (svg) svg.innerHTML = '';
-        $$('#trend-chart .bar-cell, #trend-chart .month-label').forEach(el => {
-            el.classList.remove('active-month');
+        $$('#trend-chart .trend-col, #trend-chart .trend-month').forEach(el => {
+            el.classList.remove('is-active');
         });
     }
 
@@ -1640,12 +1706,12 @@
     function focusHeatmapMonth(month) {
         const year = state.statsYear;
         const monthStr = String(month).padStart(2, '0');
-        const cells = Array.from($$(`#heatmap .cell[data-date^="${year}-${monthStr}"]`));
+        const cells = Array.from($$(`#heatmap .heatmap-cell[data-date^="${year}-${monthStr}"]`));
         if (!cells.length) return;
 
         state.focusedMonth = month;
         const heatmap = $('#heatmap');
-        const wrapper = $('#heatmap-scroll-area');
+        const wrapper = $('#heatmap-wrapper');
 
         let svg = $('#heatmap-month-svg');
         if (!svg) {
@@ -1736,40 +1802,40 @@
         const targetLeft = targetCenterX - wrapper.clientWidth / 2;
         animateScrollLeft(wrapper, targetLeft, 380);
 
-        $$('#trend-chart .bar-cell, #trend-chart .month-label').forEach(el => {
-            el.classList.toggle('active-month', parseInt(el.dataset.month, 10) === month);
+        $$('#trend-chart .trend-col, #trend-chart .trend-month').forEach(el => {
+            el.classList.toggle('is-active', parseInt(el.dataset.month, 10) === month);
         });
     }
 
     function renderPlayback(dateStr) {
-        const playback = $('#playback-area'), title = $('#playback-title'), content = $('#playback-content');
+        const playback = $('#playback-box'), title = $('#playback-title'), content = $('#playback-content');
         const heatmap = $('#heatmap');
 
         if (state.activePlaybackDate === dateStr && playback.style.display !== 'none') {
             playback.style.display = 'none';
             state.activePlaybackDate = null;
             heatmap.classList.remove('has-selection');
-            $$('#heatmap .cell.selected').forEach(c => c.classList.remove('selected'));
+            $$('#heatmap .heatmap-cell.is-selected').forEach(c => c.classList.remove('is-selected'));
             return;
         }
 
         state.activePlaybackDate = dateStr;
 
-        $$('#heatmap .cell.selected').forEach(c => c.classList.remove('selected'));
-        const activeCell = $(`#heatmap .cell[data-date="${dateStr}"]`);
-        if (activeCell) activeCell.classList.add('selected');
+        $$('#heatmap .heatmap-cell.is-selected').forEach(c => c.classList.remove('is-selected'));
+        const activeCell = $(`#heatmap .heatmap-cell[data-date="${dateStr}"]`);
+        if (activeCell) activeCell.classList.add('is-selected');
         heatmap.classList.add('has-selection');
 
         playback.style.display = 'block';
         const data = state.logs[dateStr];
 
         if (!data) {
-            title.innerText = `${dateStr} | 无记录`; title.style.color = "var(--text-muted)";
+            title.innerText = `${dateStr} | 无记录`; title.classList.add('u-muted');
             content.innerHTML = "<p>这一天像风一样消散了，什么都没留下。</p>"; return;
         }
 
         const planTitle = data.title || state.plan[data.dayType]?.title || '未知计划';
-        title.innerText = `${dateStr} | ${planTitle}`; title.style.color = "var(--text-main)";
+        title.innerText = `${dateStr} | ${planTitle}`; title.classList.remove('u-muted');
 
         if (isRestDayLog(data)) {
             content.innerHTML = `<p>${data.score > 0 ? '[x] 这一天，你选择了休息或有氧，让身体进行恢复。' : '[ ] 这一天被标记为休息/有氧日，但你还没有勾选完成。'}</p>
@@ -1777,8 +1843,8 @@
             return;
         }
 
-        let html = `<p><strong>容量完成度：</strong><span style="color:${data.score > 0 ? 'var(--accent)' : 'var(--text-muted)'}">${data.score}%</span></p>`;
-        if (data.score === 0) html += `<p style="color:var(--danger)">这次记录已保存，但没有完成任何有效组。</p>`;
+        let html = `<p><strong>容量完成度：</strong><span class="${data.score > 0 ? 'stat-value' : 'u-muted'}">${data.score}%</span></p>`;
+        if (data.score === 0) html += `<p class="u-danger">这次记录已保存，但没有完成任何有效组。</p>`;
         html += '<hr>';
 
         if (!data.exercises || !data.exercises.length) html += `<p>没有可回放的动作明细。</p>`;
@@ -1789,8 +1855,8 @@
                 const tSets = ex.targetSets || Math.max((ex.weights||[]).length, (ex.reps||[]).length) || pEx.sets || 0;
                 const cSets = typeof ex.completedSets === 'number' ? ex.completedSets : (ex.weights||[]).reduce((a, w, i) => a + (hasSetActivity(w, ex.reps?.[i])?1:0), 0);
 
-                html += `<div style="margin-bottom: 12px;"><strong>> ${escapeHTML(ex.name || pEx.name)}</strong> <span style="color:var(--text-muted)">(${cSets}/${tSets} 组)</span><div style="margin-top: 4px;">`;
-                if (cSets === 0) html += `<span class="playback-set" style="color:var(--danger)">未执行</span>`;
+                html += `<div class="playback-ex"><strong>> ${escapeHTML(ex.name || pEx.name)}</strong> <span class="u-muted">(${cSets}/${tSets} 组)</span><div class="u-mt-4">`;
+                if (cSets === 0) html += `<span class="playback-set u-danger">未执行</span>`;
                 else {
                     const maxL = Math.max((ex.weights||[]).length, (ex.reps||[]).length);
                     for (let i = 0; i < maxL; i++) {
@@ -1815,7 +1881,7 @@
 
     function renderVolumeChart(year) {
         const container = $('#vol-chart-wrapper');
-        const chartDiv = $('#volume-chart');
+        const chartDiv = $('#vol-chart');
         const volData = [];
 
         const bw = Number($('#vol-bodyweight').value) || 0;
@@ -1859,7 +1925,7 @@
         });
 
         if (volData.length === 0) {
-            chartDiv.innerHTML = `<p style="color:var(--text-muted); text-align:center; width:100%;">// 所选范围内暂无有效容量数据</p>`;
+            chartDiv.innerHTML = `<p class="vol-empty">// 所选范围内暂无有效容量数据</p>`;
             container.style.overflowX = 'hidden';
             chartDiv.style.width = '100%';
             chartDiv.style.minWidth = '0';
@@ -1942,7 +2008,7 @@
         const svgWidthAttr = isScrollable ? svgW : '100%';
 
         chartDiv.innerHTML = `
-            <svg width="${svgWidthAttr}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="overflow: visible; display: block;">
+            <svg width="${svgWidthAttr}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
                 <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,3" />
                 <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol.toFixed(0)}</text>
 
@@ -1966,7 +2032,7 @@
         if (!showPoints) return;
 
         const showTooltip = (p) => {
-            p.classList.add('hot');
+            p.classList.add('is-hot');
             const tt = $('#global-tooltip');
             tt.innerText = `${p.dataset.date} | ${p.dataset.vol} 容量`;
             tt.style.opacity = '1';
@@ -1982,7 +2048,7 @@
         };
 
         const hideTooltip = () => {
-            chartDiv.querySelectorAll('.vol-point').forEach(pt => pt.classList.remove('hot'));
+            chartDiv.querySelectorAll('.vol-point').forEach(pt => pt.classList.remove('is-hot'));
             $('#global-tooltip').style.opacity = '0';
         };
 
@@ -2009,8 +2075,8 @@
         });
         const maxD = Math.max(1, ...md);
         $('#trend-chart').innerHTML =
-            md.map((days, i) => `<div class="bar-cell" data-month="${i + 1}"><div class="bar" style="height:${days === 0 ? 0 : (days / maxD) * 100}%" data-val="${days}天"></div></div>`).join('') +
-            md.map((_, i) => `<div class="month-label" data-month="${i + 1}">${i + 1}月</div>`).join('');
+            md.map((days, i) => `<div class="trend-col" data-month="${i + 1}"><div class="trend-bar" style="height:${days === 0 ? 0 : (days / maxD) * 100}%" data-val="${days}天"></div></div>`).join('') +
+            md.map((_, i) => `<div class="trend-month" data-month="${i + 1}">${i + 1}月</div>`).join('');
     }
 
     function renderAnalysis(year) {
@@ -2019,11 +2085,11 @@
             const data = state.logs[d];
             if (d.startsWith(year) && !isRestDayLog(data) && data.score > 0) { days++; total += data.score; }
         });
-        $('#ai-analysis').innerHTML = days === 0
-            ? `<p style="color:var(--text-muted)">// ${escapeHTML(year)} 年还没有容量记录。种一棵树最好的时间是十年前，其次是现在。</p>`
+        $('#year-analysis').innerHTML = days === 0
+            ? `<p class="u-muted">// ${escapeHTML(year)} 年还没有容量记录。种一棵树最好的时间是十年前，其次是现在。</p>`
             : `<div class="analysis-box"><strong>${escapeHTML(year)} 年</strong><br>
-               有效训练 (不含纯休息日) <span style="color:var(--accent); font-size:1em; font-weight:bold">${days}</span> 天<br>
-               平均容量完成度 <span style="color:var(--accent); font-size:1em; font-weight:bold">${Math.round(total/days)}%</span></div>`;
+               有效训练 (不含纯休息日) <span class="stat-value">${days}</span> 天<br>
+               平均容量完成度 <span class="stat-value">${Math.round(total/days)}%</span></div>`;
     }
 
     /* ==========================================
@@ -2033,23 +2099,23 @@
         return `
             <div class="card" data-id="${escapeHTML(ex.id)}">
                 <div class="edit-row">
-                    <input type="text" class="ed-name" value="${escapeHTML(ex.name)}" placeholder="动作名称" style="font-weight:bold;">
-                    <input type="text" class="ed-exid" value="${escapeHTML(ex.id)}" spellcheck="false" title="动作ID（仅字母/数字/_/-，本计划内唯一，点击修改）">
-                    <label style="align-items: center;"><input type="checkbox" class="ed-core" ${ex.isCore ? 'checked' : ''}> core</label>
-                    <button class="btn-danger" type="button" style="margin-left:auto;">x 删除</button>
+                    <input type="text" class="edit-name" value="${escapeHTML(ex.name)}" placeholder="动作名称">
+                    <input type="text" class="edit-exid" value="${escapeHTML(ex.id)}" spellcheck="false" title="动作ID（仅字母/数字/_/-，本计划内唯一，点击修改）">
+                    <label class="edit-core-label"><input type="checkbox" class="edit-core" ${ex.isCore ? 'checked' : ''}> core</label>
+                    <button class="btn-danger u-ml-auto" type="button">x 删除</button>
                 </div>
-                <div class="edit-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <label style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--text-muted); font-size:1em;">目标组数</span>
-                        <input type="number" class="ed-sets" value="${ex.sets}" min="1" max="20">
+                <div class="edit-row edit-row--grid">
+                    <label class="edit-stack">
+                        <span class="edit-stack-label">目标组数</span>
+                        <input type="number" class="edit-sets" value="${ex.sets}" min="1" max="20">
                     </label>
-                    <label style="display:flex; flex-direction:column; gap:4px;">
-                        <span style="color:var(--text-muted); font-size:1em;">要求</span>
-                        <input type="text" class="ed-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
+                    <label class="edit-stack">
+                        <span class="edit-stack-label">要求</span>
+                        <input type="text" class="edit-reps" value="${escapeHTML(ex.repsDesc)}" placeholder="如: 8-10次">
                     </label>
                 </div>
-                <div class="edit-row" style="margin-bottom:0;">
-                    <input type="text" class="ed-tip" value="${escapeHTML(ex.tip)}" placeholder="教练骚话或要点 (选填)" style="width:100%;">
+                <div class="edit-row edit-row--last">
+                    <input type="text" class="edit-tip" value="${escapeHTML(ex.tip)}" placeholder="教练骚话或要点 (选填)">
                 </div>
             </div>`;
     }
@@ -2063,11 +2129,11 @@
         }
         const p = state.plan[day];
 
-        $('#ed-day-id').value = day;
-        $('#ed-day-title').value = p.title;
-        $('#ed-day-isrest').checked = p.isRest;
+        $('#edit-day-id').value = day;
+        $('#edit-day-title').value = p.title;
+        $('#edit-day-rest').checked = p.isRest;
         $('#edit-exercise-wrapper').style.display = p.isRest ? 'none' : 'block';
-        $('#day-count-badge').innerText = `total: ${Object.keys(state.plan).length} days`;
+        $('#edit-day-count').innerText = `total: ${Object.keys(state.plan).length} days`;
 
         $('#edit-exercise-list').innerHTML = (p.exercises || []).map(exerciseCardHTML).join('');
         $('#edit-feedback').innerText = '';
@@ -2122,9 +2188,9 @@
 
     async function saveEditPlan() {
         const oldId = $('#edit-day-selector').value;
-        const newId = ($('#ed-day-id').value || '').trim();
-        const isRest = $('#ed-day-isrest').checked;
-        const title = $('#ed-day-title').value.trim() || '未命名计划';
+        const newId = ($('#edit-day-id').value || '').trim();
+        const isRest = $('#edit-day-rest').checked;
+        const title = $('#edit-day-title').value.trim() || '未命名计划';
         const fb = $('#edit-feedback');
         let newExs = [];
 
@@ -2140,8 +2206,8 @@
         if (!isRest) {
             const seenExIds = new Set();
             for (const card of $$('#edit-exercise-list .card')) {
-                const exId = (card.querySelector('.ed-exid').value || '').trim();
-                const exName = card.querySelector('.ed-name').value.trim() || '未命名动作';
+                const exId = (card.querySelector('.edit-exid').value || '').trim();
+                const exName = card.querySelector('.edit-name').value.trim() || '未命名动作';
                 if (!/^[A-Za-z0-9_\-]{1,30}$/.test(exId)) {
                     fb.innerText = `[ERR] 动作「${exName}」的ID无效：仅限 1-30 位字母、数字、下划线或横杠`;
                     return;
@@ -2154,10 +2220,10 @@
                 newExs.push({
                     id: exId,
                     name: exName,
-                    sets: Math.min(20, Math.max(1, parseInt(card.querySelector('.ed-sets').value) || 1)),
-                    repsDesc: card.querySelector('.ed-reps').value.trim() || '力竭',
-                    tip: card.querySelector('.ed-tip').value.trim(),
-                    isCore: card.querySelector('.ed-core').checked
+                    sets: Math.min(20, Math.max(1, parseInt(card.querySelector('.edit-sets').value) || 1)),
+                    repsDesc: card.querySelector('.edit-reps').value.trim() || '力竭',
+                    tip: card.querySelector('.edit-tip').value.trim(),
+                    isCore: card.querySelector('.edit-core').checked
                 });
             }
             if (!newExs.length) { fb.innerText = '[ERR] 非休息日至少保留一个动作。'; return; }
