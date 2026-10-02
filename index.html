@@ -321,8 +321,7 @@
         .guide-num::after { content: ']'; }
         .guide-step b { color: var(--text-main); }
         .guide-step code { border: 1px solid var(--border-color); padding: 0 5px; font-family: var(--font); font-size: 14px; overflow-wrap: anywhere; }
-        .guide-step .guide-main { color: var(--text-main); }
-        .guide-step .guide-warn { color: var(--quick-fill); }
+        .guide-step .guide-btn { background: var(--text-main); color: var(--bg-color); padding: 0 5px; }
         .guide-step .guide-danger { color: var(--danger); }
 
         .gh-commit { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color); margin-bottom: 8px; font-size: 15px; }
@@ -531,14 +530,14 @@
 
             <div class="guide-steps" id="guide-steps">
                 <div class="guide-step"><span class="guide-num">1</span><div>新建一个<b>私有仓库</b>（如 <code>my-workout-sync</code>），专门存放同步数据。</div></div>
-                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页</a>，点 <b class="guide-main">Generate new token</b>。</div></div>
+                <div class="guide-step"><span class="guide-num">2</span><div>打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">Token 设置页</a>，点 <b>Generate new token</b>。</div></div>
                 <div class="guide-step"><span class="guide-num">3</span><div><b>Token name</b> 随意填，<b>Expiration</b> 建议选 90 天或 1 年。</div></div>
-                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b class="guide-main">Only select repositories</b>，仅勾选你的同步仓库。</div></div>
-                <div class="guide-step"><span class="guide-num">5</span><div>点 <b class="guide-main">Add permissions</b>，勾选 <b class="guide-warn">Contents</b> 并设为 <b class="guide-warn">Read and write</b>，其余不动。</div></div>
-                <div class="guide-step"><span class="guide-num">6</span><div>点 <b class="guide-main">Generate token</b>，<b class="guide-danger">立刻复制</b> <code>github_pat_xxx...</code>（只显示一次）。</div></div>
-                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b class="guide-main">保存配置</b> 即可。</div></div>
-                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="guide-danger">错误</b>操作，建议先本地 <b class="guide-main">导出完整数据</b>，随时都可以通过 <b class="guide-main">导入恢复数据</b> 挽救回来。</div></div>
-                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="guide-warn">推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="guide-warn">拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
+                <div class="guide-step"><span class="guide-num">4</span><div>Repository access 选 <b>Only select repositories</b>，仅勾选你的同步仓库。</div></div>
+                <div class="guide-step"><span class="guide-num">5</span><div>点 <b>Add permissions</b>，勾选 <b>Contents</b> 并设为 <b>Read and write</b>，其余不动。</div></div>
+                <div class="guide-step"><span class="guide-num">6</span><div>点 <b>Generate token</b>，<b class="guide-danger">立刻复制</b> <code>github_pat_xxx...</code>（只显示一次）。</div></div>
+                <div class="guide-step"><span class="guide-num">7</span><div>在下方填入 Token 和仓库（格式 <code>用户名/仓库名</code>），<b>保存配置</b> 即可。</div></div>
+                <div class="guide-step"><span class="guide-num">8</span><div>为了避免后续<b class="guide-danger">错误</b>操作，建议先本地 <b>导出完整数据</b>，随时都可以通过 <b>导入恢复数据</b> 挽救回来。</div></div>
+                <div class="guide-step"><span class="guide-num">9</span><div>如果你的本地设备已有数据，但未曾同步过，选择 <b class="guide-btn">推送</b> 到 GitHub；如果你使用新的本地设备，需要同步已有的 GitHub 远程数据，选择 <b class="guide-btn">拉取</b> 到本地；如果两端都没有数据？那你随便。</div></div>
             </div>
             <div class="gh-fields">
                 <input type="password" id="gh-token" placeholder="GitHub Token (github_pat_xxx...)">
@@ -551,9 +550,9 @@
                 </label>
             </div>
             <div class="gh-actions">
-                <button id="btn-gh-save" class="btn-outline">保存配置</button>
                 <button id="btn-gh-push">push 推送</button>
                 <button id="btn-gh-pull" class="btn-outline">pull 拉取</button>
+                <button id="btn-gh-save" class="btn-outline">保存配置</button>
                 <button id="btn-gh-history" class="btn-outline">log 历史版本</button>
             </div>
             <div id="gh-status"></div>
