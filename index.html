@@ -82,7 +82,7 @@
         a:hover { color: var(--accent); }
         b, strong { color: var(--text-main); }
 
-        h2, h3 { display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: bold; margin: 0 0 22px; color: var(--text-main); line-height: 1.45; }
+        h2, h3 { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: bold; margin: 0 0 22px; color: var(--text-main); line-height: 1.45; }
         h2::before, h3::before { content: '\2500\2500'; color: var(--border-color); flex-shrink: 0; }
         h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
 
@@ -150,7 +150,7 @@
         /* ============ 卡片 ============ */
         .card { border: 1px solid var(--border-color); padding: 17px; margin-bottom: 16px; background: var(--bg-color); position: relative; }
         .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px dashed var(--border-color); padding-bottom: 12px; }
-        .card-title { font-weight: bold; color: var(--text-main); font-size: 18px; }
+        .card-title { font-weight: bold; color: var(--text-main); font-size: 17px; }
         .card-title::before { content: '> '; color: var(--text-muted); }
         .card-target { font-size: 15px; color: var(--text-muted); }
         .core-mark { color: var(--accent); font-size: 15px; margin-left: 8px; }
@@ -299,7 +299,7 @@
 
         @media (max-width: 700px) {
             body { padding: 16px 12px 36px; font-size: 16px; }
-            h2, h3 { font-size: 18px; }
+            h2, h3 { font-size: 17px; }
             .panel { padding: 21px 0; }
             .card { padding: 14px; margin-bottom: 13px; }
             .card-title { font-size: 17px; }
@@ -1340,7 +1340,7 @@
         if (planObj.isRest) {
             const checked = savedLog && savedLog.score === 100 ? 'checked' : '';
             listDiv.innerHTML = `<div class="card" style="border-color: var(--text-main);">
-                <label class="rest-day-check" style="display:flex; align-items:center; gap:10px; font-size:1.05em; cursor:pointer; user-select:none;">
+                <label class="rest-day-check" style="display:flex; align-items:center; gap:10px; font-size:1em; cursor:pointer; user-select:none;">
                     <input type="checkbox" id="rest-check" style="width:22px;height:22px;" ${checked}>
                     我今天乖乖休息/完成了有氧安排。
                 </label>
