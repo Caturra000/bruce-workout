@@ -27,6 +27,9 @@
             --danger: #ff6868; --quick-fill: #bcbcbc;
             --date-icon-filter: brightness(0) saturate(100%) invert(83%);
             --level-0: #141414; --level-1: #3c3c3c; --level-2: #707070; --level-3: #a8a8a8; --level-4: #e8e8e8;
+            /* 间距规范：xs4 微距(图标/内联) · sm8 控件间距 · md12 控件内边距·标题线 · lg16 块间距·盒子内边距 · xl20 页面左右 · 2xl24 面板/分节 · 3xl36 大分节 · 4xl48 页底 */
+            --space-xs: 4px; --space-sm: 8px; --space-md: 12px; --space-lg: 16px;
+            --space-xl: 20px; --space-2xl: 24px; --space-3xl: 36px; --space-4xl: 48px;
         }
         [data-theme="pink"] {
             --text-main: #ff52a8; --text-muted: #d15e98;
@@ -77,28 +80,28 @@
 
         /* ============ 基础 ============ */
         * { border-radius: 0 !important; box-sizing: border-box; }
-        body { font-family: var(--font); font-size: 17px; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 24px 20px 50px; display: flex; justify-content: center; line-height: 1.65; min-width: 320px; }
+        body { font-family: var(--font); font-size: 17px; background: var(--bg-color); color: var(--text-main); margin: 0; padding: var(--space-2xl) var(--space-xl) var(--space-4xl); display: flex; justify-content: center; line-height: 1.65; min-width: 320px; }
         .container { max-width: 1040px; width: 100%; }
         a { color: var(--text-main); text-decoration: underline; }
         a:hover { color: var(--accent); }
         b, strong { color: var(--text-main); }
 
-        h2, h3 { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: bold; margin: 0 0 22px; color: var(--text-main); line-height: 1.45; }
+        h2, h3 { display: flex; align-items: center; gap: var(--space-sm); font-size: 17px; font-weight: bold; margin: 0 0 var(--space-2xl); color: var(--text-main); line-height: 1.45; }
         h2::before, h3::before { content: ''; width: 2em; border-top: 1px solid var(--border-color); flex-shrink: 0; }
         h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
 
-        .titlebar { color: var(--text-muted); font-size: 15px; margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .titlebar { color: var(--text-muted); font-size: 15px; margin-bottom: var(--space-lg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* ============ 基础：通用工具 ============ */
         .u-muted { color: var(--text-muted); }
         .u-danger { color: var(--danger); }
-        .u-hint { color: var(--text-muted); font-size: 15px; margin-bottom: 8px; }
-        .u-hint-lg { color: var(--text-muted); font-size: 16px; }
+        .u-hint { color: var(--text-muted); font-size: 15px; margin: 0 0 var(--space-lg); }
+        .u-hint-lg { color: var(--text-muted); font-size: 16px; margin: 0 0 var(--space-lg); }
         .u-label { white-space: nowrap; color: var(--text-muted); }
-        .u-check { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+        .u-check { display: flex; align-items: center; gap: var(--space-sm); cursor: pointer; }
         .u-check--muted { font-size: 15px; color: var(--text-muted); }
-        .u-mt-4 { margin-top: 4px; }
-        .u-mt-10 { margin-top: 10px; }
+        .u-mt-4 { margin-top: var(--space-xs); }
+        .u-mt-8 { margin-top: var(--space-sm); }
         .u-ml-auto { margin-left: auto; }
 
         /* ============ 表单 ============ */
@@ -110,9 +113,8 @@
         input[type=number] { -moz-appearance: textfield; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: var(--date-icon-filter); cursor: pointer; }
         select, input[type="date"], input[type="text"], input[type="number"], input[type="password"] {
-            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 11px; height: 42px; max-width: 100%;
+            background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: var(--space-sm) var(--space-md); height: 42px; max-width: 100%;
         }
-        input[type="date"] { padding-top: 8px; padding-bottom: 8px; }
         input:focus, select:focus { border-color: var(--text-main); outline: none; }
         input:hover, select:hover { border-color: var(--text-main); }
         button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -127,107 +129,107 @@
         input[type="checkbox"]:checked { border-color: var(--text-main); }
         input[type="checkbox"]:checked::before { transform: scale(1); }
 
-        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 17px; font-weight: bold; cursor: pointer; height: 42px; touch-action: manipulation; }
+        button { background: var(--text-main); color: var(--bg-color); border: 1px solid var(--text-main); padding: var(--space-sm) var(--space-md); font-weight: bold; cursor: pointer; height: 42px; touch-action: manipulation; }
         button:hover { background: var(--accent); border-color: var(--accent); }
         .btn-outline { background: transparent; color: var(--text-main); border-color: var(--border-color); }
         .btn-outline:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
-        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 6px 11px; font-size: 15px; }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: var(--space-sm) var(--space-md); font-size: 15px; }
         .btn-danger:hover { background: var(--danger); color: var(--bg-color); border-color: var(--danger); }
 
         /* ============ 标签栏 ============ */
-        .tabs { display: flex; align-items: center; gap: 5px; padding: 8px 0; overflow-x: auto; }
-        .tab { padding: 7px 13px; cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; height: 42px; display: inline-flex; align-items: center; flex-shrink: 0; touch-action: manipulation; }
+        .tabs { display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) 0; overflow-x: auto; }
+        .tab { padding: var(--space-sm) var(--space-md); cursor: pointer; color: var(--text-muted); white-space: nowrap; user-select: none; height: 42px; display: inline-flex; align-items: center; flex-shrink: 0; touch-action: manipulation; }
         .tab:hover { color: var(--text-main); }
         .tab.active { background: var(--text-main); color: var(--bg-color); }
         .tab.active:not(.is-just-activated):hover { background: var(--accent); color: var(--bg-color); }
-        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: 5px 11px; font-size: 15px; font-weight: normal; flex-shrink: 0; }
+        #theme-toggle { margin-left: auto; background: transparent; border: 1px solid var(--border-color); color: var(--text-main); padding: var(--space-sm) var(--space-md); font-size: 15px; font-weight: normal; flex-shrink: 0; }
         #theme-toggle:hover { border-color: var(--text-main); color: var(--text-main); background: transparent; }
 
-        .panel { display: none; background: var(--panel-bg); padding: 27px 0; }
+        .panel { display: none; background: var(--panel-bg); padding: var(--space-2xl) 0; }
         .panel.active { display: block; }
 
         /* ============ 自定义下拉 ============ */
-        .custom-select { position: relative; width: 100%; margin-bottom: 18px; }
-        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: 9px 36px 9px 11px; cursor: pointer; font-weight: normal; height: 42px; }
+        .custom-select { position: relative; width: 100%; margin-bottom: var(--space-lg); }
+        .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: var(--space-sm) var(--space-3xl) var(--space-sm) var(--space-md); cursor: pointer; font-weight: normal; height: 42px; }
         .custom-select-btn:hover { background: var(--bg-color); border-color: var(--text-main); }
-        .custom-select-btn::after { content: ''; position: absolute; right: 12px; top: 50%; margin-top: -6px; width: 13px; height: 13px; background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center / 1px 11px no-repeat; pointer-events: none; }
+        .custom-select-btn::after { content: ''; position: absolute; right: var(--space-md); top: 50%; transform: translateY(-50%); width: 13px; height: 13px; background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center / 1px 11px no-repeat; pointer-events: none; }
         .custom-select.is-open .custom-select-btn::after { background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat; }
         .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 310px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar { width: 8px; }
         .custom-select-dropdown::-webkit-scrollbar-track { background: var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar-thumb { background: var(--border-color); }
         .custom-select.is-open .custom-select-dropdown { display: block; }
-        .custom-select-option { padding: 8px 12px; cursor: pointer; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 42px; }
+        .custom-select-option { padding: var(--space-sm) var(--space-md); cursor: pointer; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 42px; }
         .custom-select-option::before { content: '  '; white-space: pre; color: var(--text-muted); }
         .custom-select-option.is-selected::before { content: '> '; }
         .custom-select-option:hover { background: var(--text-main); color: var(--bg-color); }
         .custom-select-option:hover::before { color: var(--bg-color); }
 
         /* ============ 卡片 ============ */
-        .card { border: 1px solid var(--border-color); padding: 17px; margin-bottom: 16px; background: var(--bg-color); position: relative; }
-        .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; border-bottom: 1px dashed var(--border-color); padding-bottom: 12px; }
+        .card { border: 1px solid var(--border-color); padding: var(--space-lg); margin-bottom: var(--space-lg); background: var(--bg-color); position: relative; }
+        .card-header { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-sm); border-bottom: 1px dashed var(--border-color); padding-bottom: var(--space-sm); }
         .card-title { font-weight: bold; color: var(--text-main); font-size: 17px; }
         .card-title::before { content: '> '; color: var(--text-muted); }
         .card-target { font-size: 15px; color: var(--text-muted); }
-        .card-core { color: var(--accent); font-size: 15px; margin-left: 8px; }
+        .card-core { color: var(--accent); font-size: 15px; margin-left: var(--space-sm); }
 
-        .card-tip { font-size: 15px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.7; }
+        .card-tip { font-size: 15px; color: var(--text-muted); margin-bottom: var(--space-lg); line-height: 1.7; }
         .card-tip::before { content: '// '; }
         .card-tip:last-child { margin-bottom: 0; }
-        .sets-container { display: flex; flex-direction: column; gap: 10px; }
-        .set-row { display: flex; align-items: center; gap: 11px; flex-wrap: nowrap; }
+        .sets-container { display: flex; flex-direction: column; gap: var(--space-sm); }
+        .set-row { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: nowrap; }
         .set-row .set-input { width: 100px; text-align: center; flex-grow: 1; max-width: 125px; }
         .set-row .set-unit { flex: 0 0 auto; }
         .set-row .set-unit:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .set-unit { color: var(--text-muted); font-size: 15px; }
 
         /* ============ 卡片：今日打卡面板 ============ */
-        #date-picker { margin-bottom: 18px; width: auto; }
-        #daily-note { width: 100%; margin-top: 18px; display: none; }
-        #btn-save-today { width: 100%; margin-top: 24px; font-size: 17px; display: none; }
-        #daily-feedback { margin-top: 18px; }
+        #date-picker { margin-bottom: var(--space-lg); width: auto; }
+        #daily-note { width: 100%; margin-top: var(--space-lg); display: none; }
+        #btn-save-today { width: 100%; margin-top: var(--space-2xl); font-size: 17px; display: none; }
+        #daily-feedback { margin-top: var(--space-lg); }
         .card--rest { border-color: var(--text-main); }
         .card-rest-label { user-select: none; }
         input[type="checkbox"].card-rest-check { width: 22px; height: 22px; }
 
         /* ============ 卡片：编辑（计划定制） ============ */
-        .edit-meta-box { border: 1px dashed var(--border-color); padding: 18px; margin-bottom: 24px; }
-        .edit-row { display: flex; gap: 11px; margin-bottom: 12px; flex-wrap: wrap; }
+        .edit-meta-box { border: 1px dashed var(--border-color); padding: var(--space-lg); margin-bottom: var(--space-lg); }
+        .edit-row { display: flex; gap: var(--space-sm); margin-bottom: var(--space-sm); flex-wrap: wrap; }
         .edit-row--center { align-items: center; }
         .edit-row--id { flex-wrap: nowrap; }
         .edit-row--id #edit-day-id { flex: 1; min-width: 0; }
-        .edit-row--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .edit-row--grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
         .edit-row--last { margin-bottom: 0; }
-        .edit-row label { display: flex; gap: 7px; font-size: 16px; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
+        .edit-row label { display: flex; gap: var(--space-sm); font-size: 16px; cursor: pointer; color: var(--text-main); margin: 0; padding: 0; line-height: normal; }
         .card input[type="text"].edit-name { flex: 1; min-width: 170px; font-weight: bold; }
         .card input[type="text"].edit-exid {
             width: 135px; flex-shrink: 0; font-size: 14px; text-align: center; font-family: var(--font);
-            color: var(--text-muted); background: transparent; border: 1px dashed transparent; padding: 5px 7px; min-height: 38px;
+            color: var(--text-muted); background: transparent; border: 1px dashed transparent; padding: var(--space-xs) var(--space-sm); min-height: 38px;
         }
         .card input[type="text"].edit-exid:hover { border-color: var(--border-color); cursor: text; }
         .card input[type="text"].edit-exid:focus { outline: none; border-color: var(--text-main); border-style: solid; color: var(--text-main); }
 
         #edit-day-count { margin-left: auto; font-size: 14px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
-        .edit-note { font-size: 15px; color: var(--text-muted); margin: -3px 0 13px; }
+        .edit-note { font-size: 15px; color: var(--text-muted); margin: calc(var(--space-xs) * -1) 0 var(--space-md); }
         #edit-day-title { font-weight: bold; width: min(100%, 380px); }
         .edit-tip { width: 100%; }
         .edit-core-label { align-items: center; }
-        .edit-row label.edit-stack { display: flex; flex-direction: column; gap: 7px; }
+        .edit-row label.edit-stack { display: flex; flex-direction: column; gap: var(--space-sm); }
         .edit-stack-label { color: var(--text-muted); font-size: 1em; }
-        #btn-add-exercise { width: 100%; margin-top: 12px; border-style: dashed; }
-        .edit-actions { display: flex; gap: 11px; margin-top: 28px; flex-wrap: wrap; }
+        #btn-add-exercise { width: 100%; margin-top: var(--space-lg); border-style: dashed; }
+        .edit-actions { display: flex; gap: var(--space-sm); margin-top: var(--space-2xl); flex-wrap: wrap; }
         #btn-save-edit { flex: 2; min-width: 200px; }
         #btn-restore-default { flex: 1; min-width: 150px; }
-        #edit-feedback { margin-top: 18px; color: var(--text-main); font-weight: bold; }
+        #edit-feedback { margin-top: var(--space-lg); color: var(--text-main); font-weight: bold; }
 
-        .edit-day-bar { display: flex; gap: 9px; align-items: stretch; margin-bottom: 19px; flex-wrap: wrap; }
+        .edit-day-bar { display: flex; gap: var(--space-sm); align-items: stretch; margin-bottom: var(--space-lg); flex-wrap: wrap; }
         .edit-day-bar .custom-select { flex: 1; min-width: 240px; margin-bottom: 0; }
-        .edit-day-bar button { white-space: nowrap; padding: 7px 13px; }
+        .edit-day-bar button { white-space: nowrap; padding: var(--space-sm) var(--space-md); }
 
         /* ============ 统计 ============ */
-        .section-title { margin-top: 38px; }
-        .year-tabs { display: flex; gap: 8px; margin-bottom: 19px; overflow-x: auto; }
-        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: 5px 13px; font-weight: normal; }
+        .section-title { margin-top: var(--space-3xl); }
+        .year-tabs { display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); overflow-x: auto; }
+        .year-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); cursor: pointer; padding: var(--space-sm) var(--space-md); font-weight: normal; }
         .year-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
         .year-btn.active { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
         .year-btn.active:not(.is-just-activated):hover { background: var(--accent); color: var(--bg-color); border-color: var(--accent); }
@@ -253,126 +255,126 @@
         .heatmap-month-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible; transition: opacity 0.2s; }
         .heatmap-month-path { fill: var(--text-main); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 1.5px; stroke-linejoin: miter; }
 
-        .tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: 7px 10px; font-size: 15px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
+        .tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: var(--space-sm); font-size: 15px; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
 
-        #playback-box { border: 1px solid var(--border-color); padding: 18px; margin-top: 24px; display: none; }
+        #playback-box { border: 1px solid var(--border-color); padding: var(--space-lg); margin-top: var(--space-2xl); display: none; }
         #playback-title { display: block; }
         #playback-title::before, #playback-title::after { content: none; }
-        .playback-set { font-size: 15px; color: var(--text-muted); margin-left: 18px; }
+        .playback-set { font-size: 15px; color: var(--text-muted); margin-left: var(--space-lg); }
         .playback-set.u-danger { color: var(--danger); }
-        .playback-ex { margin-bottom: 12px; }
-        #playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: 18px 0; }
+        .playback-ex { margin-bottom: var(--space-sm); }
+        #playback-box hr { border: none; border-top: 1px dashed var(--border-color); margin: var(--space-lg) 0; }
 
-        .vol-settings-bar { display: flex; flex-direction: column; gap: 15px; margin-bottom: 13px; font-size: 16px; color: var(--text-muted); }
-        .vol-input-group { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-        .vol-input-group label { display: flex; align-items: center; gap: 7px; }
+        .vol-settings-bar { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-sm); font-size: 16px; color: var(--text-muted); }
+        .vol-input-group { display: flex; gap: var(--space-sm); flex-wrap: wrap; align-items: center; }
+        .vol-input-group label { display: flex; align-items: center; gap: var(--space-sm); }
         .vol-input-group input[type="number"] { width: 85px; }
-        .vol-date-range { display: flex; align-items: center; gap: 7px; }
+        .vol-date-range { display: flex; align-items: center; gap: var(--space-sm); }
         .vol-date-field { position: relative; display: block; width: 160px; flex-shrink: 0; }
         .vol-date-field input[type="date"] { width: 100%; }
-        .vol-date-ph { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
+        .vol-date-ph { position: absolute; left: var(--space-md); top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
         .vol-date-field.has-value .vol-date-ph, .vol-date-field.is-focus .vol-date-ph { display: none; }
         .vol-date-field:not(.has-value):not(.is-focus) input[type="date"] { color: transparent; }
-        .vol-zoom-controls { margin-left: auto; display: flex; gap: 7px; align-items: center; }
-        .vol-zoom-controls button { padding: 5px 12px; font-weight: bold; min-width: 44px; }
-        .vol-input-group button.btn-outline { padding: 5px 12px; }
-        .vol-quick-range { display: flex; gap: 9px; flex-wrap: wrap; }
-        .vol-quick-range button { flex: 1; min-width: 85px; padding: 7px 10px; text-align: center; }
+        .vol-zoom-controls { margin-left: auto; display: flex; gap: var(--space-sm); align-items: center; }
+        .vol-zoom-controls button { padding: var(--space-sm) var(--space-md); font-weight: bold; min-width: 44px; }
+        .vol-input-group button.btn-outline { padding: var(--space-sm) var(--space-md); }
+        .vol-quick-range { display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+        .vol-quick-range button { flex: 1; min-width: 85px; padding: var(--space-sm) var(--space-md); text-align: center; }
 
-        .vol-chart-wrapper { overflow-x: auto; margin-top: 18px; padding: 18px 0 8px; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+        .vol-chart-wrapper { overflow-x: auto; margin-top: var(--space-lg); padding: var(--space-lg) 0 var(--space-sm); scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
         .vol-chart-wrapper::-webkit-scrollbar { height: 8px; display: block; }
         .vol-chart-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
         .vol-chart-wrapper svg { display: block; overflow: visible; }
-        .vol-hint { font-size: 15px; color: var(--text-muted); margin: 7px 0 0; }
+        .vol-hint { font-size: 15px; color: var(--text-muted); margin: var(--space-sm) 0 0; }
         #vol-chart { width: max-content; min-width: 100%; }
         .vol-empty { color: var(--text-muted); text-align: center; width: 100%; }
         .vol-point { cursor: pointer; transform-box: fill-box; transform-origin: center; }
         .vol-point.is-hot { transform: scale(1.5); }
 
-        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 175px auto; gap: 0 5px; margin-top: 36px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
+        .trend-chart { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 175px auto; gap: 0 var(--space-xs); margin-top: var(--space-3xl); border-bottom: 1px solid var(--border-color); }
         .trend-col { display: flex; align-items: flex-end; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .trend-bar { width: 100%; max-width: 42px; background: var(--level-3); position: relative; }
         .trend-col:hover .trend-bar { background: var(--text-main); }
         .trend-col.is-active .trend-bar { background: var(--accent); }
-        .trend-bar:hover::after { content: attr(data-val); position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: 3px 7px; font-size: 14px; font-weight: bold; z-index: 2; white-space: nowrap; }
-        .trend-month { font-size: 14px; color: var(--text-muted); text-align: center; padding-top: 7px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .trend-bar:hover::after { content: attr(data-val); position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: var(--space-xs) var(--space-sm); font-size: 14px; font-weight: bold; z-index: 2; white-space: nowrap; }
+        .trend-month { font-size: 14px; color: var(--text-muted); text-align: center; padding-top: var(--space-sm); cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .trend-month:hover { color: var(--text-main); }
         .trend-month.is-active { color: var(--accent); font-weight: bold; }
 
-        .analysis-box { border: 1px solid var(--border-color); padding: 16px 18px; margin-top: 24px; }
+        .analysis-box { border: 1px solid var(--border-color); padding: var(--space-lg); margin-top: var(--space-2xl); }
         .analysis-box--warning { border-color: var(--danger); }
         .stat-value { color: var(--accent); font-weight: bold; }
 
         /* ============ 加载页 ============ */
         #loading-screen { position: fixed; inset: 0; background: var(--bg-color); display: flex; align-items: center; justify-content: center; z-index: 10000; color: var(--text-main); transition: opacity 0.3s; }
-        .loading-cursor { display: inline-block; width: 0.6em; height: 1em; background: var(--text-main); vertical-align: -0.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+        .loading-cursor { display: inline-block; width: 0.6em; height: 1em; background: var(--text-main); vertical-align: -0.15em; margin-left: var(--space-xs); animation: blink 1s steps(1) infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
         /* ============ 教程 / GitHub ============ */
-        .guide-toggle { display: flex; align-items: center; gap: 9px; padding: 9px 12px; margin-bottom: 15px; cursor: pointer; color: var(--text-main); font-size: 15px; font-weight: normal; background: transparent; border: 1px dashed var(--border-color); width: 100%; text-align: left; }
+        .guide-toggle { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-md); margin-bottom: var(--space-lg); cursor: pointer; color: var(--text-main); font-size: 15px; font-weight: normal; background: transparent; border: 1px dashed var(--border-color); width: 100%; text-align: left; }
         .guide-toggle:hover { background: transparent; border-color: var(--text-main); }
         .guide-toggle .guide-toggle-icon::before { content: '[+]'; color: var(--text-muted); }
         .guide-toggle.is-open { margin-bottom: 0; }
         .guide-toggle.is-open .guide-toggle-icon::before { content: '[-]'; }
-        .guide-steps { display: none; margin: 0 0 15px; padding: 8px 12px; border: 1px dashed var(--border-color); border-top: none; }
+        .guide-steps { display: none; margin: 0 0 var(--space-lg); padding: var(--space-sm) var(--space-md); border: 1px dashed var(--border-color); border-top: none; }
         .guide-steps.is-open { display: block; }
-        .guide-step { display: flex; gap: 11px; padding: 7px 0; font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+        .guide-step { display: flex; gap: var(--space-sm); padding: var(--space-sm) 0; font-size: 15px; color: var(--text-muted); line-height: 1.7; }
         .guide-step + .guide-step { border-top: 1px dotted var(--border-color); }
         .guide-num { flex-shrink: 0; color: var(--text-main); }
         .guide-num::before { content: '['; }
         .guide-num::after { content: ']'; }
         .guide-step b { color: var(--text-main); }
-        .guide-step code { border: 1px solid var(--border-color); padding: 0 5px; font-family: var(--font); font-size: 14px; overflow-wrap: anywhere; }
-        .guide-step .guide-btn { background: var(--text-main); color: var(--bg-color); padding: 0 5px; }
+        .guide-step code { border: 1px solid var(--border-color); padding: 0 var(--space-xs); font-family: var(--font); font-size: 14px; overflow-wrap: anywhere; }
+        .guide-step .guide-btn { background: var(--text-main); color: var(--bg-color); padding: 0 var(--space-xs); }
         .guide-step .guide-danger { color: var(--danger); }
 
-        .gh-commit { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color); margin-bottom: 8px; font-size: 15px; }
+        .gh-commit { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm) var(--space-md); border: 1px solid var(--border-color); margin-bottom: var(--space-sm); font-size: 15px; }
         .gh-commit:hover { border-color: var(--text-main); }
         .gh-commit-info { flex: 1; min-width: 0; }
         .gh-commit-msg { color: var(--text-main); font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .gh-commit-meta { color: var(--text-muted); font-size: 14px; margin-top: 3px; }
+        .gh-commit-meta { color: var(--text-muted); font-size: 14px; margin-top: var(--space-xs); }
         .gh-commit-sha { color: var(--text-main); }
         .gh-commit button { flex-shrink: 0; }
         .gh-head { color: var(--text-muted); font-size: 14px; }
 
-        .gh-section { margin-top: 38px; border-top: 1px solid var(--border-color); padding-top: 24px; }
-        .gh-fields { display: flex; flex-direction: column; gap: 11px; }
+        .gh-section { margin-top: var(--space-2xl); border-top: 1px solid var(--border-color); padding-top: var(--space-2xl); }
+        .gh-fields { display: flex; flex-direction: column; gap: var(--space-sm); }
         .gh-fields > input { width: 100%; }
-        .gh-actions { display: flex; gap: 11px; margin-top: 18px; flex-wrap: wrap; }
+        .gh-actions { display: flex; gap: var(--space-sm); margin-top: var(--space-lg); flex-wrap: wrap; }
         .gh-actions > button { flex: 1; min-width: 120px; }
-        #gh-status { margin-top: 13px; font-size: 15px; min-height: 1.5em; overflow-wrap: anywhere; }
-        #gh-history { margin-top: 15px; display: none; }
-        #import-wrap { margin-top: 24px; }
+        #gh-status { margin-top: var(--space-lg); font-size: 15px; min-height: 1.5em; overflow-wrap: anywhere; }
+        #gh-history { margin-top: var(--space-lg); display: none; }
+        #import-wrap { margin-top: var(--space-lg); }
         #import-file { display: none; }
-        #btn-clear-data { margin-top: 48px; }
+        #btn-clear-data { margin-top: var(--space-2xl); }
 
         /* ============ 关于 ============ */
-        .about-ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.2; margin: 12px 0 10px; overflow-x: auto; max-width: 100%; }
+        .about-ascii { display: inline-block; text-align: left; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.2; margin: var(--space-lg) 0 var(--space-sm); overflow-x: auto; max-width: 100%; }
         .about-table { border-collapse: collapse; font-size: 16px; color: var(--text-muted); line-height: 2; width: 100%; }
-        .about-table td { padding-right: 24px; vertical-align: top; }
+        .about-table td { padding-right: var(--space-2xl); vertical-align: top; }
         .about-table td:first-child { white-space: nowrap; width: 1%; }
         .about-table td:last-child { padding-right: 0; overflow-wrap: anywhere; }
-        .about-head { text-align: center; padding: 24px 0 13px; }
+        .about-head { text-align: center; padding: var(--space-2xl) 0 var(--space-md); }
         .about-head p { color: var(--text-muted); font-size: 15px; margin: 0; }
-        .about-foot { border-top: 1px solid var(--border-color); padding-top: 19px; color: var(--text-muted); line-height: 2; }
-        .about-copy { margin-top: 24px; font-size: 15px; color: var(--text-muted); }
+        .about-foot { border-top: 1px solid var(--border-color); padding-top: var(--space-lg); color: var(--text-muted); line-height: 2; }
+        .about-copy { margin-top: var(--space-2xl); font-size: 15px; color: var(--text-muted); }
 
-        #sync-toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: 9px 15px; font-size: 15px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis; }
+        #sync-toast { position: fixed; bottom: var(--space-xl); left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: var(--space-sm) var(--space-lg); font-size: 15px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - var(--space-2xl)); overflow: hidden; text-overflow: ellipsis; }
 
         @supports (-webkit-touch-callout: none) { select, input { font-size: 16px; } }
 
         @media (max-width: 700px) {
-            body { padding: 16px 12px 36px; font-size: 16px; }
-            .panel { padding: 21px 0; }
-            .card { padding: 14px; margin-bottom: 13px; }
-            .set-row { gap: 8px; }
+            body { padding: var(--space-lg) var(--space-md) var(--space-3xl); font-size: 16px; }
+            .panel { padding: var(--space-xl) 0; }
+            .card { padding: var(--space-md); margin-bottom: var(--space-lg); }
+            .set-row { gap: var(--space-sm); }
             .set-row .set-input { width: auto; max-width: none; min-width: 0; flex: 1 1 0; }
             .edit-day-bar .custom-select { min-width: 100%; }
             .edit-day-bar > button { flex: 1; }
-            .edit-meta-box { padding: 13px; }
-            .vol-input-group { width: 100%; flex-direction: column; align-items: stretch; gap: 11px; }
+            .edit-meta-box { padding: var(--space-md); }
+            .vol-input-group { width: 100%; flex-direction: column; align-items: stretch; gap: var(--space-sm); }
             .vol-input-group label { justify-content: space-between; width: 100%; }
-            .vol-input-group input[type="number"] { width: auto; flex: 1; min-width: 0; margin-left: 10px; }
+            .vol-input-group input[type="number"] { width: auto; flex: 1; min-width: 0; margin-left: var(--space-sm); }
             .vol-input-group button.btn-outline { width: 100%; }
             .vol-date-range { width: 100%; flex-wrap: wrap; }
             .vol-date-field { width: 0; min-width: 0; flex: 1; }
@@ -381,7 +383,7 @@
             .vol-chart-wrapper { min-height: 240px; }
             .heatmap-grid { grid-template-rows: repeat(7, 15px); gap: 4px; }
             .heatmap-cell { width: 15px; height: 15px; }
-            .trend-chart { grid-template-rows: 155px auto; gap: 0 2px; }
+            .trend-chart { grid-template-rows: 155px auto; }
             .trend-month { font-size: 12px; }
         }
     </style>
@@ -1403,7 +1405,7 @@
                     <input type="checkbox" id="rest-check" class="card-rest-check" ${checked}>
                     我今天乖乖休息/完成了有氧安排。
                 </label>
-                <div class="card-tip u-mt-10">肌肉是在休息时生长的，不要有负罪感。</div>
+                <div class="card-tip u-mt-8">肌肉是在休息时生长的，不要有负罪感。</div>
             </div>`;
         } else {
             listDiv.innerHTML = planObj.exercises.map(ex => {
@@ -1935,8 +1937,8 @@
         const yRange = maxVol - minVol;
 
         const maxLabelLen = Math.max(String(maxVol.toFixed(0)).length, String(minVol.toFixed(0)).length);
-        const padL = Math.max(58, maxLabelLen * 9 + 8);
-        const padR = 25, padT = 24, padB = 33;
+        const padL = Math.max(38, maxLabelLen * 8 + 6);
+        const padR = 0, padT = 24, padB = 33;
         const totalPad = padL + padR;
 
         const containerWidth = container.clientWidth || getVolAvailableWidth();
@@ -1986,7 +1988,7 @@
             const m = d.date.split('-')[1];
             if (m !== lastMonth) {
                 lastMonth = m;
-                monthMarks += `<text x="${x}" y="${svgH - 8}" fill="var(--text-muted)" font-size="10" text-anchor="middle">${parseInt(m)}月</text>`;
+                monthMarks += `<text x="${x}" y="${svgH - 8}" fill="var(--text-muted)" font-size="15" text-anchor="middle">${parseInt(m)}月</text>`;
             }
         });
 
@@ -1998,10 +2000,10 @@
         chartDiv.innerHTML = `
             <svg width="${svgWidthAttr}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
                 <line x1="${padL}" y1="${topY}" x2="${svgW - padR}" y2="${topY}" stroke="var(--border-color)" stroke-dasharray="2,3" />
-                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${maxVol.toFixed(0)}</text>
+                <text x="${padL - 5}" y="${topY + 4}" fill="var(--text-muted)" font-size="15" text-anchor="end">${maxVol.toFixed(0)}</text>
 
                 <line x1="${padL}" y1="${botY}" x2="${svgW - padR}" y2="${botY}" stroke="var(--border-color)" />
-                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="10" text-anchor="end">${minVol.toFixed(0)}</text>
+                <text x="${padL - 5}" y="${botY + 4}" fill="var(--text-muted)" font-size="15" text-anchor="end">${minVol.toFixed(0)}</text>
 
                 <path d="${pathD}" fill="none" stroke="var(--text-main)" stroke-width="${strokeWidth}" stroke-linejoin="miter" stroke-linecap="square" />
                 ${pointsHtml}
