@@ -92,7 +92,7 @@
         h2::before, h3::before { content: ''; width: 2em; border-top: 1px solid var(--border-color); flex-shrink: 0; }
         h2::after, h3::after { content: ''; flex: 1; border-top: 1px solid var(--border-color); }
 
-        .titlebar { color: var(--text-muted); font-size: var(--fs-md); margin-bottom: var(--space-lg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .titlebar { color: var(--text-muted); font-size: var(--fs-md); line-height: 1.6; margin-bottom: var(--space-lg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* ============ 基础：通用工具 ============ */
         .u-muted { color: var(--text-muted); }
@@ -154,7 +154,7 @@
         .custom-select { position: relative; width: 100%; margin-bottom: var(--space-lg); }
         .custom-select-btn { position: relative; width: 100%; text-align: left; background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color); padding: var(--space-sm) var(--space-3xl) var(--space-sm) var(--space-md); cursor: pointer; font-weight: normal; height: 42px; }
         .custom-select-btn:hover { background: var(--bg-color); border-color: var(--text-main); }
-        .custom-select-btn::after { content: ''; position: absolute; right: var(--space-md); top: 50%; transform: translateY(-50%); width: 13px; height: 13px; background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center / 1px 11px no-repeat; pointer-events: none; }
+        .custom-select-btn::after { content: ''; position: absolute; right: var(--space-md); top: 0; bottom: 0; margin: auto 0; width: 13px; height: 13px; background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center / 1px 11px no-repeat; pointer-events: none; }
         .custom-select.is-open .custom-select-btn::after { background: linear-gradient(var(--text-muted), var(--text-muted)) center / 11px 1px no-repeat; }
         .custom-select-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100; background: var(--bg-color); border: 1px solid var(--text-main); margin-top: -1px; max-height: 310px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) var(--bg-color); }
         .custom-select-dropdown::-webkit-scrollbar { width: 8px; }
@@ -241,8 +241,8 @@
         #heatmap-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); }
         #heatmap-wrapper.is-scrolling { pointer-events: none; }
 
-        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 17px); grid-auto-flow: column; gap: 5px; width: max-content; padding: 8px 10px; }
-        .heatmap-cell { width: 17px; height: 17px; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; touch-action: manipulation; }
+        .heatmap-grid { position: relative; display: grid; grid-template-rows: repeat(7, 18px); grid-auto-flow: column; gap: 4px; width: max-content; padding: 10px; }
+        .heatmap-cell { width: 18px; height: 18px; background: var(--level-0); border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s; touch-action: manipulation; }
         .heatmap-cell[data-level="1"] { background: var(--level-1); }
         .heatmap-cell[data-level="2"] { background: var(--level-2); }
         .heatmap-cell[data-level="3"] { background: var(--level-3); }
@@ -255,7 +255,7 @@
         .heatmap-grid.has-selection .heatmap-month-svg { opacity: 0.2; }
 
         .heatmap-month-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: visible; transition: opacity 0.2s; }
-        .heatmap-month-path { fill: var(--text-main); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 1.5px; stroke-linejoin: miter; }
+        .heatmap-month-path { fill: var(--text-main); fill-opacity: 0.08; stroke: var(--accent); stroke-width: 2px; stroke-linejoin: miter; shape-rendering: crispEdges; }
 
         .tooltip { position: fixed; background: var(--bg-color); color: var(--text-main); padding: var(--space-sm); font-size: var(--fs-md); pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.1s; white-space: nowrap; border: 1px solid var(--text-main); }
 
@@ -274,7 +274,7 @@
         .vol-date-range { display: flex; align-items: center; gap: var(--space-sm); }
         .vol-date-field { position: relative; display: block; width: 160px; flex-shrink: 0; }
         .vol-date-field input[type="date"] { width: 100%; }
-        .vol-date-ph { position: absolute; left: var(--space-md); top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; white-space: nowrap; }
+        .vol-date-ph { position: absolute; left: var(--space-md); top: 0; bottom: 0; display: flex; align-items: center; color: var(--text-muted); pointer-events: none; white-space: nowrap; }
         .vol-date-field.has-value .vol-date-ph, .vol-date-field.is-focus .vol-date-ph { display: none; }
         .vol-date-field:not(.has-value):not(.is-focus) input[type="date"] { color: transparent; }
         .vol-zoom-controls { margin-left: auto; display: flex; gap: var(--space-sm); align-items: center; }
@@ -298,7 +298,7 @@
         .trend-bar { width: 100%; max-width: 42px; background: var(--level-3); position: relative; }
         .trend-col:hover .trend-bar { background: var(--text-main); }
         .trend-col.is-active .trend-bar { background: var(--accent); }
-        .trend-bar:hover::after { content: attr(data-val); position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-color); padding: var(--space-xs) var(--space-sm); font-size: var(--fs-sm); font-weight: bold; z-index: 2; white-space: nowrap; }
+        .trend-bar:hover::after { content: attr(data-val); position: absolute; bottom: calc(100% + 4px); left: 0; right: 0; margin: 0 auto; width: max-content; background: var(--text-main); color: var(--bg-color); padding: var(--space-xs) var(--space-sm); font-size: var(--fs-sm); font-weight: bold; z-index: 2; white-space: nowrap; }
         .trend-month { font-size: var(--fs-sm); color: var(--text-muted); text-align: center; padding-top: var(--space-sm); cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .trend-month:hover { color: var(--text-main); }
         .trend-month.is-active { color: var(--accent); font-weight: bold; }
@@ -361,7 +361,7 @@
         .about-foot { border-top: 1px solid var(--border-color); padding-top: var(--space-lg); color: var(--text-muted); line-height: 2; }
         .about-copy { margin-top: var(--space-2xl); font-size: var(--fs-md); color: var(--text-muted); }
 
-        #sync-toast { position: fixed; bottom: var(--space-xl); left: 50%; transform: translateX(-50%); background: var(--bg-color); border: 1px solid var(--text-main); padding: var(--space-sm) var(--space-lg); font-size: var(--fs-md); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - var(--space-2xl)); overflow: hidden; text-overflow: ellipsis; }
+        #sync-toast { position: fixed; bottom: var(--space-xl); left: 0; right: 0; margin: 0 auto; width: max-content; background: var(--bg-color); border: 1px solid var(--text-main); padding: var(--space-sm) var(--space-lg); font-size: var(--fs-md); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; max-width: calc(100vw - var(--space-2xl)); overflow: hidden; text-overflow: ellipsis; }
 
         @supports (-webkit-touch-callout: none) { select, input { font-size: var(--fs-lg); } }
 
@@ -1713,7 +1713,7 @@
             heatmap.appendChild(svg);
         }
 
-        const pad = 2.5;
+        const pad = 2;
 
         const firstGridChild = heatmap.children[0];
         const lastRowChild = heatmap.children[Math.min(6, heatmap.children.length - 1)] || firstGridChild;
@@ -1958,7 +1958,7 @@
 
         const showPoints = stepX >= 12;
 
-        const svgW = volData.length * stepX + totalPad;
+        const svgW = Math.round(volData.length * stepX + totalPad);
         const isScrollable = svgW > containerWidth + 1;
 
         if (isScrollable) {
@@ -1980,8 +1980,8 @@
         let lastMonth = "";
 
         volData.forEach((d, i) => {
-            const x = padL + i * stepX + stepX / 2;
-            const y = padT + innerH - ((d.vol - minVol) / yRange * innerH);
+            const x = Math.round(padL + i * stepX + stepX / 2);
+            const y = Math.round(padT + innerH - ((d.vol - minVol) / yRange * innerH));
 
             if (i === 0) pathD += `M ${x} ${y}`;
             else pathD += ` L ${x} ${y}`;
@@ -2069,8 +2069,9 @@
             if (date.startsWith(year) && !isRestDayLog(data) && data.score > 0) md[parseInt(date.split('-')[1]) - 1]++;
         });
         const maxD = Math.max(1, ...md);
+        const plotH = parseFloat(getComputedStyle($('#trend-chart')).gridTemplateRows) || 175;
         $('#trend-chart').innerHTML =
-            md.map((days, i) => `<div class="trend-col" data-month="${i + 1}"><div class="trend-bar" style="height:${days === 0 ? 0 : (days / maxD) * 100}%" data-val="${days}天"></div></div>`).join('') +
+            md.map((days, i) => `<div class="trend-col" data-month="${i + 1}"><div class="trend-bar" style="height:${days === 0 ? 0 : Math.round((days / maxD) * plotH)}px" data-val="${days}天"></div></div>`).join('') +
             md.map((_, i) => `<div class="trend-month" data-month="${i + 1}">${i + 1}月</div>`).join('');
     }
 
