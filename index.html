@@ -365,6 +365,12 @@
 
         @supports (-webkit-touch-callout: none) { select, input { font-size: var(--fs-lg); } }
 
+        /* ============ Workaround ============ */
+        button, input, select, .tab, .custom-select-btn, .year-btn, .guide-toggle {
+            padding-top: calc(var(--space-sm) + var(--ink-shift, 0px)) !important;
+            padding-bottom: calc(var(--space-sm) - var(--ink-shift, 0px)) !important;
+        }
+
         @media (max-width: 700px) {
             body { padding: var(--space-lg) var(--space-md) var(--space-3xl); }
             .panel { padding: var(--space-xl) 0; }
@@ -600,6 +606,27 @@
     const hasSetActivity = (w, r) => String(r || '').trim() !== '';
     const isRestDayLog = data => !!(data && (data.isRest || (Array.isArray(data.exercises) && data.exercises.length === 0)));
     const genExId = () => 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+
+    // Workaround: 处理 Android/Chromium 居中问题
+    (function () {
+        const inkShift = font => {
+            try {
+                const ctx = document.createElement('canvas').getContext('2d');
+                ctx.font = font;
+                const { fontBoundingBoxAscent: fa, fontBoundingBoxDescent: fd, actualBoundingBoxAscent: aa, actualBoundingBoxDescent: ad } = ctx.measureText('国');
+                if ([fa, fd, aa, ad].some(v => v == null || !isFinite(v))) return 0;
+                return (aa - ad) / 2 - (fa - fd) / 2;
+            } catch (e) { return 0; }
+        };
+        const applyInkShift = () => {
+            const el = document.querySelector('button, input, select');
+            if (!el) return;
+            const cs = getComputedStyle(el);
+            const s = inkShift(`${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`);
+            if (Math.abs(s) >= 0.5) document.documentElement.style.setProperty('--ink-shift', s.toFixed(2) + 'px');
+        };
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyInkShift); else applyInkShift();
+    })();
 
     const DB_NAME = 'HardcoreLogDB';
     const STORE_NAME = 'store';
